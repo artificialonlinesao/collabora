@@ -26,6 +26,7 @@
 #include <atomic>
 #include <string>
 #include <map>
+#include <atomic>
 
 namespace ConfigUtil
 {
