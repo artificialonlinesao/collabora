@@ -40,6 +40,11 @@ tasks:
       tar xvf core-co-24.04-assets.tar.gz
       rm core-co-24.04-assets.tar.gz
       cd collabora
+      # Use Node 20 with nvm, as canvas dependency on v2.11.2 doesn't support Node 22
+      nvm install 20
+      nvm use 20
+      nvm alias default 20
+      node -v # Verify Node.js version
     init: |
       ./autogen.sh
       ./configure --enable-silent-rules --with-lokit-path=/workspace/include --with-lo-path=/workspace/instdir --enable-debug -enable-cypress
