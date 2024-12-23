@@ -39,7 +39,7 @@ tasks:
       wget https://github.com/CollaboraOnline/online/releases/download/for-code-assets/core-co-24.04-assets.tar.gz
       tar xvf core-co-24.04-assets.tar.gz
       rm core-co-24.04-assets.tar.gz
-      cd online
+      cd collabora
     init: |
       ./autogen.sh
       ./configure --enable-silent-rules --with-lokit-path=/workspace/include --with-lo-path=/workspace/instdir --enable-debug -enable-cypress
@@ -60,4 +60,3 @@ tasks:
       echo "4. In a new terminal execute the following:"
       echo "   firefox  [paste copied URL here]"
     openMode: split-right
-
