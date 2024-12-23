@@ -70,6 +70,7 @@ jsstress
 cscope*
 *.orig
 coolwsd.log
+coolwsd-*.log
 *.log.*.gz
 .log
 *.lo
