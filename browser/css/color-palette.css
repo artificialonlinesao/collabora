@@ -14,9 +14,9 @@
 	--color-status-badge: #616161;
 	--color-slideshow: #A8A8A8;
 
-	--color-main-background: #F8F9FA;
-	--color-background-dark: #e8e8e8;  /* select */
-	--color-background-darker: #c0bfbc;  /* todo: apply to pressed (active), li:hover(top menu on classic mode)*/
+	--color-main-background: var(--brand-50);
+	--color-background-dark: var(--brand-100);  /* select */
+	--color-background-darker: var(--brand-200);  /* todo: apply to pressed (active), li:hover(top menu on classic mode)*/
 	--color-background-slideshow: #1a1a1a;
 	--color-background-lighter: #fff; /* hover, toolbar, dialog, disabled */
 	--color-overlay: #1c5fa814;
@@ -26,15 +26,15 @@
 
 	--color-canvas: #f5f5f5;
 
-	--color-primary: #0b87e7; /* border-color */
-	--color-primary-text: #fff; /* text color when primary-lighter is background */
-	--color-primary-dark: #0063b1;
-	--color-primary-darker: #004b86;
-	--color-primary-lighter: #83beec; /* background-color */
+	--color-primary: var(--brand-500); /* border-color */
+	--color-primary-text: var(--kyzon-white); /* text color when primary-lighter is background */
+	--color-primary-dark: var(--brand-600);
+	--color-primary-darker: black;
+	--color-primary-lighter: var(--brand-300); /* background-color */
 
 	--color-border: #b6b6b6;
-	--color-border-dark: #cecece; /* select */
-	--color-border-darker: #c0bfbc;  /* hover */
+	--color-border-dark: var(--brand-200); /* select */
+	--color-border-darker: var(--color-background-darker);  /* hover */
 	--color-border-lighter: #f1f1f1; /* disabled */
 
 	--color-btn-border: #b6b6b6;

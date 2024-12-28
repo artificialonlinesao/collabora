@@ -67,7 +67,8 @@ class FormulaBar {
 							id: 'AutoSumMenu:AutoSumMenu',
 							type: 'menubutton',
 							class: 'AutoSumMenu',
-							command: '.uno:AutoSumMenu'
+							command: '.uno:AutoSumMenu',
+							noLabel: true,
 						},
 						{
 							id: 'startformula',

@@ -17,8 +17,8 @@
 	background: var(--color-background-darker);
 	border: var(--color-border-darker);
 	color: var(--color-text-darker);
-	border-top-left-radius: var(--border-radius);
-	border-top-right-radius: var(--border-radius);
+	border-top-left-radius: var(--border-radius-large);
+	border-top-right-radius: var(--border-radius-large);
 	border-bottom-left-radius: 0px;
 	border-bottom-right-radius: 0px;
 	font-size: var(--header-font-size);

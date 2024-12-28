@@ -1,19 +1,19 @@
 :root {
 	/*All used fonts (except w2ui)
 	----------------------------------*/
-	--cool-font: 'Segoe UI', Tahoma, Arial, Helvetica, sans-serif;
+	--cool-font: 'tt-commons-pro', 'Source Sans Pro', 'Open Sans', sans-serif;
 	/*investigate what are the drawback in consisntly use --cool-fonts
 	for jquery-ui and perhaps mobile*/
-	--mobile-font: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;
-	--jquery-ui-font: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;
+	--mobile-font: 'tt-commons-pro', 'Source Sans Pro', 'Open Sans', sans-serif;
+	--jquery-ui-font: 'tt-commons-pro', 'Source Sans Pro', 'Open Sans', sans-serif;
 
-	--docs-font: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	--docs-font: 'tt-commons-pro', 'Source Sans Pro', 'Open Sans', sans-serif;
 	--docs--pre-font: 'Consolas', 'Menlo', 'Lucida Console', 'Courier New', monospace;
 
 	/* Shared color for cell and selection border */
 	--cell-cursor-selection-border-color: var(--color-primary);
 
-	--btn-size: 28px;
+	--btn-size: 24px;
 	--btn-padding: 2px;
 	--btn-img-size: calc(var(--btn-size) - var(--btn-padding) * 2);
 	--btn-color-colorpicker-size: 4px;
@@ -26,19 +26,20 @@
 	--btn-img-size-s: calc(var(--btn-size-s) - var(--btn-padding) * 2);
 
 	--border-radius: 4px; /* buttons, widgets */
+	--border-radius-menu: 8px; /* menus */
 	--border-radius-large: 10px; /* dialog */
 
-	--tooltip-font-size: 14px;
+	--tooltip-font-size: 12px;
 	--default-font-size: 12px;
-	--header-font-size: 16px;
+	--header-font-size: 12px;
 	/* tab min font-size */
 	--tb-min-fs: 11px;
 	/* tab min font-size without units*/
 	--tb-min-fs-u: 11;
 	/* tab max font-size */
-	--tb-max-fs: 16px;
+	--tb-max-fs: 12px;
 	/* tab max font-size wihtout units*/
-	--tb-max-fs-u: 16;
+	--tb-max-fs-u: 12;
 	/* tab font-size preferred value or scaler */
 	--tb-fs-s: 1vw;
 
@@ -52,6 +53,41 @@
 
 	/* Ruler */
 	--ruler-height: 20px;
+
+	--side-padding: 8px;
+
+	/* KYZON */
+	--kyzon-solutions-logo-light: url('https://assets.kyzon.com/KYZONSolutions_logo_black.svg') left center / contain no-repeat;
+	--kyzon-solutions-logo-dark: url('https://assets.kyzon.com/KYZONSolutions_logo_white.svg') left center / contain no-repeat;
+	--kyzon-solutions-logo-aspect-ratio: 839.643 / 202.961;
+	--kyzon-flow-logo-light: url('https://assets.kyzon.com/KYZONFlow_logo_black.svg') left center / contain no-repeat;
+	--kyzon-flow-logo-dark: url('https://assets.kyzon.com/KYZONFlow_logo_white.svg') left center / contain no-repeat;
+	--kyzon-flow-logo-aspect-ratio: 913.958 / 400;
+	--kyzon-space-logo-light: url('https://assets.kyzon.com/KYZONSpace_logo_black.svg') left center / contain no-repeat;
+	--kyzon-space-logo-dark: url('https://assets.kyzon.com/KYZONSpace_logo_white.svg') left center / contain no-repeat;
+	--kyzon-space-logo-aspect-ratio: 1046.686 / 400;
+
+	--brand-600: #161617;
+	--brand-500: #35353d;
+	--brand-400: #5f5f69;
+	--brand-300: #a6a6aa;
+	--brand-200: #dedee3;
+	--brand-100: #ededf0;
+	--brand-50: #f5f5f7;
+
+	/* In between colours. Not part of the official design */
+	--brand-extra-550: hsl(240, 4%, 16%);
+	--brand-extra-450: hsl(240, 6%, 30%);
+	--brand-extra-350: hsl(240, 3%, 52%);
+
+	--kyzon-black: var(--brand-600);
+	--kyzon-white: var(--brand-50);
+	--kyzon-grey: var(--brand-300);
+
+	--box-shadow-modal: 0px 24px 48px -4px rgba(56, 66, 80, 0.04),
+		0px 4px 8px -2px rgba(56, 66, 80, 0.04),
+		0px 0px 1px 0px rgba(56, 66, 80, 0.64),
+		0px 48px 96px -4px rgba(56, 66, 80, 0.04);
 }
 
 html {
@@ -69,6 +105,17 @@ body {
 	display: flex;
 	flex-direction: column;
 	user-select: none;
+}
+
+*:focus-visible {
+	outline: var(--brand-200) solid 2.5px;
+	border-color: var(--brand-400);
+}
+
+:has(> input.ui-edit), :has(> textarea.ui-textarea), :has(> .ui-listbox), :has(> .ui-combobox) {
+	&:has(> :first-child:last-child) {
+		padding: 3px;
+	}
 }
 
 #insertgraphic, #insertmultimedia {
@@ -363,7 +410,8 @@ body {
 	flex-direction: column;
 }
 #toolbar-wrapper:not(.mobile) {
-	padding: 3px 0;
+	padding: 0px;
+	box-sizing: border-box;
 }
 /* Remove bottom padding in calc as it affects formulabar*/
 #toolbar-wrapper.spreadsheet:not(.mobile) {
@@ -438,13 +486,16 @@ body {
 }
 #search-input:focus {
 	background-color: var(--color-background);
-	border-color: var(--color-primary) !important;
+	border: 1px solid var(--color-primary) !important;
 }
 #search-input:hover {
-	border: 1px solid var(--color-border-darker) !important;
+	border: 1px solid var(--color-primary) !important;
 }
 #search-input::placeholder {
 	color: var(--color-main-text);
+}
+#search-input:focus::placeholder {
+	color: var(--color-primary-lighter);
 }
 
 .cool-character {
@@ -502,24 +553,32 @@ body {
 }
 
 .context-menu-hover {
-	background-color: var(--color-background-darker) !important;
-	color: var(--color-text-darker) !important;
+	background-color: var(--color-background-dark) !important;
+	color: var(--color-text-dark) !important;
 }
 
 .context-menu-hover > span > a {
-	color: var(--color-text-darker);
+	color: var(--color-text-dark);
 }
 .context-menu-submenu:after {
 	border-color: transparent transparent transparent var(--color-text-darker) !important;
+	right: 10px;
+}
+.context-menu-submenu {
+	padding-right: 24px;
 }
 
 /* With RTL write direction the arrow of the context menu's submenu should be flipped */
 
 [dir='rtl'] .context-menu-submenu:after {
 	right: unset;
-	left: .5em;
+	left: 10px;
 	border-color: transparent var(--color-text-darker) transparent transparent;
 	border-width: .25em .25em .25em 0;
+}
+
+[dir='rtl'] .context-menu-submenu {
+	padding-left: 24px;
 }
 
 
@@ -559,15 +618,15 @@ body {
 }
 
 .cool-annotation-content-wrapper, .cool-annotation-redline-content-wrapper {
-	padding: 8px;
+	padding: 12px;
 	font-family: var(--cool-font) !important;
 	font-size: var(--default-font-size);
 	text-align: left;
 	background-color: var(--color-background-lighter);
-	box-shadow: 0 0 3px var(--color-box-shadow);
+	box-shadow: var(--box-shadow-modal);
 	color: var(--color-main-text);
 	border: none;
-	border-radius: var(--border-radius);
+	border-radius: var(--border-radius-large);
 	width: auto;
 }
 
@@ -640,12 +699,6 @@ body {
 	hyphens: auto;
 }
 
-.cool-annotation-content-author {
-	margin: 0;
-	margin-top: 2px;
-	height: 18px;
-}
-
 .cool-annotation-content-resolved {
 	color: var(--color-success);
 }
@@ -659,13 +712,13 @@ body {
 	font-family: var(--cool-font) !important;
 	font-size: var(--default-font-size);
 	border: 1px solid var(--color-border);
-	background-color: var(--color-background-dark);
 	color: var(--color-main-text);
 	overflow-x: hidden;
 	padding: 2px;
 	height: 54px;
 	width: 100%;
 	box-sizing: border-box;
+	border-radius: var(--border-radius);
 }
 
 .cool-annotation-textarea a:link,
@@ -690,6 +743,7 @@ body {
 	border-collapse: separate;
 	white-space: nowrap;
 	width: 100%;
+	margin-bottom: 16px;
 }
 
 .cool-annotation-img {
@@ -701,6 +755,7 @@ body {
 	height: 32px;
 	width: 32px;
 	padding: 0;
+	line-height: 1.5;
 }
 .cool-annotation-img .avatar-img{
 	border: none;
@@ -745,9 +800,9 @@ body {
 	margin: 0 !important;
 	padding: 0 !important;
 	min-width: initial !important;
-	width: var(--btn-size) !important;
-	height: var(--btn-size) !important;
-	vertical-align: top;
+	width: var(--btn-img-size) !important;
+	height: var(--btn-img-size) !important;
+	vertical-align: top !important;
 	border: 1px solid transparent !important;
 	display: inline-block !important;
 }
@@ -828,7 +883,7 @@ body {
 }
 
 .cool-bar {
-	box-shadow: 0 1px 5px rgba(0,0,0,0.65);
+	box-shadow: var(--box-shadow-modal);
 	border-radius: var(--border-radius);
 	display: inline-block;
 	margin: 3px;
@@ -890,7 +945,7 @@ body {
 
 .ui-dialog-title {
 	min-height: 1em;
-	font-size: var(--header-font-size);
+	font-size: calc(1.1 * var(--default-font-size));
 }
 
 .lokdialog_container.ui-dialog.ui-widget-content {
@@ -911,8 +966,8 @@ body {
 	overflow: auto;
 	border-top-left-radius: 0px;
 	border-top-right-radius: 0px;
-	border-bottom-left-radius: var(--border-radius);
-	border-bottom-right-radius: var(--border-radius);
+	border-bottom-left-radius: var(--border-radius-large);
+	border-bottom-right-radius: var(--border-radius-large);
 }
 
 #formulaautocompletePopup .lokdialog {
@@ -1182,20 +1237,19 @@ body {
 }
 
 .username-pop-up {
-	min-width: 110px;
 	padding-inline: 8px;
-	height: 45px;
+	height: calc(var(--default-font-size) + 2 * 8px);
 	position: absolute;
 	text-align: center;
 	z-index: 11;
 	font-family: var(--docs-font);
 	font-size: var(--default-font-size);
-	border-radius: var(--border-radius-large);
-	box-shadow: 0 0 2px 1px var(--color-box-shadow);
+	border-radius: var(--border-radius);
+	box-shadow: var(--box-shadow-modal);
 }
 
 .username-pop-up p {
-	line-height: 45px;
+	line-height: calc(var(--default-font-size) + 2 * 8px);
 	padding: 0;
 	margin: auto;
 	color: white;
@@ -1209,6 +1263,12 @@ body {
 	position: relative;
 	top: calc(-10px - var(--border-radius));
 	border-radius: var(--border-radius);
+	z-index: 0;
+}
+
+.username-pop-up > :not(.arrow-div) {
+	z-index: 2;
+	position: relative;
 }
 
 .hyperlink-pop-up-container .arrow-div {

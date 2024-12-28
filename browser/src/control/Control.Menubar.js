@@ -144,7 +144,8 @@ L.Control.Menubar = L.Control.extend({
 					{name: _('Show Ruler'), id: 'showruler', type: 'action'},
 					{name: _('Show Status Bar'), id: 'showstatusbar', type: 'action'},
 					{name: _('Hide Menu Bar'), id: 'togglemenubar', type: 'action'},
-					{name: _('Dark Mode'), id: 'toggledarktheme', type: 'action'},
+					// Comment out for now, as dark mode looks ugly and bad accessibility
+					// // {name: _('Dark Mode'), id: 'toggledarktheme', type: 'action'},
 					{name: _('Invert Background'), id: 'invertbackground', type: 'action'},
 					{uno: '.uno:SidebarDeck.PropertyDeck', name: _UNO('.uno:Sidebar')},
 					{uno: '.uno:Navigator', id: 'navigator'},
@@ -379,12 +380,12 @@ L.Control.Menubar = L.Control.extend({
 				{name: _UNO('.uno:RunMacro'), id: 'runmacro', uno: '.uno:RunMacro'}
 			]},
 			{name: _UNO('.uno:HelpMenu', 'text'), id: 'help', type: 'menu', menu: [
-				{name: _('Forum'), id: 'forum', type: 'action'},
+				// // {name: _('Forum'), id: 'forum', type: 'action'},
 				{name: _('Online Help'), id: 'online-help', type: 'action', iosapp: false},
 				{name: L.Control.MenubarShortcuts.addShortcut(_('Keyboard shortcuts'), L.Control.MenubarShortcuts.shortcuts.KEYBOARD_SHORTCUTS), id: 'keyboard-shortcuts', type: 'action', iosapp: false},
-				{name: _('Report an issue'), id: 'report-an-issue', type: 'action', iosapp: false},
-				{name: _('Latest Updates'), id: 'latestupdates', type: 'action', iosapp: false},
-				{name: _('Send Feedback'), id: 'feedback', type: 'action', mobileapp: false},
+				// // {name: _('Report an issue'), id: 'report-an-issue', type: 'action', iosapp: false},
+				// // {name: _('Latest Updates'), id: 'latestupdates', type: 'action', iosapp: false},
+				// // {name: _('Send Feedback'), id: 'feedback', type: 'action', mobileapp: false},
 				{name: _('Server audit'), id: 'serveraudit', type: 'action', mobileapp: false},
 				{name: _('About'), id: 'about', type: 'action'}]
 			},
@@ -460,7 +461,8 @@ L.Control.Menubar = L.Control.extend({
 				   {name: _('Show Status Bar'), id: 'showstatusbar', type: 'action'},
 				   {name: _('Notes View'), id: 'notesmode', type: 'action'},
 				   {name: _('Hide Menu Bar'), id: 'togglemenubar', type: 'action'},
-				   {name: _('Dark Mode'), id: 'toggledarktheme', type: 'action'},
+					 // Comment out for now, as dark mode looks ugly and bad accessibility
+				  // //  {name: _('Dark Mode'), id: 'toggledarktheme', type: 'action'},
 				   {name: _('Invert Background'), id: 'invertbackground', type: 'action'},
 				   {name: _('Master View'), uno: '.uno:SlideMasterPage'},
 				   {uno: '.uno:SidebarDeck.PropertyDeck', name: _UNO('.uno:Sidebar')},
@@ -555,11 +557,11 @@ L.Control.Menubar = L.Control.extend({
 
 			]},
 			{name: _UNO('.uno:HelpMenu', 'presentation'), id: 'help', type: 'menu', menu: [
-				{name: _('Online Help'), id: 'online-help', type: 'action', iosapp: false},
+				// // {name: _('Online Help'), id: 'online-help', type: 'action', iosapp: false},
 				{name: L.Control.MenubarShortcuts.addShortcut(_('Keyboard shortcuts'), L.Control.MenubarShortcuts.shortcuts.KEYBOARD_SHORTCUTS), id: 'keyboard-shortcuts', type: 'action', iosapp: false},
-				{name: _('Report an issue'), id: 'report-an-issue', type: 'action', iosapp: false},
-				{name: _('Latest Updates'), id: 'latestupdates', type: 'action', iosapp: false},
-				{name: _('Send Feedback'), id: 'feedback', type: 'action', mobileapp: false},
+				// // {name: _('Report an issue'), id: 'report-an-issue', type: 'action', iosapp: false},
+				// // {name: _('Latest Updates'), id: 'latestupdates', type: 'action', iosapp: false},
+				// // {name: _('Send Feedback'), id: 'feedback', type: 'action', mobileapp: false},
 				{name: _('Server audit'), id: 'serveraudit', type: 'action', mobileapp: false},
 				{name: _('About'), id: 'about', type: 'action'}]
 			},
@@ -615,7 +617,8 @@ L.Control.Menubar = L.Control.extend({
 					{uno: '.uno:GridUse', name: _UNO('.uno:GridUse')},
 					{type: 'separator'},
 					{name: _('Toggle UI Mode'), id: 'toggleuimode', type: 'action'},
-					{name: _('Dark Mode'), id: 'toggledarktheme', type: 'action'},
+					// Comment out for now, as dark mode looks ugly and bad accessibility
+					// // {name: _('Dark Mode'), id: 'toggledarktheme', type: 'action'},
 					{name: _('Invert Background'), id: 'invertbackground', type: 'action'},
 					{uno: '.uno:SidebarDeck.PropertyDeck', name: _UNO('.uno:Sidebar')},
 					{uno: '.uno:Navigator', id: 'navigator'},
@@ -692,11 +695,11 @@ L.Control.Menubar = L.Control.extend({
 					{name: _('None (Do not check spelling)'), id: 'nonelanguage', uno: '.uno:LanguageStatus?Language:string=Default_LANGUAGE_NONE'}]}
 			]},
 			{name: _UNO('.uno:HelpMenu', 'presentation'), id: 'help', type: 'menu', menu: [
-				{name: _('Online Help'), id: 'online-help', type: 'action', iosapp: false},
+				// // {name: _('Online Help'), id: 'online-help', type: 'action', iosapp: false},
 				{name: L.Control.MenubarShortcuts.addShortcut(_('Keyboard shortcuts'), L.Control.MenubarShortcuts.shortcuts.KEYBOARD_SHORTCUTS), id: 'keyboard-shortcuts', type: 'action', iosapp: false},
-				{name: _('Report an issue'), id: 'report-an-issue', type: 'action', iosapp: false},
-				{name: _('Latest Updates'), id: 'latestupdates', type: 'action', iosapp: false},
-				{name: _('Send Feedback'), id: 'feedback', type: 'action', mobileapp: false},
+				// // {name: _('Report an issue'), id: 'report-an-issue', type: 'action', iosapp: false},
+				// // {name: _('Latest Updates'), id: 'latestupdates', type: 'action', iosapp: false},
+				// // {name: _('Send Feedback'), id: 'feedback', type: 'action', mobileapp: false},
 				{name: _('Server audit'), id: 'serveraudit', type: 'action', mobileapp: false},
 				{name: _('About'), id: 'about', type: 'action'}]
 			},
@@ -760,7 +763,8 @@ L.Control.Menubar = L.Control.extend({
 				   {name: _('Toggle UI Mode'), id: 'toggleuimode', type: 'action'},
 				   {name: _('Show Status Bar'), id: 'showstatusbar', type: 'action'},
 				   {name: _('Hide Menu Bar'), id: 'togglemenubar', type: 'action'},
-				   {name: _('Dark Mode'), id: 'toggledarktheme', type: 'action'},
+					 // Comment out for now, as dark mode looks ugly and bad accessibility
+				  // //  {name: _('Dark Mode'), id: 'toggledarktheme', type: 'action'},
 				   {name: _('Invert Background'), id: 'invertbackground', type: 'action'},
 				   {uno: '.uno:SidebarDeck.PropertyDeck', name: _UNO('.uno:Sidebar')},
 				   {uno: '.uno:Navigator', id: 'navigator'},
@@ -978,11 +982,11 @@ L.Control.Menubar = L.Control.extend({
 				{name: _UNO('.uno:RunMacro'), id: 'runmacro', uno: '.uno:RunMacro'}
 			]},
 			{name: _UNO('.uno:HelpMenu', 'spreadsheet'), id: 'help', type: 'menu', menu: [
-				{name: _('Online Help'), id: 'online-help', type: 'action', iosapp: false},
+				// // {name: _('Online Help'), id: 'online-help', type: 'action', iosapp: false},
 				{name: L.Control.MenubarShortcuts.addShortcut(_('Keyboard shortcuts'), L.Control.MenubarShortcuts.shortcuts.KEYBOARD_SHORTCUTS), id: 'keyboard-shortcuts', type: 'action', iosapp: false},
-				{name: _('Report an issue'), id: 'report-an-issue', type: 'action', iosapp: false},
-				{name: _('Latest Updates'), id: 'latestupdates', type: 'action', iosapp: false},
-				{name: _('Send Feedback'), id: 'feedback', type: 'action', mobileapp: false},
+				// // {name: _('Report an issue'), id: 'report-an-issue', type: 'action', iosapp: false},
+				// // {name: _('Latest Updates'), id: 'latestupdates', type: 'action', iosapp: false},
+				// // {name: _('Send Feedback'), id: 'feedback', type: 'action', mobileapp: false},
 				{name: _('Server audit'), id: 'serveraudit', type: 'action', mobileapp: false},
 				{name: _('About'), id: 'about', type: 'action'}]
 			},
@@ -1036,7 +1040,8 @@ L.Control.Menubar = L.Control.extend({
 				{uno: '.uno:ControlCodes', id: 'formattingmarks'},
 				{uno: '.uno:SpellOnline'},
 				{name: _UNO('.uno:ShowResolvedAnnotations', 'text'), id: 'showresolved', type: 'action', uno: '.uno:ShowResolvedAnnotations'},
-				{name: _('Dark Mode'), id: 'toggledarktheme', type: 'action'},
+				// Comment out for now, as dark mode looks ugly and bad accessibility
+				// // {name: _('Dark Mode'), id: 'toggledarktheme', type: 'action'},
 				{name: _('Invert Background'), id: 'invertbackground', type: 'action'},
 			]
 			},
@@ -1089,7 +1094,8 @@ L.Control.Menubar = L.Control.extend({
 			{name: _UNO('.uno:ViewMenu', 'presentation'), id: 'view', type: 'menu', menu: [
 				{uno: '.uno:SpellOnline'},
 				{name: _UNO('.uno:FullScreen', 'presentation'), id: 'fullscreen', type: 'action', mobileapp: false},
-				{name: _('Dark Mode'), id: 'toggledarktheme', type: 'action'},
+				// Comment out for now, as dark mode looks ugly and bad accessibility
+				// // {name: _('Dark Mode'), id: 'toggledarktheme', type: 'action'},
 				{name: _('Invert Background'), id: 'invertbackground', type: 'action'},
 			]
 			},
@@ -1150,7 +1156,8 @@ L.Control.Menubar = L.Control.extend({
 			{name: _UNO('.uno:ViewMenu', 'presentation'), id: 'view', type: 'menu', menu: [
 				{uno: '.uno:SpellOnline'},
 				{name: _UNO('.uno:FullScreen', 'presentation'), id: 'fullscreen', type: 'action', mobileapp: false},
-				{name: _('Dark Mode'), id: 'toggledarktheme', type: 'action'},
+				// Comment out for now, as dark mode looks ugly and bad accessibility
+				// // {name: _('Dark Mode'), id: 'toggledarktheme', type: 'action'},
 				{name: _('Invert Background'), id: 'invertbackground', type: 'action'},
 			]
 			},
@@ -1210,7 +1217,8 @@ L.Control.Menubar = L.Control.extend({
 			{name: _UNO('.uno:ViewMenu', 'spreadsheet'), id: 'view', type: 'menu', menu: [
 				{uno: '.uno:SpellOnline'},
 				{name: _UNO('.uno:FullScreen', 'presentation'), id: 'fullscreen', type: 'action', mobileapp: false},
-				{name: _('Dark Mode'), id: 'toggledarktheme', type: 'action'},
+				// Comment out for now, as dark mode looks ugly and bad accessibility
+				// // {name: _('Dark Mode'), id: 'toggledarktheme', type: 'action'},
 				{name: _('Invert Background'), id: 'invertbackground', type: 'action'},
 			]
 			},
@@ -1383,7 +1391,7 @@ L.Control.Menubar = L.Control.extend({
 			'downloadas-ods', 'downloadas-xls', 'downloadas-xlsx', 'downloadas-csv', 'closedocument', // file menu
 			!(L.Browser.ie || L.Browser.edge) ? 'fullscreen' : undefined, 'zoomin', 'zoomout', 'zoomreset', 'showstatusbar', 'showresolved', 'showannotations', 'toggledarktheme', // view menu
 			() => app.map.eSignature ? 'insert-esignature' : undefined, // insert menu
-			'about', 'keyboard-shortcuts', 'latestupdates', 'feedback', 'serveraudit', 'online-help', 'report-an-issue', // help menu
+			'about', 'keyboard-shortcuts', /* 'latestupdates', 'feedback', */ 'serveraudit', 'online-help', /* 'report-an-issue', */ // help menu
 			'insertcomment'
 		]
 	},
@@ -2078,14 +2086,14 @@ L.Control.Menubar = L.Control.extend({
 			this._map.duplicatePage();
 		} else if (id === 'about') {
 			this._map.showLOAboutDialog();
-		} else if (id === 'latestupdates' && this._map.welcome) {
-			this._map.welcome.showWelcomeDialog();
-		} else if (id === 'feedback' && this._map.feedback) {
-			this._map.feedback.showFeedbackDialog();
-		} else if (id === 'report-an-issue') {
-			window.open('https://github.com/CollaboraOnline/online/issues', '_blank');
-		} else if (id === 'forum') {
-			window.open('https://forum.collaboraonline.com', '_blank');
+		// // } else if (id === 'latestupdates' && this._map.welcome) {
+		// // 	this._map.welcome.showWelcomeDialog();
+		// // } else if (id === 'feedback' && this._map.feedback) {
+		// // 	this._map.feedback.showFeedbackDialog();
+		// // } else if (id === 'report-an-issue') {
+		// // 	window.open('https://github.com/CollaboraOnline/online/issues', '_blank');
+		// // } else if (id === 'forum') {
+		// // 	window.open('https://forum.collaboraonline.com', '_blank');
 		} else if (id === 'inserthyperlink') {
 			app.dispatcher.dispatch('hyperlinkdialog');
 		} else if (id === 'keyboard-shortcuts' || id === 'online-help') {

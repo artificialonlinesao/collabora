@@ -984,7 +984,6 @@ L.Map.include({
 		}
 
 		$('#AutoSumMenu-button').css('margin-inline', '0');
-		$('#AutoSumMenu .unoarrow').css('margin', '0');
 
 		map.formulabar.blurField();
 		$('#addressInput input').blur();

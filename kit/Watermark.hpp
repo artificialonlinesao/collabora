@@ -29,7 +29,7 @@ public:
               double opacity)
         : _loKitDoc(loKitDoc)
         , _text(Util::replace(text, "\\n", "\n"))
-        , _font("Carlito")
+        , _font("Open Sans")
         , _alphaLevel(opacity)
     {
         if (_loKitDoc == nullptr)

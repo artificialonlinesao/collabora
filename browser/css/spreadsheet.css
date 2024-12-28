@@ -2,7 +2,6 @@
 	margin: 0;
 	padding: 0;
 	position: relative;
-	height: 38px;
 	overflow: hidden;
 	width: 100%;
 	white-space: nowrap;
@@ -20,6 +19,7 @@
 	scrollbar-width: none; /* Firefox */
 	-ms-overflow-style: none; /* IE and Edge */
 	margin-left: 6px;
+	display: flex;
 }
 
 .spreadsheet-tab-scroll::-webkit-scrollbar {
@@ -28,18 +28,20 @@
 
 .spreadsheet-tab {
 	margin: 0 !important;
-	padding: 6px 9px 4px !important;
+	padding: 5px 10px 6px !important;
 	text-decoration: none;
 
 	font: var(--default-font-size)/1.5 var(--cool-font);
 	display: inline-grid;
 	grid-auto-flow: column;
 	justify-content: center;
-	align-items: center;
 	border: 1px solid transparent;
 	border-radius: var(--border-radius);
 	background: var(--color-main-background);
 	color: var(--color-main-text);
+	
+	gap: 4px !important;
+	align-items: flex-end !important;
 }
 
 .spreadsheet-tab.spreadsheet-tab-selected {
@@ -55,6 +57,10 @@
 	background-repeat: no-repeat !important;
 }
 
+.spreadsheet-tab:not(.spreadsheet-tab-protected) > .lock {
+	display: none;
+}
+
 #spreadsheet-tab-scroll button.spreadsheet-tab-selected:hover {
 	background-color: var(--color-primary-dark) !important;
 	color: var(--color-primary-text) !important;
@@ -67,7 +73,7 @@
 }
 
 #drop-zone-end-container {
-	height: 32px;
+	height: 100%;
 	width: 128px;
 	opacity: 0;
 	vertical-align: bottom;
@@ -221,13 +227,9 @@
 	display: grid;
 	grid-template-columns: 120px auto;
 	align-items: center;
-	padding: 4px;
+	padding: 4px var(--side-padding);
 	background-color: var(--color-main-background);
 	border-top: 1px solid var(--color-border);
-}
-
-#formulabar-toolbox {
-	grid-template-rows: 30px;
 }
 
 #AutoSumMenu {
@@ -250,7 +252,6 @@
 #formulabar > .root-container > .formulabar {
 	display: grid;
 	grid-template-columns: 112px auto;
-	grid-template-rows: 30px;
 }
 
 #formulabar > .root-container > .formulabar * {
@@ -268,10 +269,11 @@
 	z-index: 1000;
 	display: grid;
 	grid-template-columns: 170px auto;
+	align-items: center;
 	text-align: center;
 	vertical-align: middle;
-	padding: 0;
-	background-color: var(--color-main-background);
+	padding: 2px var(--side-padding);
+	background-color: var(--color-background-dark);
 	border-top: 1px solid var(--color-border);
 }
 
@@ -279,7 +281,6 @@
 	display: grid;
 	grid-auto-flow: column;
 	align-content: center;
-	height: 38px;
 }
 
 #sheets-buttons-toolbox .unotoolbutton {
@@ -288,7 +289,7 @@
 }
 
 .tab-drop-area {
-	height: 32px;
+	height: 100%;
 	width: 4px;
 	opacity: 0;
 	vertical-align: bottom;

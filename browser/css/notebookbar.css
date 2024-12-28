@@ -178,6 +178,8 @@ html[data-theme='dark'] .savemodified.unotoolbutton .unobutton img {
 
 #toolbar-row {
 	height: 74px;
+	position: relative;
+	padding: 3px var(--side-padding);
 }
 
 .vertical.notebookbar {
@@ -194,6 +196,29 @@ html[data-theme='dark'] .savemodified.unotoolbutton .unobutton img {
 	align-items: center;
 	justify-items: center;
 	width: max-content;
+}
+
+.ui-content.level-0 .ui-tabpage > .horizontal.notebookbar {
+	grid-gap: 12px;
+
+	> .notebookbar:not(:last-child) {
+		position: relative;
+		margin-right: 12px;
+		align-content: center;
+	}
+
+	> .notebookbar:not(:last-child)::after {
+		content: '';
+		position: absolute;
+		right: -12.5px; /* 12px margin + 1/2 border */
+		top: 0;
+		bottom: 0;
+		border-right: 1px solid var(--color-toolbar-border);
+	}
+
+	> .notebookbar:empty {
+		display: none;
+	}
 }
 
 /* unobuttons */
@@ -243,10 +268,6 @@ html[data-theme='dark'] .savemodified.unotoolbutton .unobutton img {
 
 .unotoolbutton.notebookbar.inline:hover {
 	background-color: var(--color-background-darker);
-}
-
-.jsdialog .ui-tabs-content {
-	margin-top: 10px;
 }
 
 .ui-tabs-content .unobutton > img {
@@ -325,18 +346,60 @@ html[data-theme='dark'] .savemodified.unotoolbutton .unobutton img {
 }
 
 .unotoolbutton.notebookbar.has-label > *:not(.arrowbackground) { /*so they stay side by side*/
-	display: table-cell;
-	width: 100%;
+	justify-content: flex-start;
+	justify-items: center;
+	gap: 4px;
+	width: min-content;
 	height: 100%;
-}
+	text-align: center;
+	padding-left: 5px;
+	padding-right: 5px;
 
+	& label {
+		padding-left: 0 !important;
+		padding-right: 0 !important;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		overflow: hidden;
+	}
+
+	&:not(:has(~ .arrowbackground)) {
+		padding-bottom: 0px;
+	}
+
+	&:not(:has(~ .arrowbackground)) label {
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 2;
+		white-space: initial;
+		text-overflow: ellipsis;
+		overflow: hidden;
+	}
+}
 .unotoolbutton.notebookbar.has-label {
 	text-align: center;
+	grid-template-rows: auto auto;
+	justify-items: center;
+	box-sizing: border-box;
+	height: 56px;
+
+	.arrowbackground {
+		width: 100%;
+		grid-column: unset;
+
+		& > * {
+			margin-left: auto;
+			margin-right: auto;
+		}
+	}
+}
+
+.unotoolbutton.notebookbar:not(.has-label).has-dropdown .unobutton {
+	padding-right: 0px;
 }
 
 .unotoolbutton.notebookbar.has-label:not(.inline) img {
 	width: 24px !important;
-	margin: auto !important;
 	display: block;
 }
 .has-label.has-dropdown:not(.inline) .unolabel{
@@ -395,6 +458,7 @@ html[data-theme='dark'] .savemodified.unotoolbutton .unobutton img {
 	background-color: var(--color-stylesview-background);
 	filter: brightness(var(--brightness-stylesview));
 	box-sizing: border-box;
+	align-content: unset;
 }
 
 #stylesview:hover {
@@ -465,8 +529,8 @@ html[data-theme='dark'] .savemodified.unotoolbutton .unobutton img {
 
 /* Home tab */
 
-#numbertype {
-	width: 170px !important;
+#numbertype .ui-listbox {
+	width: 100%;
 }
 
 /* Review Tab */

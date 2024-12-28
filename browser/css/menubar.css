@@ -32,8 +32,15 @@
 
 .document-logo {
 	position: relative;
-	width: 30px;
-	height: 30px;
+	height: var(--btn-img-size);
+	margin-right: 12px;
+
+	aspect-ratio: var(--logo-aspect-ratio, var(--kyzon-solutions-logo-aspect-ratio));
+	background: var(--logo-light, var(--kyzon-solutions-logo-light));
+}
+
+[data-theme='dark'] .document-logo {
+	background: var(--logo-dark, var(--kyzon-solutions-logo-dark));
 }
 
 .document-title {
@@ -46,10 +53,6 @@
 	flex-direction: column;
 	width: fit-content;
 	flex: 1 1 auto;
-}
-
-.readonly .document-title {
-	justify-content: flex-end;
 }
 
 /* Add a class for the rotating effect */
@@ -69,7 +72,7 @@
 }
 #save {
 	display: flex;
-	font-size: var(--default-font-size);
+	font-size: calc(var(--header-font-size) * 0.8);
 	font-family: var(--cool-font);
 	position: relative;
 	background: transparent;
@@ -162,9 +165,10 @@ nav.hasnotebookbar #save.saved::after {
 }
 .main-nav.hasnotebookbar:not(.readonly) {
 	background: var(--color-main-background);
-	padding: 0px;
+	padding: 0px var(--side-padding);
 	overflow: scroll hidden;
-	padding-inline-start: 5px;
+	width: 100%;
+	box-sizing: border-box;
 }
 
 /* Customizations to sm-simple theme to make it look like LO menu, lo-menu class */
@@ -363,7 +367,7 @@ nav.hasnotebookbar #save.saved::after {
 	filter: brightness(100);
 }
 
-.writer-icon-img {
+/* .writer-icon-img {
 	background-image: url('images/x-office-document.svg');
 	background-size: 16px 16px;
 	background-repeat: no-repeat;
@@ -389,7 +393,7 @@ nav.hasnotebookbar #save.saved::after {
 	background-size: 16px 16px;
 	background-repeat: no-repeat;
 	background-position: center;
-}
+} */
 
 #menu-last-mod a {
 	color: var(--color-text-lighter);
