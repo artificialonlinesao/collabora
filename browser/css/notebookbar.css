@@ -178,7 +178,7 @@ html[data-theme='dark'] .savemodified.unotoolbutton .unobutton img {
 
 #toolbar-row {
 	height: 74px;
-    position: relative;
+	position: relative;
 	padding: 3px var(--side-padding);
 }
 
@@ -268,10 +268,6 @@ html[data-theme='dark'] .savemodified.unotoolbutton .unobutton img {
 
 .unotoolbutton.notebookbar.inline:hover {
 	background-color: var(--color-background-darker);
-}
-
-.jsdialog .ui-tabs-content {
-	margin-top: 10px;
 }
 
 .ui-tabs-content .unobutton > img {
@@ -462,7 +458,7 @@ html[data-theme='dark'] .savemodified.unotoolbutton .unobutton img {
 	background-color: var(--color-stylesview-background);
 	filter: brightness(var(--brightness-stylesview));
 	box-sizing: border-box;
-    align-content: unset;
+	align-content: unset;
 }
 
 #stylesview:hover {

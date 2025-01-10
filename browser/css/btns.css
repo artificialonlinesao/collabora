@@ -1,12 +1,13 @@
 /* For btns hover status see device-desktop.css */
 
 .jsdialog *[disabled] {
-	color: var(--color-text-lighter) !important;
+	color: var(--color-text-dark) !important;
 	background: var(--color-background-lighter);
+	cursor: not-allowed;
 }
 
-.jsdialog *[disabled]:not(label):not(.ui-frame-container):not(.checkbutton):not(.spinfieldcontainer):not(.ui-grid):not(.ui-content):not(.ui-listbox-container) {
-	border: 1px solid var(--color-border-lighter);
+.jsdialog *:not([disabled]) > *[disabled] {
+	opacity: 0.5;
 }
 
 /* toolbuttons */
@@ -86,12 +87,12 @@ button.jsdialog img {
 	flex-direction: row;
 	justify-content: end;
 	flex-wrap: wrap;
+	margin-top: 8px;
 }
 
 :not(.main-nav) .button-secondary,
 :not(.main-nav) > div > button:not(.ui-tab):not(.ui-corner-all):not(.button-primary):not(.unobutton):not(.form-field-button):not(.col) {
 	box-sizing: border-box;
-	height: 32px;
 	line-height: normal;
 	color: var(--color-main-text);
 	font-size: var(--default-font-size);
@@ -103,6 +104,29 @@ button.jsdialog img {
 	margin: 5px;
 	vertical-align: middle;
 	width: max-content;
+	padding: 6px 12px;
+}
+
+:not(.main-nav) > div > button:not(.ui-tab):not(.ui-corner-all):not(.button-primary):not(.unobutton):not(.form-field-button):not(.col) {
+	background-color: var(--color-background-lighter);
+	margin-left: 0;
+
+	.jsdialog.ui-button-box.end & {
+		/* restore margin back */
+		margin-left: 5px;
+	}
+	
+	&:not(:has(.access-key)) {
+		display: flex;
+		align-items: center;
+		justify-self: flex-start;
+		justify-content: center;
+		gap: 8px;
+	}
+
+	&:has(.access-key) img {
+		margin-right: 8px;
+	}
 }
 
 .button-primary {
@@ -116,6 +140,7 @@ button.jsdialog img {
 	margin: 5px;
 	vertical-align: middle;
 	width: max-content;
+	padding: 6px 12px;
 }
 
 .jsdialog.ui-button-box.end {

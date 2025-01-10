@@ -97,7 +97,7 @@ img.sidebar.ui-drawing-area {
 /* section content */
 
 .sidebar.ui-expander-content {
-	padding-inline: 10px;
+	padding: 10px;
 	width: 300px;
 	line-height: var(--default-height);
 }
@@ -124,7 +124,6 @@ div.sidebar.ui-grid .checkbutton.sidebar,
 
 .sidebar.spinfieldcontainer input {
 	color: var(--color-text-dark);
-	background-color: var(--color-background-dark);
 }
 
 .sidebar.ui-grid.ui-grid-cell .menubutton {
@@ -413,4 +412,51 @@ span.jsdialog.sidebar.ui-treeview-notexpandable {
 #TemplatePanel > div:nth-child(3),
 #TemplatePanel > div:nth-child(4) {
 	flex-grow: 1;
+}
+
+#A11yCheckIssuesPanel [id^='accessibilityCheckEntryBox'] {
+	align-items: center;
+}
+
+#box_no_alt {
+	display: grid;
+	grid-template-columns: 1fr auto;
+	grid-template-rows: repeat(4, auto);
+
+	> * {
+		grid-template-columns: subgrid !important;
+		grid-column: 1 / span 2;
+	}
+}
+
+#box_document .ui-grid {
+	grid-template-columns: 1fr auto auto !important;
+}
+
+#box_no_alt, #box_formatting, #box_hyperlink, #box_other {
+	.hidden {
+		display: none !important;
+	}
+}
+
+#transitions_icons {
+	font-size: var(--default-font-size);
+	margin-bottom: 16px;
+
+	.icon-view-item-container {
+		margin: 0px;
+	}
+}
+
+#SdSlideTransitionPanelPanelExpander  .sidebar.ui-grid {
+	> .hidden, >.ui-grid-cell:empty {
+		display: none !important;
+	}
+}
+
+#SdSlideTransitionPanelPanelExpander  .ui-expander-content[id] {
+	&, div {
+		margin-bottom: 0;
+		padding-bottom: 0;
+	}
 }
