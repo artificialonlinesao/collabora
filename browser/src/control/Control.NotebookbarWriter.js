@@ -591,9 +591,9 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 							{
 								'id': 'fontnamecombobox',
 								'type': 'combobox',
-								'text': 'Carlito',
+								'text': 'Open Sans',
 								'entries': [
-									'Carlito'
+									'Open Sans'
 								],
 								'selectedCount': '1',
 								'selectedEntries': [
