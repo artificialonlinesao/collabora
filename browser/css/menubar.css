@@ -32,8 +32,15 @@
 
 .document-logo {
 	position: relative;
-	width: 30px;
-	height: 30px;
+	height: var(--btn-img-size);
+	margin-right: 12px;
+
+	aspect-ratio: var(--logo-aspect-ratio, var(--kyzon-solutions-logo-aspect-ratio));
+	background: var(--logo-light, var(--kyzon-solutions-logo-light));
+}
+
+[data-theme='dark'] .document-logo {
+	background: var(--logo-dark, var(--kyzon-solutions-logo-dark));
 }
 
 .document-title {
@@ -360,7 +367,7 @@ nav.hasnotebookbar #save.saved::after {
 	filter: brightness(100);
 }
 
-.writer-icon-img {
+/* .writer-icon-img {
 	background-image: url('images/x-office-document.svg');
 	background-size: 16px 16px;
 	background-repeat: no-repeat;
@@ -386,7 +393,7 @@ nav.hasnotebookbar #save.saved::after {
 	background-size: 16px 16px;
 	background-repeat: no-repeat;
 	background-position: center;
-}
+} */
 
 #menu-last-mod a {
 	color: var(--color-text-lighter);
