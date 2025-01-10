@@ -23,7 +23,7 @@
 	outline: 0;
 	margin: auto;
 	/* general typography */
-	font: var(--default-font-size)/1.5 'Helvetica Neue', Arial, Helvetica, sans-serif;
+	font: var(--default-font-size)/1.5 var(--docs-font);
 }
 .leaflet-tile,
 .leaflet-marker-icon,
@@ -314,7 +314,7 @@
 
 .leaflet-control-zoom-in,
 .leaflet-control-zoom-out {
-	font: bold 18px 'Lucida Console', Monaco, monospace;
+	font: bold 18px var(--docs--pre-font);
 	text-indent: 1px;
 }
 .leaflet-control-zoom-out {
@@ -621,7 +621,7 @@ a.leaflet-control-buttons:hover:first-child {
 
 .debug .leaflet-popup-content {
 	margin: 1px;
-	font: 9px/8px Tahoma, Verdana, sans-serif;
+	font: 9px/8px var(--docs-font);
 	line-height: 1;
 	background: rgba(0, 0, 0, 0);
 	pointer-events: none;
@@ -864,7 +864,7 @@ input.clipboard {
 
 .leaflet-progress-label {
 	text-align: center;
-	font: var(--default-font-size)/1.5 var(--cool-font);
+	font: var(--default-font-size)/1.5 var(--docs-font);
 }
 
 .leaflet-progress-label.brand-label {

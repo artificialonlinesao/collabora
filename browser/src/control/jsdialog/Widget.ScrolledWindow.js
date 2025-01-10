@@ -79,7 +79,7 @@ function _scrolledWindowControl(parentContainer, data, builder) {
 	var realContentHeight = scrollwindow.scrollHeight;
 	var realContentWidth = scrollwindow.scrollwidth;
 
-	var margin = 15;
+	var margin = 0;
 
 	var verticalSteps = (data.vertical.upper - data.vertical.lower - data.vertical.page_size) * 10;
 	if (verticalSteps < 0 || noVertical)

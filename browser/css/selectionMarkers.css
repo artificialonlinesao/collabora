@@ -28,3 +28,9 @@
 	z-index: 11;
 	user-select: none;
 }
+
+.html-object-section:not(:empty):not(.leaflet-cursor-handler):not(.text-selection-handle-start):not(.text-selection-handle-end) {
+	font-family: var(--cool-font);
+	font-size: var(--tooltip-font-size);
+	padding: 4px 8px;
+}

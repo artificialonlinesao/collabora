@@ -1,6 +1,6 @@
 /* Overlay for popups and dropdowns allowing to handle click outside */
 .jsdialog-overlay {
-	position: absolute;
+	position: fixed;
 	background: transparent;
 	top: 0;
 	right: 0;
@@ -47,10 +47,6 @@
 	padding-right: 5px;
 }
 
-#AcceptRejectChangesDialog {
-	width: max-content;
-	max-width: 1000px;
-}
 .jsdialog.one-child-popup {
 	border: 0;
 	margin: 0 !important;
@@ -69,13 +65,16 @@ div#autoFillPreviewTooltip .lokdialog.ui-dialog-content.ui-widget-content {
 .hyperlink-pop-up-container {
 	min-width: 198px;
 	max-width: 498px;
-	border: 1px solid var(--color-border-darker) !important;
-	border-radius: var(--border-radius);
-	box-shadow: 0 0 3px var(--color-box-shadow);
+	border-radius: var(--border-radius-menu);
+	box-shadow: var(--box-shadow-modal);
 	overflow: auto;
 	position: relative;
 	margin: auto;
 	max-height: calc(100% - 30px);
+
+	.jsdialog-overlay.dimmed & {
+		min-width: 300px;
+	}
 }
 
 /* Overwrite .jsdialog-window.modalpopup width */
@@ -93,11 +92,18 @@ div#autoFillPreviewTooltip .lokdialog.ui-dialog-content.ui-widget-content {
 }
 
 .jsdialog-container .ui-dialog-content {
-	max-height: calc( 90vh - 34px);
 	overflow-y: auto !important;
 	background-color: var(--color-background-lighter) !important;
 	font-family: var(--jquery-ui-font);
 	line-height: 1.5;
+	font-size: var(--default-font-size);
+
+	.jsdialog-overlay.cancellable .jsdialog-window.modalpopup & {
+		max-height: calc(50vh);
+	}
+	.jsdialog-window:not(.modalpopup) & {
+		max-height: calc( 90vh - 34px);
+	}
 }
 
 #SortKeyWindow {
@@ -121,6 +127,14 @@ div#autoFillPreviewTooltip .lokdialog.ui-dialog-content.ui-widget-content {
 	overflow: hidden;
 }
 
+.ui-frame-container {
+	margin-bottom: 16px;
+}
+
+.ui-frame-container > .ui-frame > .ui-frame-label {
+	font-weight: 600;
+}
+
 .jsdialog.vertical label, .ui-frame-label {
 	margin: auto 0px;
 	color: var(--color-main-text);
@@ -136,20 +150,29 @@ div#autoFillPreviewTooltip .lokdialog.ui-dialog-content.ui-widget-content {
 	margin: 4px;
 }
 
+#accessibilityCheckBox {
+	margin-bottom: 16px;
+}
+
 #accessibilityCheckBox .jsdialog.ui-text {
 	margin: 0;
-	padding-inline-end: 112px;
 	color: var(--color-main-text);
 	font-size: var(--default-font-size);
 	text-transform: none;
 }
 
 *:not(.modalpopup) > .lokdialog_container.ui-dialog.ui-widget-content, .autofilter-container {
-	border: 1px solid var(--color-border-darker);
-	-webkit-box-shadow: 0 0 3px var(--color-border-darker);
-	box-shadow: 0 0 3px var(--color-border-darker);
-	border-radius: var(--border-radius);
+	box-shadow: var(--box-shadow-modal);
+	border-radius: var(--border-radius-large);
 	background: var(--color-background-darker);
+}
+
+.jsdialog h1 {
+	font-size: 1.5em;
+}
+
+.jsdialog h2 {
+	font-size: 1.3em;
 }
 
 .jsdialog.row {
@@ -188,7 +211,8 @@ td.jsdialog > [id^='table-box']:not(.sidebar) {
 	border-spacing: 0px;
 	width: 100%;
 	display: grid;
-	grid-gap: 4px;
+	row-gap: 4px;
+	column-gap: 8px;
 }
 
 /* Special Characters dialog */
@@ -204,6 +228,10 @@ td.jsdialog > [id^='table-box']:not(.sidebar) {
 }
 #searchframe input[type='checkbox'] {
 	margin-inline-start: 0;
+}
+
+#search_grid #checkboxrow {
+	column-gap: 16px;
 }
 
 /* keep structure with hidden elements correct */
@@ -236,7 +264,7 @@ td.jsdialog > [id^='table-box']:not(.sidebar) {
 	max-width: 700px;
 }
 /* - Also used in SpellingDialog where suggestion come in form
-     of an image*/
+	 of an image*/
 .jsdialog.ui-scrollwindow.has-ui-drawing-area {
 	width: max-content;
 }
@@ -264,10 +292,13 @@ td.jsdialog > [id^='table-box']:not(.sidebar) {
 }
 
 .jsdialog.ui-separator.horizontal {
-	margin: 0px;
+	margin: 4px 0px;
 	background-color: var(--color-border-lighter);
 	border: none;
 	height: 1px;
+}
+.jsdialog.ui-separator.horizontal:last-child {
+	display: none;
 }
 
 /* Badge */
@@ -368,6 +399,7 @@ td.jsdialog > [id^='table-box']:not(.sidebar) {
 
 .jsdialog.ui-expander {
 	box-shadow: 0 1px 0px 0 var(--color-border-lighter);
+	padding: 4px 0px;
 }
 
 #options.ui-expander {
@@ -376,6 +408,7 @@ td.jsdialog > [id^='table-box']:not(.sidebar) {
 
 .ui-expander-label {
 	color: #666;
+	font-size: var(--default-font-size);
 }
 
 .ui-expander-label::before,
@@ -437,7 +470,6 @@ td.jsdialog > [id^='table-box']:not(.sidebar) {
 }
 
 .ui-expander-label.expanded {
-	padding-left: 14px; /*adding extra padding to account for image absolute position*/
 	color: #444;
 }
 
@@ -453,8 +485,8 @@ td.jsdialog > [id^='table-box']:not(.sidebar) {
 	cursor: pointer;
 }
 
-.ui-expander-content > .root-container.jsdialog {
-	margin: 4px;
+.ui-expander-content > .root-container.jsdialog:not(:has(.ui-expander-container)) {
+	margin: 8px 14px;
 }
 
 /* Link Button*/
@@ -480,8 +512,8 @@ td.jsdialog > [id^='table-box']:not(.sidebar) {
 	max-width: 1000px;
 	min-width: 150px;
 	min-height: 100px;
-	padding: 1px;
-	padding-inline-end: 3px;
+	padding: 8px 4px;
+	column-gap: 8px;
 	color: var(--color-main-text);
 	font-size: var(--default-font-size);
 	line-height: var(--default-height);
@@ -520,6 +552,8 @@ td.jsdialog > [id^='table-box']:not(.sidebar) {
 .ui-treeview:not(.ui-treeview-tree) .ui-treeview-entry {
 	display: grid;
 	grid-template-columns: subgrid;
+	border-radius: var(--border-radius);
+	padding: 0px 8px;
 }
 
 .ui-treeview.ui-treeview-tree .ui-treeview-entry {
@@ -561,6 +595,8 @@ td.jsdialog > [id^='table-box']:not(.sidebar) {
 	display: grid;
 	grid-auto-flow: column;
 	/* grid-column: '1 / ' + (this._columns + 1) - set inside JS */
+	padding: 0px 8px;
+	grid-template-columns: subgrid;
 }
 
 .ui-treeview-header {
@@ -607,6 +643,7 @@ input[type='checkbox'].autofilter, .jsdialog input[type='checkbox'] {
 	height: 20px;
 	background: url('images/lc_checkboxoff.svg') no-repeat center;
 	margin: 1px 8px;
+	margin-left: 0px;
 }
 
 [data-theme='dark'] input[type='checkbox'].autofilter, [data-theme='dark'] .jsdialog input[type='checkbox'] {
@@ -662,23 +699,11 @@ input[type='checkbox']:checked.autofilter, .jsdialog input[type='checkbox']:chec
 /* tree grid */
 
 .ui-treeview div[aria-level='1'] + .ui-treeview-expanded-content {
-	margin-left: 2.5ch;
+	margin-left: calc(3ch + 12px);
 }
 
-.ui-treeview div[aria-level='2'] + .ui-treeview-expanded-content {
-	margin-left: 5ch;
-}
-
-.ui-treeview div[aria-level='3'] + .ui-treeview-expanded-content {
-	margin-left: 7.5ch;
-}
-
-.ui-treeview div[aria-level='4'] + .ui-treeview-expanded-content {
-	margin-left: 10ch;
-}
-
-.ui-treeview div[aria-level='5'] + .ui-treeview-expanded-content {
-	margin-left: 12.5ch;
+.ui-treeview .ui-treeview-expanded-content {
+	margin-left: 3ch;
 }
 
 .ui-treeview div.ui-treeview-expander {
@@ -692,14 +717,18 @@ input[type='checkbox']:checked.autofilter, .jsdialog input[type='checkbox']:chec
 }
 .context-menu-list {
 	background: var(--color-background-lighter);
-	border: 1px solid var(--color-border-dark);
-	border-radius: var(--border-radius);
-	-webkit-box-shadow: 0 0 3px var(--color-box-shadow);
-	box-shadow: 0 0 3px var(--color-box-shadow);
+	border: none;
+	border-radius: var(--border-radius-menu);
+	-webkit-box-shadow: var(--box-shadow-modal);
+	box-shadow: var(--box-shadow-modal);
+	padding: 4px 0;
 }
 .context-menu-item {
 	color: var(--color-main-text);
 	background-color: transparent;
+	padding: 6px 12px;
+	margin: 0px 4px;
+	border-radius: var(--border-radius);
 }
 .context-menu-separator {
 	border-bottom: 1px solid var(--color-border-lighter);
@@ -709,17 +738,10 @@ input[type='checkbox']:checked.autofilter, .jsdialog input[type='checkbox']:chec
 	color: var(--color-text-lighter);
 	background-color: var(--color-background-lighter);
 }
-/* input text */
-
-.ui-dialog .jsdialog.ui-edit:focus-visible {
-	outline-offset: -2px;
-}
 
 .jsdialog.ui-edit, #hyperlink-text-box:not(.mobile-wizard) {
 	color: var(--color-text-dark);
-	background-color: var(--color-background-dark);
-	line-height: 28px;
-	max-height: 32px;
+	height: 28px;
 	width: auto;
 	width: -webkit-fill-available;
 	width: -moz-available;
@@ -728,6 +750,7 @@ input[type='checkbox']:checked.autofilter, .jsdialog input[type='checkbox']:chec
 	overflow: hidden;
 	align-self: center;
 	padding-inline: 4px;
+	box-sizing: border-box;
 }
 
 #search_edit.ui-edit.autofilter {
@@ -774,6 +797,7 @@ input[type='checkbox']:checked.autofilter, .jsdialog input[type='checkbox']:chec
 	height: 18px;
 	width: 20px;
 	display: block;
+	margin-left: 0px;
 }
 
 .jsdialog .radiobutton > label {
@@ -788,7 +812,6 @@ input[type='checkbox']:checked.autofilter, .jsdialog input[type='checkbox']:chec
 
 .ui-dialog-content .jsdialog.ui-text {
 	padding-inline-start: 0;
-	margin: auto 5px;
 }
 
 .jsdialog.ui-grid-cell input[type='checkbox'] + label[for^='hidden-part-checkbox'] {
@@ -805,12 +828,12 @@ input[type='checkbox']:checked.autofilter, .jsdialog input[type='checkbox']:chec
 	margin-inline-end: 5px;
 	min-width: 70px;
 	width: 100%;
+	align-self: center;
 }
 
 .spinfieldcontainer input {
 	border: 1px solid var(--color-border-dark);
 	border-radius: var(--border-radius);
-	background: var(--color-background-dark);
 	color: var(--color-text-dark);
 }
 
@@ -835,9 +858,9 @@ input[type='checkbox']:checked.autofilter, .jsdialog input[type='checkbox']:chec
 
 .spinfieldunit {
 	font-size: var(--default-font-size);
-	color: var(--color-text-dark);
+	color: var(--color-text-lighter);
 	margin: 5px;
-	margin-inline-start: calc(-50px);
+	margin-inline-start: calc(-40px);
 }
 /* spinfield (number) */
 input[type='number'] {
@@ -864,7 +887,6 @@ input[type='number']:hover::-webkit-outer-spin-button {
 	margin: auto 0;
 	align-items: center;
 	box-sizing: border-box;
-	height: 24px;
 }
 
 .ui-listbox {
@@ -884,14 +906,13 @@ input[type='number']:hover::-webkit-outer-spin-button {
 	font-size: var(--default-font-size);
 	font-family: var(--jquery-ui-font);
 	border-radius: var(--border-radius);
-	background-color: var(--color-background-dark);
 	color: var(--color-text-dark);
 }
 
 .jsdialog-window .ui-listbox,
 .jsdialog-window .ui-combobox,
 .jsdialog-window .ui-timefield {
-	height: 32px;/* Use the same height as in .jsdialog.ui-edit */
+	height: 28px;/* Use the same height as in .jsdialog.ui-edit */
 	min-width: 100px;
 	width: 100%;
 }
@@ -939,7 +960,7 @@ input[type='number']:hover::-webkit-outer-spin-button {
 /* ui-combobox */
 .ui-combobox,
 .ui-timefield {
-	border: 1px solid var(--color-border);
+	border: 1px solid var(--color-border-dark);
 }
 
 .ui-combobox-content {
@@ -952,11 +973,14 @@ input[type='number']:hover::-webkit-outer-spin-button {
 	color: var(--color-text-dark);
 	background-color: var(--color-background-lighter);
 	padding-inline: 5px;
+	font-size: var(--default-font-size);
 }
 
 .ui-combobox-button {
 	padding-left: 20px;
-	border-left: 1px solid var(--color-border);
+	border-left: 1px solid var(--color-border-dark);
+	height: 100%;
+	align-content: center;
 }
 
 .ui-combobox-button:hover {
@@ -987,20 +1011,23 @@ input[type='number']:hover::-webkit-outer-spin-button {
 
 .modalpopup[id$='-dropdown'] .ui-grid {
 	grid-gap: 0px;
+	padding: 4px 0px;
 }
 
 .ui-combobox-entry {
-	width: calc(100% + 15px); /* + padding for scrollbar */
 	display: flex;
 	align-items: center;
+	margin: 0px 4px;
+	border-radius: calc(0.75 * var(--border-radius-menu));
+	padding: 0px 5px;
+	color: var(--color-text-dark);
 }
 
 .ui-combobox-entry:hover {
 	background-color: var(--color-background-dark);
 }
 
-.ui-combobox-entry.selected:not(:hover) span {
-	border: 1px solid var(--color-primary);
+.ui-combobox-entry.selected:not(:hover) {
 	background-color: var(--color-primary);
 	color: var(--color-primary-text);
 }
@@ -1012,7 +1039,7 @@ input[type='number']:hover::-webkit-outer-spin-button {
 	width: 100%;
 	font-size: var(--default-font-size);
 	font-family: var(--jquery-ui-font);
-	color: var(--color-text-dark);
+	box-sizing: border-box;
 }
 
 .ui-combobox-entry.checked::before {
@@ -1043,7 +1070,6 @@ input[type='number']:hover::-webkit-outer-spin-button {
 
 .ui-combobox-entry img:hover {
 	border: 1px solid var(--color-border-darker);
-	filter: contrast(0.5);
 }
 
 .ui-combobox-entry.selected img:not(:hover) {
@@ -1067,14 +1093,13 @@ input[type='number']:hover::-webkit-outer-spin-button {
 	width: 9px;
 	background: url('images/lc_menu_chevron.svg') no-repeat;
 	height: 9px;
-	margin-inline-start: -9px;
 }
 
 .ui-combobox-entry.ui-has-menu > span {
 	/* menu entries have 5px all around padding,
 	 add extra 9px at the horizontal end = 14px
 	 so we can re-position the arrow/chevron  */
-	padding-inline-end: 14px;
+	padding-inline-end: 20px;
 }
 
 /* Apply style always show real colors */
@@ -1090,7 +1115,6 @@ input[type='number']:hover::-webkit-outer-spin-button {
 /* ui-textarea */
 .jsdialog.ui-textarea {
 	color: var(--color-text-dark);
-	background-color: var(--color-background-dark);
 	border: 1px solid var(--color-border-dark);
 	border-radius: var(--border-radius);
 	vertical-align: top;
@@ -1410,7 +1434,7 @@ input[type='number']:hover::-webkit-outer-spin-button {
 	border: 4px solid transparent;
 	border-top: 5px solid var(--color-main-text);
 	display: inline-block !important;
-	margin-left: 3px;
+	margin-left: 2px;
 	margin-top: 4px;
 }
 
@@ -1420,7 +1444,7 @@ input[type='number']:hover::-webkit-outer-spin-button {
 
 .arrowbackground {
 	box-sizing: border-box;
-	width: 16px;
+	width: 12px;
 	height: 100%;
 	display: flex;
 	align-items: center;
@@ -1460,7 +1484,6 @@ input[type='number']:hover::-webkit-outer-spin-button {
 .menubutton .arrow {
 	display: table-cell !important;
 	float: right;
-	margin: 5px 0px 5px 5px;
 }
 
 .jsdialog.menubutton[disabled] {
@@ -1499,15 +1522,19 @@ input[type='number']:hover::-webkit-outer-spin-button {
 
 /* color picker */
 .ui-color-picker {
-	padding: 4px;
+	padding: 4px 12px;
 }
 
 .ui-color-picker,
 #ui-color-picker-custom,
 #ui-color-picker-recent {
 	display: grid;
-	grid-gap: 4px;
+	grid-gap: 8px;
 	align-items: center;
+}
+
+.ui-color-picker label {
+	padding-left: 0 !important;
 }
 
 .ui-color-picker-palette {
@@ -1536,10 +1563,13 @@ input[type='number']:hover::-webkit-outer-spin-button {
 .ui-color-picker button {
 	margin: 0px !important;
 	width: 100% !important;
+	padding: 6px 0px;
 }
 
 #ui-color-picker-custom input {
 	max-width: 75px;
+	border-radius: var(--border-radius);
+	border: 1px solid var(--color-border-darker);
 }
 
 /* busy popup */
@@ -1856,8 +1886,8 @@ input[type='number']:hover::-webkit-outer-spin-button {
 .ui-custom-textarea-cursor-layer,
 .ui-custom-textarea-text-layer {
 	font-family: monospace;
-	line-height: 1.2;
-	font-size: calc(var(--default-font-size)*1.2) !important;
+	line-height: 16px; /* 24px - 8px */
+	font-size: var(--default-font-size) !important;
 	color: var(--color-main-text);
 	overflow-wrap: anywhere;
 }
@@ -1921,18 +1951,12 @@ input[type='number']:hover::-webkit-outer-spin-button {
 	opacity: 1;
 }
 
-.formulabar.unotoolbutton img, .formulabar.ui-pushbutton {
-	height: 24px !important;
-	width: 24px !important;
-	min-width: unset !important;
-}
-
 #expand.formulabar {
-	height: 30px !important;
 	margin: 0 !important;
 	border-radius: 0 var(--border-radius) var(--border-radius) 0 !important;
 	border-inline-start: none !important;
 	background-color: var(--color-main-background) !important;
+	width: var(--btn-size);
 }
 
 /* Zotero dialog*/
@@ -1986,7 +2010,6 @@ input[type='number']:hover::-webkit-outer-spin-button {
 #toolbar-down .jsdialog.ui-edit:not([disabled]):hover,
 #toolbar-down .jsdialog.ui-textarea:not([disabled]):hover {
 	color: var(--color-text-darker);
-	background-color: transparent !important;
 	border-color: transparent;
 }
 #toolbar-down .unobutton .unolabel {
@@ -2225,4 +2248,147 @@ kbd,
 
 #FormulaDialog #ed_formula.ui-textarea {
 	max-width: 392px;
+}
+
+#jpegcompress {
+	width: max-content;
+}
+
+#ParaIndentSpacing, #TransparencyTabPage #box2 {
+	gap: 24px;
+}
+
+#labelFT_LINEDIST {
+	justify-self: center;
+}
+
+#DocumentInfoPage #grid1 {
+	grid-template-columns: auto 1fr !important;
+}
+
+#DocumentInfoPage label {
+	width: max-content;
+}
+
+#SpecialCharactersDialog #grid1 {
+	grid-gap: 16px;
+}
+
+#SpecialCharactersDialog #grid2 {
+	column-gap: 12px;
+}
+
+#SpecialCharactersDialog #box4 {
+	align-items: center;
+}
+
+#SpecialCharactersDialog #favbtn {
+	margin-left: 0;
+}
+
+#FindReplaceDialog #OptionsExpander.ui-expander-container {
+	margin-top: 16px;
+}
+
+#DLG_TITLEPAGE #box4, #DLG_TITLEPAGE #box5 {
+	margin-left: 30px;
+}
+
+#PageFormatPage #grid2, 
+#PageFormatPage #grid5, 
+#ColorPicker #box1, 
+[id^='FL_POSITION'][id*='-content'] > * > * > *, 
+#FL_ANGLE-content > * > * > *,
+#FL_SIZE-content > * > * > * {
+	gap: 24px;
+}
+
+#TransparencyTabPage-content #gridGradient {
+	margin-top: 24px;
+}
+
+label#lineposft {
+	justify-self: flex-end;
+}
+
+#palette_listbox {
+	margin-bottom: 8px;
+	margin-top: 8px;
+}
+
+#PositionPage #box4, #PositionPage #box7 {
+	column-gap: 8px;
+}
+
+#ContentControlDialog {
+	.ui-grid {
+		margin-bottom: 16px;
+	}
+}
+
+#checkboxframe {
+	.ui-grid {
+		align-items: center;
+	}
+
+	.root-container.jsdialog {
+		margin: 0;
+	}
+}
+
+#TransparencyTabPage-content {
+	.ui-grid label {
+		width: max-content;
+	}
+}
+
+#ContentControlDialog, 
+#ThemeColorEditDialog, 
+#indexentrygrid, 
+#FootnotePage, 
+#SwPosSizePage, 
+[id^='HeaderFooterTab'],
+#RID_SVXPAGE_PAGE,
+[id^='FL_POSITION'][id*='-content'],
+#FL_ANGLE-content,
+#FL_SIZE-content {
+	.ui-text {
+		width: max-content;
+	}
+}
+
+#scrolledwindow, #suggestionsft {
+	& ~ .ui-grid {
+		justify-items: flex-start;
+	}
+}
+
+#notindictft ~ #toolbar .toolbox {
+	gap: 8px;
+}
+
+#OptLinguPage {
+	& > .ui-frame-container:has(#lingumodulesft.hidden):has(#lingumodules.hidden):has(#lingumodulesedit.hidden) {
+		display: none;
+	}
+}
+
+#indexentrygrid {
+	align-items: center;
+}
+
+#selectedentryframe {
+	margin-top: 16px;
+}
+
+#HeaderFooterTab, #HeaderFooterTab0 {
+	[id^='datetime_cb'] ~ [id^='datetimebox'], 
+	[id^='header_cb'] ~ [id^='header_box'], 
+	[id^='footer_cb'] ~ [id^='footer_box'] {
+		margin-left: 30px;
+	}
+}
+
+#ManageNamesDialog #more {
+	margin-top: 12px;
 }

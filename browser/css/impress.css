@@ -5,6 +5,7 @@
 
 #slide-sorter {
 	background: transparent !important;
+	padding: 0 calc(var(--side-padding) - 6px);
 }
 #presentation-controls-wrapper {
 	background: var(--color-main-background) !important;
@@ -22,4 +23,8 @@
 	height: 100%;
 	left: 50%;
 	transform: translateX(-50%);
+}
+
+#first-drop-site {
+	padding: 0;
 }
