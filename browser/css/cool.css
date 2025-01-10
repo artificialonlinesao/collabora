@@ -1,13 +1,13 @@
 :root {
 	/*All used fonts (except w2ui)
 	----------------------------------*/
-	--cool-font: 'Segoe UI', Tahoma, Arial, Helvetica, sans-serif;
+	--cool-font: 'tt-commons-pro', 'Source Sans Pro', 'Open Sans', sans-serif;
 	/*investigate what are the drawback in consisntly use --cool-fonts
 	for jquery-ui and perhaps mobile*/
-	--mobile-font: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;
-	--jquery-ui-font: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;
+	--mobile-font: 'tt-commons-pro', 'Source Sans Pro', 'Open Sans', sans-serif;
+	--jquery-ui-font: 'tt-commons-pro', 'Source Sans Pro', 'Open Sans', sans-serif;
 
-	--docs-font: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	--docs-font: 'tt-commons-pro', 'Source Sans Pro', 'Open Sans', sans-serif;
 	--docs--pre-font: 'Consolas', 'Menlo', 'Lucida Console', 'Courier New', monospace;
 
 	/* Shared color for cell and selection border */
