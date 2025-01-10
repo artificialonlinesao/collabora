@@ -1247,13 +1247,14 @@ L.Control.NotebookbarCalc = L.Control.NotebookbarWriter.extend({
 				],
 				'vertical': 'true'
 			},
-			{
-				'id':'toggledarktheme',
-				'class': 'unotoggledarktheme',
-				'type': 'bigcustomtoolitem',
-				'text': _('Dark Mode'),
-				'accessibility': { focusBack: true,	combination: 'DT', de: null }
-			},
+      // Comment out for now, as dark mode looks ugly and bad accessibility
+			// // {
+			// // 	'id':'toggledarktheme',
+			// // 	'class': 'unotoggledarktheme',
+			// // 	'type': 'bigcustomtoolitem',
+			// // 	'text': _('Dark Mode'),
+			// // 	'accessibility': { focusBack: true,	combination: 'DT', de: null }
+			// // },
 			{
 				'id':'invertbackground',
 				'class': 'unoinvertbackground',

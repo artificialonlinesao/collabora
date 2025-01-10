@@ -443,12 +443,13 @@ L.Control.NotebookbarDraw = L.Control.NotebookbarImpress.extend({
 				],
 				'vertical': 'true'
 			},
-			{
-				'id':'toggledarktheme',
-				'type': 'bigcustomtoolitem',
-				'text': _('Dark Mode'),
-				'accessibility': { focusBack: true, combination: 'DT', de: null }
-			},
+      // Comment out for now, as dark mode looks ugly and bad accessibility
+			// // {
+			// // 	'id':'toggledarktheme',
+			// // 	'type': 'bigcustomtoolitem',
+			// // 	'text': _('Dark Mode'),
+			// // 	'accessibility': { focusBack: true, combination: 'DT', de: null }
+			// // },
 			{
                 'id':'invertbackground',
                 'class': 'unoinvertbackground',

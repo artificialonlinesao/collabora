@@ -70,15 +70,16 @@ L.Map.Welcome = L.Handler.extend({
 		return false;
 	},
 
+	// disable this
 	showWelcomeDialog: function() {
-		if (this._iframeWelcome && this._iframeWelcome.queryContainer())
-			this.remove();
+		// // if (this._iframeWelcome && this._iframeWelcome.queryContainer())
+		// // 	this.remove();
 
-		var uiTheme = window.prefs.getBoolean('darkTheme') ? 'dark' : 'light';
-		var params = [{'ui_theme' : uiTheme}];
+		// // var uiTheme = window.prefs.getBoolean('darkTheme') ? 'dark' : 'light';
+		// // var params = [{'ui_theme' : uiTheme}];
 
-		this._iframeWelcome = L.iframeDialog(this._url, params, null, { prefix: 'iframe-welcome' });
-		this._iframeWelcome._iframe.title = _('Welcome Dialog');
+		// // this._iframeWelcome = L.iframeDialog(this._url, params, null, { prefix: 'iframe-welcome' });
+		// // this._iframeWelcome._iframe.title = _('Welcome Dialog');
 	},
 
 	removeHooks: function () {
