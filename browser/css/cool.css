@@ -482,7 +482,9 @@ body {
 	min-width: 100px;
 	width: 200px;
 	height: 22px;
-	background: var(--color-background-lighter);
+	padding-left: 22px;
+    background: url("images/lc_recsearch.svg") var(--color-background-lighter) no-repeat 5px;
+    background-size: 12px;
 }
 #search-input:focus {
 	background-color: var(--color-background);
