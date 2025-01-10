@@ -359,11 +359,11 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 	},
 
 	getHelpTab: function() {
-		var hasLatestUpdates = window.enableWelcomeMessage;
-		var hasFeedback = this._map.feedback;
+		// // var hasLatestUpdates = window.enableWelcomeMessage;
+		// // var hasFeedback = this._map.feedback;
 		var hasAccessibilitySupport = window.enableAccessibility;
 		var hasAccessibilityCheck = this._map.getDocType() === 'text';
-		var hasAbout = L.DomUtil.get('about-dialog') !== null;
+		// // var hasAbout = L.DomUtil.get('about-dialog') !== null;
 		var hasServerAudit = !!this._map.serverAuditDialog;
 
 		var content = [
@@ -371,18 +371,18 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 				'type': 'container',
 				'id': helpTabName + '-container',
 				'children': [
-					{
-						'type': 'toolbox',
-						'children': [
-							{
-								'id': 'forum',
-								'type': 'bigtoolitem',
-								'text': _('Forum'),
-								'command': '.uno:ForumHelp',
-								'accessibility': { focusBack: true, combination: 'C', de: null }
-							}
-						]
-					},
+					// // {
+					// // 	'type': 'toolbox',
+					// // 	'children': [
+					// // 		{
+					// // 			'id': 'forum',
+					// // 			'type': 'bigtoolitem',
+					// // 			'text': _('Forum'),
+					// // 			'command': '.uno:ForumHelp',
+					// // 			'accessibility': { focusBack: true, combination: 'C', de: null }
+					// // 		}
+					// // 	]
+					// // },
 					{
 						'type': 'toolbox',
 						'children': [
@@ -430,55 +430,55 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 							'command': 'serveraudit',
 							'accessibility': { focusBack: false, combination: 'SA', de: null }
 						} : {},
-					{
-						'type': 'toolbox',
-						'children': [
-							{
-								'id': 'report-an-issue',
-								'type': 'bigtoolitem',
-								'text': _('Report an issue'),
-								'command': '.uno:ReportIssue',
-								'accessibility': { focusBack: true, combination: 'K', de: null }
-							}
-						]
-					},
-					hasLatestUpdates ?
-						{
-							'type': 'toolbox',
-							'children': [
-								{
-									'id': 'latestupdates',
-									'type': 'bigtoolitem',
-									'text': _('Latest Updates'),
-									'command': '.uno:LatestUpdates'
-								}
-							]
-						} : {},
-					hasFeedback ?
-						{
-							'type': 'toolbox',
-							'children': [
-								{
-									'id': 'feedback',
-									'type': 'bigtoolitem',
-									'text': _('Send Feedback'),
-									'command': '.uno:Feedback'
-								}
-							]
-						} : {},
-					hasAbout ?
-						{
-							'type': 'toolbox',
-							'children': [
-								{
-									'id': 'about',
-									'type': 'bigtoolitem',
-									'text': _('About'),
-									'command': '.uno:About',
-									'accessibility': { focusBack: false, combination: 'W', de: null }
-								}
-							]
-						} : {}
+					// // {
+					// // 	'type': 'toolbox',
+					// // 	'children': [
+					// // 		{
+					// // 			'id': 'report-an-issue',
+					// // 			'type': 'bigtoolitem',
+					// // 			'text': _('Report an issue'),
+					// // 			'command': '.uno:ReportIssue',
+					// // 			'accessibility': { focusBack: true, combination: 'K', de: null }
+					// // 		}
+					// // 	]
+					// // },
+					// // hasLatestUpdates ?
+					// // 	{
+					// // 		'type': 'toolbox',
+					// // 		'children': [
+					// // 			{
+					// // 				'id': 'latestupdates',
+					// // 				'type': 'bigtoolitem',
+					// // 				'text': _('Latest Updates'),
+					// // 				'command': '.uno:LatestUpdates'
+					// // 			}
+					// // 		]
+					// // 	} : {},
+					// // hasFeedback ?
+					// // 	{
+					// // 		'type': 'toolbox',
+					// // 		'children': [
+					// // 			{
+					// // 				'id': 'feedback',
+					// // 				'type': 'bigtoolitem',
+					// // 				'text': _('Send Feedback'),
+					// // 				'command': '.uno:Feedback'
+					// // 			}
+					// // 		]
+					// // 	} : {},
+					// // hasAbout ?
+					// // 	{
+					// // 		'type': 'toolbox',
+					// // 		'children': [
+					// // 			{
+					// // 				'id': 'about',
+					// // 				'type': 'bigtoolitem',
+					// // 				'text': _('About'),
+					// // 				'command': '.uno:About',
+					// // 				'accessibility': { focusBack: false, combination: 'W', de: null }
+					// // 			}
+					// // 		]
+					// // 	} : {}
 				]
 			}
 		];
@@ -1505,13 +1505,14 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 				'type': 'bigcustomtoolitem',
 				'text': _('Collapse Tabs')
 			},
-			{
-				'id':'toggledarktheme',
-				'class': 'unotoggledarktheme',
-				'type': 'bigcustomtoolitem',
-				'text': _('Dark Mode'),
-				'accessibility': { focusBack: true, combination: 'D', de: null }
-			},
+      // Comment out for now, as dark mode looks ugly and bad accessibility
+			// // {
+			// // 	'id':'toggledarktheme',
+			// // 	'class': 'unotoggledarktheme',
+			// // 	'type': 'bigcustomtoolitem',
+			// // 	'text': _('Dark Mode'),
+			// // 	'accessibility': { focusBack: true, combination: 'D', de: null }
+			// // },
 			{
 			    'id':'invertbackground',
 			    'class': 'unoinvertbackground',

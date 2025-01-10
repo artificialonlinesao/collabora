@@ -81,11 +81,12 @@ L.Map.Feedback = L.Handler.extend({
 		}
 	},
 
+	// disable this
 	askForFeedbackDialog: function () {
-		this._map.uiManager.showSnackbar(
-			_('Please send us your feedback'),
-			_('OK'),
-			this.showFeedbackDialog.bind(this));
+		// // this._map.uiManager.showSnackbar(
+		// // 	_('Please send us your feedback'),
+		// // 	_('OK'),
+		// // 	this.showFeedbackDialog.bind(this));
 	},
 
 	showFeedbackDialog: function () {
