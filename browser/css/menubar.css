@@ -48,10 +48,6 @@
 	flex: 1 1 auto;
 }
 
-.readonly .document-title {
-	justify-content: flex-end;
-}
-
 /* Add a class for the rotating effect */
 .rotate-icon {
 	animation: spin 2s linear infinite;
@@ -69,7 +65,7 @@
 }
 #save {
 	display: flex;
-	font-size: var(--default-font-size);
+	font-size: calc(var(--header-font-size) * 0.8);
 	font-family: var(--cool-font);
 	position: relative;
 	background: transparent;
@@ -162,9 +158,10 @@ nav.hasnotebookbar #save.saved::after {
 }
 .main-nav.hasnotebookbar:not(.readonly) {
 	background: var(--color-main-background);
-	padding: 0px;
+	padding: 0px var(--side-padding);
 	overflow: scroll hidden;
-	padding-inline-start: 5px;
+	width: 100%;
+	box-sizing: border-box;
 }
 
 /* Customizations to sm-simple theme to make it look like LO menu, lo-menu class */

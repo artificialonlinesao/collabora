@@ -13,7 +13,7 @@
 	/* Shared color for cell and selection border */
 	--cell-cursor-selection-border-color: var(--color-primary);
 
-	--btn-size: 28px;
+	--btn-size: 24px;
 	--btn-padding: 2px;
 	--btn-img-size: calc(var(--btn-size) - var(--btn-padding) * 2);
 	--btn-color-colorpicker-size: 4px;
@@ -28,17 +28,17 @@
 	--border-radius: 4px; /* buttons, widgets */
 	--border-radius-large: 10px; /* dialog */
 
-	--tooltip-font-size: 14px;
+	--tooltip-font-size: 12px;
 	--default-font-size: 12px;
-	--header-font-size: 16px;
+	--header-font-size: 12px;
 	/* tab min font-size */
 	--tb-min-fs: 11px;
 	/* tab min font-size without units*/
 	--tb-min-fs-u: 11;
 	/* tab max font-size */
-	--tb-max-fs: 16px;
+	--tb-max-fs: 12px;
 	/* tab max font-size wihtout units*/
-	--tb-max-fs-u: 16;
+	--tb-max-fs-u: 12;
 	/* tab font-size preferred value or scaler */
 	--tb-fs-s: 1vw;
 
@@ -52,6 +52,8 @@
 
 	/* Ruler */
 	--ruler-height: 20px;
+
+    --side-padding: 8px;
 }
 
 html {
@@ -363,7 +365,8 @@ body {
 	flex-direction: column;
 }
 #toolbar-wrapper:not(.mobile) {
-	padding: 3px 0;
+	padding: 0px;
+	box-sizing: border-box;
 }
 /* Remove bottom padding in calc as it affects formulabar*/
 #toolbar-wrapper.spreadsheet:not(.mobile) {

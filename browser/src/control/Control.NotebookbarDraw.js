@@ -443,7 +443,7 @@ L.Control.NotebookbarDraw = L.Control.NotebookbarImpress.extend({
 				],
 				'vertical': 'true'
 			},
-      // Comment out for now, as dark mode looks ugly and bad accessibility
+			// Comment out for now, as dark mode looks ugly and bad accessibility
 			// // {
 			// // 	'id':'toggledarktheme',
 			// // 	'type': 'bigcustomtoolitem',
@@ -1389,6 +1389,18 @@ L.Control.NotebookbarDraw = L.Control.NotebookbarImpress.extend({
 						'type': 'toolbox',
 						'children': [
 							{
+								'id': 'insert-vertical-text',
+								'type': 'toolitem',
+								'text': _UNO('.uno:VerticalText', 'presentation'),
+								'command': '.uno:VerticalText',
+								'accessibility': { focusBack: true, combination: 'VT', de: null }
+							}
+						]
+					},
+					{
+						'type': 'toolbox',
+						'children': [
+							{
 								'id': 'insert-font-gallery-floater',
 								'type': 'toolitem',
 								'text': _UNO('.uno:FontworkGalleryFloater'),
@@ -1399,18 +1411,6 @@ L.Control.NotebookbarDraw = L.Control.NotebookbarImpress.extend({
 							}
 						]
 					},
-					{
-						'type': 'toolbox',
-						'children': [
-							{
-								'id': 'insert-vertical-text',
-								'type': 'toolitem',
-								'text': _UNO('.uno:VerticalText', 'presentation'),
-								'command': '.uno:VerticalText',
-								'accessibility': { focusBack: true, combination: 'VT', de: null }
-							}
-						]
-					}
 				],
 				'vertical': 'true'
 			},

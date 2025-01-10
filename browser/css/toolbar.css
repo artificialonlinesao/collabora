@@ -35,7 +35,7 @@
 }
 .ui-toolbar > div > div {
 	display: flex;
-	padding: 0px 5px;
+	padding: 0px var(--side-padding);
 }
 .ui-toolbar > div > div > .menubutton {
 	line-height: normal;
