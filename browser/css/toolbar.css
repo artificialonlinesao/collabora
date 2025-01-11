@@ -429,10 +429,10 @@ button.leaflet-control-search-next
 
 .search-not-found {
 	border-color: var(--color-error) !important;
-    -webkit-transition: border-color .8s linear;
-    -moz-transition: border-color .8s linear;
-    -o-transition: border-color .8s linear;
-    transition: border-color .8s linear
+	-webkit-transition: border-color .8s linear;
+	-moz-transition: border-color .8s linear;
+	-o-transition: border-color .8s linear;
+	transition: border-color .8s linear
 }
 
 #zoomlevel {
