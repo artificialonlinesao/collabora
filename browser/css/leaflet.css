@@ -759,8 +759,8 @@ input.clipboard {
 	width: 1px;
 	height: 1px;
 	padding: 0px !important; /* w2ui defines "input:not([type=button])" rule which sets
-				    the padding to non-zero. Hence, the !important. Otherwise,
-				    clipboard cursor apperas in MSIE and MSEdge */
+					the padding to non-zero. Hence, the !important. Otherwise,
+					clipboard cursor apperas in MSIE and MSEdge */
 	border: 0px !important;
 }
 
@@ -818,7 +818,7 @@ input.clipboard {
 }
 
 .leaflet-progress {
-	background: #ebebeb;
+	background: #fff;
 	border-left: 1px solid transparent;
 	border-right: 1px solid transparent;
 	border-radius: 10px;
@@ -832,16 +832,8 @@ input.clipboard {
 	margin: 0 -1px;
 	height: 100%;
 	text-align: right;
-	background: #18A303;
-	border: 1px solid;
-	border-color: #106802;
+	background: var(--brand-600);
 	border-radius: 10px;
-	background-image: -webkit-linear-gradient(top, #92E285, #43C330 70%, #18A303);
-	background-image: -moz-linear-gradient(top, #92E285, #43C330 70%, #18A303);
-	background-image: -o-linear-gradient(top, #92E285, #43C330 70%, #18A303);
-	background-image: linear-gradient(to bottom, #92E285, #43C330 70%, #18A303);
-	-webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
-	box-shadow: inset 0 1px rgba(255, 255, 255, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .leaflet-progress > span > span {
@@ -849,7 +841,6 @@ input.clipboard {
 	font-size: 11px;
 	font-weight: bold;
 	color: #fff;
-	text-shadow: 0 1px rgba(0, 0, 0, 0.4);
 }
 
 .leaflet-progress-spinner {
