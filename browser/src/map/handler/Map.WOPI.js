@@ -721,13 +721,13 @@ L.Map.WOPI = L.Handler.extend({
 		var msgId = e.msgId;
 		var values = e.args || {};
 		if (!!this.PostMessageOrigin && window.parent !== window.self) {
-			// Filter out unwanted save request response
-			if (msgId === 'Action_Save_Resp') {
-				if (!this._notifySave)
-					return;
+			// // // Filter out unwanted save request response
+			// // if (msgId === 'Action_Save_Resp') {
+			// // 	if (!this._notifySave)
+			// // 		return;
 
-				this._notifySave = false;
-			}
+			// // 	this._notifySave = false;
+			// // }
 
 			var msg = {
 				'MessageId': msgId,
