@@ -57,14 +57,14 @@
 	--side-padding: 8px;
 
 	/* KYZON */
-	--kyzon-solutions-logo-light: url('https://assets.kyzon.com/KYZONSolutions_logo_black.svg') left center / contain no-repeat;
-	--kyzon-solutions-logo-dark: url('https://assets.kyzon.com/KYZONSolutions_logo_white.svg') left center / contain no-repeat;
+	--kyzon-solutions-logo-light: url('images/KYZONSolutions_logo_black.svg') left center / contain no-repeat;
+	--kyzon-solutions-logo-dark: url('images/KYZONSolutions_logo_white.svg') left center / contain no-repeat;
 	--kyzon-solutions-logo-aspect-ratio: 839.643 / 202.961;
-	--kyzon-flow-logo-light: url('https://assets.kyzon.com/KYZONFlow_logo_black.svg') left center / contain no-repeat;
-	--kyzon-flow-logo-dark: url('https://assets.kyzon.com/KYZONFlow_logo_white.svg') left center / contain no-repeat;
+	--kyzon-flow-logo-light: url('images/KYZONFlow_logo_black.svg') left center / contain no-repeat;
+	--kyzon-flow-logo-dark: url('images/KYZONFlow_logo_white.svg') left center / contain no-repeat;
 	--kyzon-flow-logo-aspect-ratio: 913.958 / 400;
-	--kyzon-space-logo-light: url('https://assets.kyzon.com/KYZONSpace_logo_black.svg') left center / contain no-repeat;
-	--kyzon-space-logo-dark: url('https://assets.kyzon.com/KYZONSpace_logo_white.svg') left center / contain no-repeat;
+	--kyzon-space-logo-light: url('images/KYZONSpace_logo_black.svg') left center / contain no-repeat;
+	--kyzon-space-logo-dark: url('images/KYZONSpace_logo_white.svg') left center / contain no-repeat;
 	--kyzon-space-logo-aspect-ratio: 1046.686 / 400;
 
 	--brand-600: #161617;
