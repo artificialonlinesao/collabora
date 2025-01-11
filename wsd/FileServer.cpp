@@ -1290,6 +1290,11 @@ FileServerRequestHandler::ResourceAccessDetails FileServerRequestHandler::prepro
                          checkFileInfoToJSON(urv[CHECK_FILE_INFO_OVERRIDE]));
     Poco::replaceInPlace(preprocess, std::string("%WOPI_HOST_ID%"), form.get("host_session_id", ""));
 
+    // start of our code
+    Poco::replaceInPlace(preprocess, BRAND_PRODUCT_NAME, urv[BRAND_PRODUCT_NAME]);
+    Poco::replaceInPlace(preprocess, BRAND_PRODUCT_URL, urv[BRAND_PRODUCT_URL]);
+    // end of our code
+
     const auto& config = Application::instance().config();
 
     std::string protocolDebug = stringifyBoolFromConfig(config, "logging.protocol", false);
