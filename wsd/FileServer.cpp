@@ -1095,6 +1095,10 @@ static const std::string CHECK_FILE_INFO_OVERRIDE = "%CHECK_FILE_INFO_OVERRIDE%"
 static const std::string BUYPRODUCT_URL = "%BUYPRODUCT_URL%";
 static const std::string PERMISSION = "%PERMISSION%";
 
+// our variables
+static const std::string BRAND_PRODUCT_NAME = "%BRAND_PRODUCT_NAME%";
+static const std::string BRAND_PRODUCT_URL = "%BRAND_PRODUCT_URL%";
+
 /// Per user request variables.
 /// Holds access_token, css_variables, postmessage_origin, etc.
 class UserRequestVars
@@ -1184,6 +1188,13 @@ public:
         extractVariable(form, "buy_product", BUYPRODUCT_URL);
 
         extractVariable(form, "permission", PERMISSION);
+
+        // start of our code
+
+        extractVariable(form, "brand_product_name", BRAND_PRODUCT_NAME);
+        extractVariable(form, "brand_product_url", BRAND_PRODUCT_URL);
+
+        // end of our code
 
         std::string buyProduct;
         {
