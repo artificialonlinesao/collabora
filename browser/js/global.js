@@ -395,7 +395,7 @@ class BrowserInitializer extends InitializerBase {
 		window.canvasSlideshowEnabled = element.dataset.canvasSlideshowEnabled.toLowerCase().trim() === "true";
 
     // start of our code
-    window.brandProductName = element.dataset.brandProductName;
+    window.brandProductName = decodeURIComponent(element.dataset.brandProductName);
     window.brandProductURL = element.dataset.brandProductUrl;
     // end of our code
 	}
