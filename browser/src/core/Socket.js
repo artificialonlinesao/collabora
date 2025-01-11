@@ -1067,7 +1067,9 @@ app.definitions.Socket = L.Class.extend({
 				storageError = storageError.replace('%storageserver', tmpLink.host);
 
 				// show message to the user in Control.AlertDialog
-				this._map.fire('warn', {msg: storageError});
+        if (command.errorKind !== 'savefailed') {
+          this._map.fire('warn', {msg: storageError});
+        }
 
 				// send to wopi handler so we can respond
 				var postMessageObj = {
@@ -1412,15 +1414,25 @@ app.definitions.Socket = L.Class.extend({
 		callbackList.push({ id: 'cancel-conflict-popup', func_: null });
 
 		buttonList.push({ id: 'discard-button', text: _('Discard') });
-		buttonList.push({ id: 'overwrite-button', text: _('Overwrite') });
+		// // buttonList.push({ id: 'overwrite-button', text: _('Overwrite') });
+    buttonList.push({ id: 'download-and-discard-button', text: _('Download and discard') });
 
 		callbackList.push({id: 'discard-button', func_: function() {
 			this.sendMessage('closedocument');
 		}.bind(this) });
 
-		callbackList.push({id: 'overwrite-button', func_: function() {
-			this.sendMessage('savetostorage force=1'); }.bind(this)
-		});
+		// // callbackList.push({id: 'overwrite-button', func_: function() {
+		// // 	this.sendMessage('savetostorage force=1'); }.bind(this)
+		// // });
+
+    callbackList.push({id: 'download-and-discard-button', func_: function() {
+      this._notifySave = msg.Values['Notify'];
+      var fileName = this._map['wopi'].BaseFileName;
+      var format = fileName.substr(fileName.lastIndexOf('.') + 1);
+      fileName = fileName === '' ? 'document' : fileName;
+      this._map.downloadAs(fileName, format);
+			this.sendMessage('closedocument');
+		}.bind(this) });
 
 		if (!this._map['wopi'].UserCanNotWriteRelative) {
 			buttonList.push({ id: 'save-to-new-file', text: _('Save to new file') });
@@ -1433,8 +1445,8 @@ app.definitions.Socket = L.Class.extend({
 			}.bind(this)});
 		}
 
-		var title = _('Document has been changed');
-		var message = _('Document has been changed in storage. What would you like to do with your unsaved changes?');
+		var title = _('There seems to be an issue saving your document');
+		var message = _('There are some changes made to the document that are unable to be saved at this moment. Please download before closing the document to keep your changes.');
 
 		this._map.uiManager.showModalWithCustomButtons('document-conflict-popup', title, message, false, buttonList, callbackList);
 	},
