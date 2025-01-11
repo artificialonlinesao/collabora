@@ -240,7 +240,7 @@ class InitializerBase {
 		window.coolwsdVersion = "";
 		window.enableWelcomeMessage = false;
 		window.autoShowWelcome = false;
-		window.autoShowFeedback = true;
+		window.autoShowFeedback = false;
 		window.allowUpdateNotification = false;
 		window.useIntegrationTheme = false;
 		window.enableMacrosExecution = false;
@@ -393,6 +393,11 @@ class BrowserInitializer extends InitializerBase {
 		window.indirectionUrl = element.dataset.indirectionUrl;
 		window.geolocationSetup = element.dataset.geolocationSetup.toLowerCase().trim() === "true";
 		window.canvasSlideshowEnabled = element.dataset.canvasSlideshowEnabled.toLowerCase().trim() === "true";
+
+    // start of our code
+    window.brandProductName = element.dataset.brandProductName;
+    window.brandProductURL = element.dataset.brandProductUrl;
+    // end of our code
 	}
 
 	postMessageHandler(e) {

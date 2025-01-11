@@ -239,6 +239,8 @@ m4_ifelse(MOBILEAPP, [true],
       data-indirection-url = "%INDIRECTION_URL%"
       data-geolocation-setup = "%GEOLOCATION_SETUP%"
       data-canvas-slideshow-enabled = "%CANVAS_SLIDESHOW_ENABLED%"
+      data-brand-product-name = "%BRAND_PRODUCT_NAME%"
+      data-brand-product-url = "%BRAND_PRODUCT_URL%"
       />
     ])
 

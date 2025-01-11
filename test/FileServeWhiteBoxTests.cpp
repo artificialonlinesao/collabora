@@ -411,6 +411,15 @@ void FileServeTests::preProcessedFileSubstitution(
             Poco::replaceInPlace(orig, std::string("%BUYPRODUCT_URL%"),
                                  variables["BUYPRODUCT_URL"]);
 
+            // start of our code
+
+            Poco::replaceInPlace(orig, std::string("%BRAND_PRODUCT_NAME%"),
+                                 variables["BRAND_PRODUCT_NAME"]);
+            Poco::replaceInPlace(orig, std::string("%BRAND_PRODUCT_URL%"),
+                                 variables["BRAND_PRODUCT_URL"]);
+
+            // end of our code
+
             LOK_ASSERT_EQUAL(orig, recon);
         }
     }
@@ -434,7 +443,11 @@ void FileServeTests::testPreProcessedFileSubstitution()
         { "BRANDING_JS", "branding.js" },
         { "FOOTER", "<div><b>blah blah footer</b></div>" },
         { "CHECK_FILE_INFO_OVERRIDE", "DownloadAsPostMessage=true;blah=bleh" },
-        { "BUYPRODUCT_URL", "https://buy.ourproduct.com/'" }
+        { "BUYPRODUCT_URL", "https://buy.ourproduct.com/'" },
+        // start of our code
+        { "BRAND_PRODUCT_NAME", "My Product" },
+        { "BRAND_PRODUCT_URL", "https://www.example.com/myproduct" },
+        // end of our code
     };
 
     preProcessedFileSubstitution(testname, std::move(variables));
