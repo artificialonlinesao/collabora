@@ -35,25 +35,25 @@ L.Control.NotebookbarDraw = L.Control.NotebookbarImpress.extend({
 		];
 	},
 
-	getOptionsSectionData: function() {
-		return this.buildOptionsSectionData([
-			{
-				'type': 'toolitem',
-				'text': _UNO('.uno:Sidebar'),
-				'command': '.uno:SidebarDeck.PropertyDeck',
-				'accessibility': { focusBack: true, combination: 'SB', de: null }
-			},
-			{
-				'type': 'toolitem',
-				'text': _UNO('.uno:Navigator'),
-				'command': '.uno:Navigator',
-				'accessibility': { focusBack: true, combination: 'N', de: null }
-			},
-			{
-				'type': 'toolitem',
-			}
-		]);
-	},
+	// // getOptionsSectionData: function() {
+	// // 	return this.buildOptionsSectionData([
+	// // 		{
+	// // 			'type': 'toolitem',
+	// // 			'text': _UNO('.uno:Sidebar'),
+	// // 			'command': '.uno:SidebarDeck.PropertyDeck',
+	// // 			'accessibility': { focusBack: true, combination: 'SB', de: null }
+	// // 		},
+	// // 		{
+	// // 			'type': 'toolitem',
+	// // 			'text': _UNO('.uno:Navigator'),
+	// // 			'command': '.uno:Navigator',
+	// // 			'accessibility': { focusBack: true, combination: 'N', de: null }
+	// // 		},
+	// // 		{
+	// // 			'type': 'toolitem',
+	// // 		}
+	// // 	]);
+	// // },
 
 	getTabs: function() {
 		return [
@@ -450,27 +450,27 @@ L.Control.NotebookbarDraw = L.Control.NotebookbarImpress.extend({
 			// // 	'text': _('Dark Mode'),
 			// // 	'accessibility': { focusBack: true, combination: 'DT', de: null }
 			// // },
-			{
-                'id':'invertbackground',
-                'class': 'unoinvertbackground',
-                'type': 'bigcustomtoolitem',
-                'text': _('Invert Background'),
-                'accessibility': { focusBack: true, combination: 'DT', de: null }
-            },
-			{
-				'id': 'view-sidebar',
-				'type': 'bigtoolitem',
-				'text': _UNO('.uno:Sidebar'),
-				'command': '.uno:SidebarDeck.PropertyDeck',
-				'accessibility': { focusBack: true, combination: 'SB', de: null }
-			},
-			{
-				'id': 'view-navigator',
-				'type': 'bigtoolitem',
-				'text': _UNO('.uno:Navigator'),
-				'command': '.uno:Navigator',
-				'accessibility': { focusBack: true, combination: 'N', de: null }
-			}
+			// // {
+      // //           'id':'invertbackground',
+      // //           'class': 'unoinvertbackground',
+      // //           'type': 'bigcustomtoolitem',
+      // //           'text': _('Invert Background'),
+      // //           'accessibility': { focusBack: true, combination: 'DT', de: null }
+      // //       },
+			// // {
+			// // 	'id': 'view-sidebar',
+			// // 	'type': 'bigtoolitem',
+			// // 	'text': _UNO('.uno:Sidebar'),
+			// // 	'command': '.uno:SidebarDeck.PropertyDeck',
+			// // 	'accessibility': { focusBack: true, combination: 'SB', de: null }
+			// // },
+			// // {
+			// // 	'id': 'view-navigator',
+			// // 	'type': 'bigtoolitem',
+			// // 	'text': _UNO('.uno:Navigator'),
+			// // 	'command': '.uno:Navigator',
+			// // 	'accessibility': { focusBack: true, combination: 'N', de: null }
+			// // }
 		];
 
 		return this.getTabPage('View', content);
@@ -1065,13 +1065,13 @@ L.Control.NotebookbarDraw = L.Control.NotebookbarImpress.extend({
 				],
 				'vertical': 'true'
 			},
-			{
-				'id': 'layout-sidebar-deck',
-				'type': 'bigtoolitem',
-				'text': _('Page Layout'),
-				'command': '.uno:SidebarDeck.PropertyDeck',
-				'accessibility': { focusBack: true, combination: 'PL', de: null }
-			},
+			// // {
+			// // 	'id': 'layout-sidebar-deck',
+			// // 	'type': 'bigtoolitem',
+			// // 	'text': _('Page Layout'),
+			// // 	'command': '.uno:SidebarDeck.PropertyDeck',
+			// // 	'accessibility': { focusBack: true, combination: 'PL', de: null }
+			// // },
 			{
 				'id': 'layout-select-all',
 				'type': 'bigtoolitem',

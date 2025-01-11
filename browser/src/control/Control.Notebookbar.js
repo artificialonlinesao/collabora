@@ -556,15 +556,24 @@ L.Control.Notebookbar = L.Control.extend({
 
 	getOptionsSectionData: function() {
 		return this.buildOptionsSectionData([
-			{
+			// // {
+			// // 	'type': 'toolitem',
+			// // 	'text': _UNO('.uno:Sidebar', '', true),
+			// // 	'command': '.uno:SidebarDeck.PropertyDeck'
+			// // },
+			// // {
+			// // 	'type': 'toolitem',
+			// // 	'text': _UNO('.uno:Navigator'),
+			// // 	'command': '.uno:Navigator'
+			// // },
+      {
 				'type': 'toolitem',
-				'text': _UNO('.uno:Sidebar', '', true),
-				'command': '.uno:SidebarDeck.PropertyDeck'
+				'text': _UNO('.uno:InsertAnnotation'),
+				'command': '.uno:InsertAnnotation',
 			},
 			{
 				'type': 'toolitem',
-				'text': _UNO('.uno:Navigator'),
-				'command': '.uno:Navigator'
+				// dummy node to avoid creating labels
 			},
 			{
 				'type': 'toolitem',
