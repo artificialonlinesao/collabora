@@ -192,12 +192,12 @@ class TopToolbar extends JSDialog.Toolbar {
 			{type: 'toolitem',  id: 'insertsymbol', text: _UNO('.uno:InsertSymbol', '', true), command: '.uno:InsertSymbol'},
 			{type: 'spacer', id: 'topspacer'},
 			{type: 'separator', orientation: 'vertical', id: 'breaksidebar', visible: false},
-			{type: 'toolitem',  id: 'sidebar', text: _UNO('.uno:Sidebar', '', true), command: '.uno:SidebarDeck.PropertyDeck', visible: false},
-			{type: 'toolitem',  id: 'modifypage', text: _UNO('.uno:ModifyPage', 'presentation', true), command: '.uno:ModifyPage', visible: false},
-			{type: 'toolitem',  id: 'slidechangewindow', text: _UNO('.uno:SlideChangeWindow', 'presentation', true), command: '.uno:SlideChangeWindow', visible: false},
-			{type: 'toolitem',  id: 'customanimation', text: _UNO('.uno:CustomAnimation', 'presentation', true), command: '.uno:CustomAnimation', visible: false},
-			{type: 'toolitem',  id: 'masterslidespanel', text: _UNO('.uno:MasterSlidesPanel', 'presentation', true), command: '.uno:MasterSlidesPanel', visible: false},
-			{type: 'toolitem',  id: 'navigator', text: _UNO('.uno:Navigator'), command: '.uno:Navigator', visible: false},
+			// // {type: 'toolitem',  id: 'sidebar', text: _UNO('.uno:Sidebar', '', true), command: '.uno:SidebarDeck.PropertyDeck', visible: false},
+			// // {type: 'toolitem',  id: 'modifypage', text: _UNO('.uno:ModifyPage', 'presentation', true), command: '.uno:ModifyPage', visible: false},
+			// // {type: 'toolitem',  id: 'slidechangewindow', text: _UNO('.uno:SlideChangeWindow', 'presentation', true), command: '.uno:SlideChangeWindow', visible: false},
+			// // {type: 'toolitem',  id: 'customanimation', text: _UNO('.uno:CustomAnimation', 'presentation', true), command: '.uno:CustomAnimation', visible: false},
+			// // {type: 'toolitem',  id: 'masterslidespanel', text: _UNO('.uno:MasterSlidesPanel', 'presentation', true), command: '.uno:MasterSlidesPanel', visible: false},
+			// // {type: 'toolitem',  id: 'navigator', text: _UNO('.uno:Navigator'), command: '.uno:Navigator', visible: false},
 			{type: 'customtoolitem',  id: 'fold', text: _('Hide Menu'), desktop: true, mobile: false, visible: true},
 			{type: 'customtoolitem',  id: 'hamburger-tablet', desktop: false, mobile: false, tablet: true, iosapptablet: false, visible: false},
 		];
@@ -272,7 +272,7 @@ class TopToolbar extends JSDialog.Toolbar {
 				['reset', 'textalign', 'wraptextbutton', 'breakspacing', 'insertannotation', 'conditionalformatdialog',
 					'numberformatcurrency', 'numberformatpercent',
 					'numberformatincdecimals', 'numberformatdecdecimals', 'break-number', 'togglemergecells', 'breakmergecells',
-					'setborderstyle', 'sortascending', 'sortdescending', 'breaksorting', 'backgroundcolor', 'breaksidebar', 'sidebar', 'printoptions'
+					'setborderstyle', 'sortascending', 'sortdescending', 'breaksorting', 'backgroundcolor', 'breaksidebar', /* 'sidebar', */ 'printoptions'
 				].forEach((id) => {
 					this.showItem(id, true);
 				});
@@ -292,7 +292,7 @@ class TopToolbar extends JSDialog.Toolbar {
 			if (this.parentContainer) {
 				['fontcolorwriter', 'reset', 'leftpara', 'centerpara', 'rightpara', 'justifypara', 'breakpara', 'linespacing',
 					'breakspacing', 'defaultbullet', 'defaultnumbering', 'breakbullet', 'incrementindent', 'decrementindent',
-					'breakindent', 'inserttable', 'insertannotation', 'backcolor', 'breaksidebar', 'sidebar'
+					'breakindent', 'inserttable', 'insertannotation', 'backcolor', 'breaksidebar', // // 'sidebar'
 				].forEach((id) => {
 					this.showItem(id, true);
 				});
@@ -320,11 +320,11 @@ class TopToolbar extends JSDialog.Toolbar {
 			}
 
 			if (this.parentContainer) {
-				['resetimpress', 'breaksidebar', 'modifypage',
+				['resetimpress', 'breaksidebar', // // 'modifypage',
 					'leftpara', 'centerpara', 'rightpara', 'justifypara', 'breakpara', 'linespacing',
 					'gridvisible', 'griduse',
 					'breakspacing', 'defaultbullet', 'defaultnumbering', 'breakbullet', 'inserttextbox', 'inserttable',  'insertannotation', 'backcolor',
-					'breaksidebar', 'modifypage', 'slidechangewindow', 'customanimation', 'masterslidespanel', 'navigator'
+					'breaksidebar', // // 'modifypage', 'slidechangewindow', 'customanimation', 'masterslidespanel', 'navigator'
 				].forEach((id) => {
 					this.showItem(id, true);
 				});
@@ -336,7 +336,7 @@ class TopToolbar extends JSDialog.Toolbar {
 			if (this.parentContainer) {
 				['leftpara', 'centerpara', 'rightpara', 'justifypara', 'breakpara', 'linespacing', 'gridvisible', 'griduse',
 					'breakspacing', 'defaultbullet', 'defaultnumbering', 'breakbullet', 'inserttextbox', 'inserttable', 'backcolor',
-					'breaksidebar', 'sidebar', 'insertconnectors'
+					'breaksidebar', /* 'sidebar', */ 'insertconnectors'
 				].forEach((id) => {
 					this.showItem(id, true);
 				});

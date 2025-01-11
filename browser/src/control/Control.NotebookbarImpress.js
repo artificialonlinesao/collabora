@@ -36,40 +36,40 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 		];
 	},
 
-	getOptionsSectionData: function() {
-		return this.buildOptionsSectionData([
-			{
-				'id': 'options-modify-page',
-				'type': 'toolitem',
-				'text': _UNO('.uno:ModifyPage', 'presentation', true),
-				'command': '.uno:ModifyPage'
-			},
-			{
-				'id': 'options-slide-change-window',
-				'type': 'toolitem',
-				'text': _UNO('.uno:SlideChangeWindow', 'presentation', true),
-				'command': '.uno:SlideChangeWindow'
-			},
-			{
-				'id': 'options-custom-animation',
-				'type': 'toolitem',
-				'text': _UNO('.uno:CustomAnimation', 'presentation', true),
-				'command': '.uno:CustomAnimation'
-			},
-			{
-				'id': 'options-master-slides-panel',
-				'type': 'toolitem',
-				'text': _UNO('.uno:MasterSlidesPanel', 'presentation', true),
-				'command': '.uno:MasterSlidesPanel'
-			},
-			{
-				'id': 'options-navigator',
-				'type': 'toolitem',
-				'text': _UNO('.uno:Navigator'),
-				'command': '.uno:Navigator'
-			}
-		]);
-	},
+	// // getOptionsSectionData: function() {
+	// // 	return this.buildOptionsSectionData([
+			// // {
+			// // 	'id': 'options-modify-page',
+			// // 	'type': 'toolitem',
+			// // 	'text': _UNO('.uno:ModifyPage', 'presentation', true),
+			// // 	'command': '.uno:ModifyPage'
+			// // },
+			// // {
+			// // 	'id': 'options-slide-change-window',
+			// // 	'type': 'toolitem',
+			// // 	'text': _UNO('.uno:SlideChangeWindow', 'presentation', true),
+			// // 	'command': '.uno:SlideChangeWindow'
+			// // },
+			// // {
+			// // 	'id': 'options-custom-animation',
+			// // 	'type': 'toolitem',
+			// // 	'text': _UNO('.uno:CustomAnimation', 'presentation', true),
+			// // 	'command': '.uno:CustomAnimation'
+			// // },
+			// // {
+			// // 	'id': 'options-master-slides-panel',
+			// // 	'type': 'toolitem',
+			// // 	'text': _UNO('.uno:MasterSlidesPanel', 'presentation', true),
+			// // 	'command': '.uno:MasterSlidesPanel'
+			// // },
+			// // {
+			// // 	'id': 'options-navigator',
+			// // 	'type': 'toolitem',
+			// // 	'text': _UNO('.uno:Navigator'),
+			// // 	'command': '.uno:Navigator'
+			// // }
+	// // 	]);
+	// // },
 
 	getTabs: function() {
 		return [
@@ -555,20 +555,20 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 			// // 	'text': _('Dark Mode'),
 			// // 	'accessibility': { focusBack: true, combination: 'TT', de: null }
 			// // },
-			{
-				'id':'invertbackground',
-				'class': 'unoinvertbackground',
-				'type': 'bigcustomtoolitem',
-				'text': _('Invert Background'),
-				'accessibility': { focusBack: true, combination: 'TT', de: null }
-			},
-			{
-				'id': 'view-side-bar',
-				'type': 'bigtoolitem',
-				'text': _UNO('.uno:Sidebar'),
-				'command': '.uno:SidebarDeck.PropertyDeck',
-				'accessibility': { focusBack: true, combination: 'SD', de: null }
-			}
+			// // {
+			// // 	'id':'invertbackground',
+			// // 	'class': 'unoinvertbackground',
+			// // 	'type': 'bigcustomtoolitem',
+			// // 	'text': _('Invert Background'),
+			// // 	'accessibility': { focusBack: true, combination: 'TT', de: null }
+			// // },
+			// // {
+			// // 	'id': 'view-side-bar',
+			// // 	'type': 'bigtoolitem',
+			// // 	'text': _UNO('.uno:Sidebar'),
+			// // 	'command': '.uno:SidebarDeck.PropertyDeck',
+			// // 	'accessibility': { focusBack: true, combination: 'SD', de: null }
+			// // }
 		];
 
 		return this.getTabPage('View', content);
@@ -1618,69 +1618,69 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 				],
 				vertical: false,
 			},
-			{
-				type: 'container',
-				children: [
-					{
-						'id': 'layout-modify-page',
-						'type': 'bigtoolitem',
-						'text': _UNO('.uno:ModifyPage', 'presentation'),
-						'command': '.uno:ModifyPage',
-						'accessibility': { focusBack: true, combination: 'MP', de: null }
-					},
-					{
-						'id': 'layout-master-slides-panel',
-						'type': 'bigtoolitem',
-						'text': _UNO('.uno:MasterSlidesPanel', 'presentation'),
-						'command': '.uno:MasterSlidesPanel',
-						'accessibility': { focusBack: true, combination: 'MS', de: null }
-					},
-				],
-				vertical: false,
-			},
-			{
-				type: 'container',
-				children: [
-					{
-						'id': 'layout-slide-change-window',
-						'type': 'bigtoolitem',
-						'text': _UNO('.uno:SlideChangeWindow', 'presentation'),
-						'command': '.uno:SlideChangeWindow',
-						'accessibility': { focusBack: true, combination: 'SC', de: null }
-					},
-					{
-						'type': 'container',
-						'children': [
-							{
-								'type': 'toolbox',
-								'children': [
-									{
-										'id': 'layout-custom-animation',
-										'type': 'toolitem',
-										'text': _UNO('.uno:CustomAnimation', 'presentation'),
-										'command': '.uno:CustomAnimation',
-										'accessibility': { focusBack: true, combination: 'CA', de: null }
-									}
-								]
-							},
-							{
-								'type': 'toolbox',
-								'children': [
-									{
-										'id': 'layout-interaction',
-										'type': 'toolitem',
-										'text': _UNO('.uno:AnimationEffects', 'presentation'),
-										'command': '.uno:AnimationEffects',
-										'accessibility': { focusBack: true, combination: 'IA', de: null }
-									}
-								]
-							}
-						],
-						'vertical': 'true'
-					},
-				],
-				vertical: false,
-			},
+			// // {
+			// // 	type: 'container',
+			// // 	children: [
+			// // 		{
+			// // 			'id': 'layout-modify-page',
+			// // 			'type': 'bigtoolitem',
+			// // 			'text': _UNO('.uno:ModifyPage', 'presentation'),
+			// // 			'command': '.uno:ModifyPage',
+			// // 			'accessibility': { focusBack: true, combination: 'MP', de: null }
+			// // 		},
+			// // 		{
+			// // 			'id': 'layout-master-slides-panel',
+			// // 			'type': 'bigtoolitem',
+			// // 			'text': _UNO('.uno:MasterSlidesPanel', 'presentation'),
+			// // 			'command': '.uno:MasterSlidesPanel',
+			// // 			'accessibility': { focusBack: true, combination: 'MS', de: null }
+			// // 		},
+			// // 	],
+			// // 	vertical: false,
+			// // },
+			// // {
+			// // 	type: 'container',
+			// // 	children: [
+			// // 		{
+			// // 			'id': 'layout-slide-change-window',
+			// // 			'type': 'bigtoolitem',
+			// // 			'text': _UNO('.uno:SlideChangeWindow', 'presentation'),
+			// // 			'command': '.uno:SlideChangeWindow',
+			// // 			'accessibility': { focusBack: true, combination: 'SC', de: null }
+			// // 		},
+			// // 		{
+			// // 			'type': 'container',
+			// // 			'children': [
+			// // 				{
+			// // 					'type': 'toolbox',
+			// // 					'children': [
+			// // 						{
+			// // 							'id': 'layout-custom-animation',
+			// // 							'type': 'toolitem',
+			// // 							'text': _UNO('.uno:CustomAnimation', 'presentation'),
+			// // 							'command': '.uno:CustomAnimation',
+			// // 							'accessibility': { focusBack: true, combination: 'CA', de: null }
+			// // 						}
+			// // 					]
+			// // 				},
+			// // 				{
+			// // 					'type': 'toolbox',
+			// // 					'children': [
+			// // 						{
+			// // 							'id': 'layout-interaction',
+			// // 							'type': 'toolitem',
+			// // 							'text': _UNO('.uno:AnimationEffects', 'presentation'),
+			// // 							'command': '.uno:AnimationEffects',
+			// // 							'accessibility': { focusBack: true, combination: 'IA', de: null }
+			// // 						}
+			// // 					]
+			// // 				}
+			// // 			],
+			// // 			'vertical': 'true'
+			// // 		},
+			// // 	],
+			// // 	vertical: false,
+			// // },
 			{
 				'id': 'layout-select-all',
 				'type': 'bigtoolitem',
@@ -1790,13 +1790,13 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 				],
 				'vertical': 'true'
 			},
-			{
-				'id': 'layout-navigator',
-				'type': 'bigtoolitem',
-				'text': _UNO('.uno:Navigator'),
-				'command': '.uno:Navigator',
-				'accessibility': { focusBack: true, combination: 'NV', de: null }
-			},
+			// // {
+			// // 	'id': 'layout-navigator',
+			// // 	'type': 'bigtoolitem',
+			// // 	'text': _UNO('.uno:Navigator'),
+			// // 	'command': '.uno:Navigator',
+			// // 	'accessibility': { focusBack: true, combination: 'NV', de: null }
+			// // },
 		];
 
 		return this.getTabPage('Layout', content);

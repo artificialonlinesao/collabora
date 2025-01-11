@@ -429,15 +429,15 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 							'type': 'bigcustomtoolitem',
 							'text': _('Screen Reading')
 						} : {},
-					hasAccessibilityCheck ?
-						{
-							'id': 'accessibility-check',
-							'class': 'unoAccessibilityCheck',
-							'type': 'bigtoolitem',
-							'text': _UNO('.uno:AccessibilityCheck', 'text'),
-							'command': '.uno:SidebarDeck.A11yCheckDeck',
-							'accessibility': { focusBack: false, combination: 'A', de: null }
-						} : {},
+					// // hasAccessibilityCheck ?
+					// // 	{
+					// // 		'id': 'accessibility-check',
+					// // 		'class': 'unoAccessibilityCheck',
+					// // 		'type': 'bigtoolitem',
+					// // 		'text': _UNO('.uno:AccessibilityCheck', 'text'),
+					// // 		'command': '.uno:SidebarDeck.A11yCheckDeck',
+					// // 		'accessibility': { focusBack: false, combination: 'A', de: null }
+					// // 	} : {},
 					hasServerAudit ?
 						{
 							'id': 'server-audit',
@@ -973,13 +973,13 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 						'command': '.uno:ParagraphDialog',
 						'accessibility': { focusBack: false, combination: 'B', de: null }
 					},
-					app.isExperimentalMode() ? {
-						'id': 'format-style-dialog',
-						'type': 'bigtoolitem',
-						'text': _('Style list'),
-						'command': '.uno:SidebarDeck.StyleListDeck',
-						'accessibility': { focusBack: false, combination: 'SD', de: null }
-					} : {},
+					// // app.isExperimentalMode() ? {
+					// // 	'id': 'format-style-dialog',
+					// // 	'type': 'bigtoolitem',
+					// // 	'text': _('Style list'),
+					// // 	'command': '.uno:SidebarDeck.StyleListDeck',
+					// // 	'accessibility': { focusBack: false, combination: 'SD', de: null }
+					// // } : {},
 					{
 						'id': 'format-FormatBulletsMenu',
 						'type': 'menubutton',
@@ -1566,33 +1566,33 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 			// // 	'text': _('Dark Mode'),
 			// // 	'accessibility': { focusBack: true, combination: 'D', de: null }
 			// // },
-			{
-			    'id':'invertbackground',
-			    'class': 'unoinvertbackground',
-			    'type': 'bigcustomtoolitem',
-			    'text': _('Invert Background'),
-			    'accessibility': { focusBack: true, combination: 'D', de: null }
-			},
-			{
-				type: 'container',
-				children: [
-					{
-						'id': 'view-sidebar-property-deck',
-						'type': 'bigtoolitem',
-						'text': _UNO('.uno:Sidebar'),
-						'command': '.uno:SidebarDeck.PropertyDeck',
-						'accessibility': { focusBack: true, combination: 'SB', de: null }
-					},
-					{
-						'id': 'view-navigator',
-						'type': 'bigtoolitem',
-						'text': _UNO('.uno:Navigator'),
-						'command': '.uno:Navigator',
-						'accessibility': { focusBack: true, combination: 'K', de: 'V' }
-					},
-				],
-				vertical: false,
-			},
+			// // {
+			// //     'id':'invertbackground',
+			// //     'class': 'unoinvertbackground',
+			// //     'type': 'bigcustomtoolitem',
+			// //     'text': _('Invert Background'),
+			// //     'accessibility': { focusBack: true, combination: 'D', de: null }
+			// // },
+			// // {
+			// // 	type: 'container',
+			// // 	children: [
+			// // 		{
+			// // 			'id': 'view-sidebar-property-deck',
+			// // 			'type': 'bigtoolitem',
+			// // 			'text': _UNO('.uno:Sidebar'),
+			// // 			'command': '.uno:SidebarDeck.PropertyDeck',
+			// // 			'accessibility': { focusBack: true, combination: 'SB', de: null }
+			// // 		},
+			// // 		{
+			// // 			'id': 'view-navigator',
+			// // 			'type': 'bigtoolitem',
+			// // 			'text': _UNO('.uno:Navigator'),
+			// // 			'command': '.uno:Navigator',
+			// // 			'accessibility': { focusBack: true, combination: 'K', de: 'V' }
+			// // 		},
+			// // 	],
+			// // 	vertical: false,
+			// // },
 		];
 
 		return this.getTabPage(viewTabName, content);
@@ -2462,14 +2462,14 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 				],
 				vertical: false,
 			},
-			{
-				'id': 'review-accessibility-check',
-				'class': 'unoAccessibilityCheck',
-				'type': 'bigtoolitem',
-				'text': _UNO('.uno:AccessibilityCheck', 'text'),
-				'command': '.uno:SidebarDeck.A11yCheckDeck',
-				'accessibility': { focusBack: false, combination: 'A1', de: 'B' }
-			}
+			// // {
+			// // 	'id': 'review-accessibility-check',
+			// // 	'class': 'unoAccessibilityCheck',
+			// // 	'type': 'bigtoolitem',
+			// // 	'text': _UNO('.uno:AccessibilityCheck', 'text'),
+			// // 	'command': '.uno:SidebarDeck.A11yCheckDeck',
+			// // 	'accessibility': { focusBack: false, combination: 'A1', de: 'B' }
+			// // }
 		];
 
 		return this.getTabPage(reviewTabName, content);

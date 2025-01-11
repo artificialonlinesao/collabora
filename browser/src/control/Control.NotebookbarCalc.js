@@ -1301,33 +1301,33 @@ L.Control.NotebookbarCalc = L.Control.NotebookbarWriter.extend({
 			// // 	'text': _('Dark Mode'),
 			// // 	'accessibility': { focusBack: true,	combination: 'DT', de: null }
 			// // },
-			{
-				'id':'invertbackground',
-				'class': 'unoinvertbackground',
-				'type': 'bigcustomtoolitem',
-				'text': _('Invert Background'),
-				'accessibility': { focusBack: true, combination: 'DT', de: null }
-			},
-			{
-				type: 'container',
-				children: [
-					{
-						'id': 'view-sidebardeck',
-						'type': 'bigtoolitem',
-						'text': _UNO('.uno:Sidebar'),
-						'command': '.uno:SidebarDeck.PropertyDeck',
-						'accessibility': { focusBack: true,	combination: 'SD', de: null }
-					},
-					{
-						'id': 'view-navigator',
-						'type': 'bigtoolitem',
-						'text': _UNO('.uno:Navigator'),
-						'command': '.uno:Navigator',
-						'accessibility': { focusBack: true,	combination: 'N', de: null }
-					},
-				],
-				vertical: false,
-			},
+			// // {
+			// // 	'id':'invertbackground',
+			// // 	'class': 'unoinvertbackground',
+			// // 	'type': 'bigcustomtoolitem',
+			// // 	'text': _('Invert Background'),
+			// // 	'accessibility': { focusBack: true, combination: 'DT', de: null }
+			// // },
+			// // {
+			// // 	type: 'container',
+			// // 	children: [
+			// // 		{
+			// // 			'id': 'view-sidebardeck',
+			// // 			'type': 'bigtoolitem',
+			// // 			'text': _UNO('.uno:Sidebar'),
+			// // 			'command': '.uno:SidebarDeck.PropertyDeck',
+			// // 			'accessibility': { focusBack: true,	combination: 'SD', de: null }
+			// // 		},
+			// // 		{
+			// // 			'id': 'view-navigator',
+			// // 			'type': 'bigtoolitem',
+			// // 			'text': _UNO('.uno:Navigator'),
+			// // 			'command': '.uno:Navigator',
+			// // 			'accessibility': { focusBack: true,	combination: 'N', de: null }
+			// // 		},
+			// // 	],
+			// // 	vertical: false,
+			// // },
 		];
 
 		return this.getTabPage('View', content);
