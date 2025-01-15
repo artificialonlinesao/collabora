@@ -82,7 +82,9 @@ L.Control.Menubar = L.Control.extend({
 					{name: _('PDF Document (.pdf)'), id: 'exportas-pdf', type: 'action'},
 					{name: _('EPUB (.epub)'), id: 'exportas-epub', type: 'action'}
 				]},
-				{name: _('Rename Document'), id: 'renamedocument', type: 'action'},
+        // Hide button as we have not implemented renaming files in our backend
+        // so it will cause the document to bug if the user does this
+				// // {name: _('Rename Document'), id: 'renamedocument', type: 'action'},
 				{name: _('Share...'), id:'shareas', type: 'action'},
 				{name: _('See revision history'), id: 'rev-history', type: 'action'},
 				{name: !window.ThisIsAMobileApp ? _('Download as') : _('Export as'), id: 'downloadas', type: 'menu', menu: [
@@ -97,7 +99,8 @@ L.Control.Menubar = L.Control.extend({
 				{name: _UNO('.uno:SetDocumentProperties', 'text'), uno: '.uno:SetDocumentProperties', id: 'properties'},
 				{name: _UNO('.uno:Signature', 'text'), uno: '.uno:Signature', id: 'signature'},
 				{type: 'separator'},
-				{name: L.Control.MenubarShortcuts.addShortcut(_UNO('.uno:Print', 'text'), L.Control.MenubarShortcuts.shortcuts.PRINT), id: 'print', type: 'action'},
+        // Hide print button as it does not work in Chromium
+				// // {name: L.Control.MenubarShortcuts.addShortcut(_UNO('.uno:Print', 'text'), L.Control.MenubarShortcuts.shortcuts.PRINT), id: 'print', type: 'action'},
 				{name: _('Close document'), id: 'closedocument', type: 'action'}
 			]},
 			{name: _UNO('.uno:EditMenu', 'text'), id: 'editmenu', type: 'menu', menu: [
@@ -160,9 +163,15 @@ L.Control.Menubar = L.Control.extend({
 				{name: L.Control.MenubarShortcuts.addShortcut(_UNO('.uno:InsertAnnotation', 'text'), L.Control.MenubarShortcuts.shortcuts.COMMENT), id: 'insertcomment', type: 'action'},
 				{uno: '.uno:InsertObjectChart'},
 				{name: _UNO('.uno:FontworkGalleryFloater'), uno: '.uno:FontworkGalleryFloater', id: 'fontworkgalleryfloater'},
-				{name: _UNO('.uno:DrawText'), uno: '.uno:DrawText'},
+        // Hide insert textbox buttons in word as it is hard to select in Chromium
+        // trying to click in its area invariably selects something else.
+        // Idk could be due to it be layered behind other stuff?
+				// // {name: _UNO('.uno:DrawText'), uno: '.uno:DrawText'},
 				{name: _UNO('.uno:InsertFrame', 'text'), uno: '.uno:InsertFrame'},
-				{name: _UNO('.uno:VerticalText'), uno: '.uno:VerticalText'},
+        // Hide insert textbox buttons in word as it is hard to select in Chromium
+        // trying to click in its area invariably selects something else.
+        // Idk could be due to it be layered behind other stuff?
+				// // {name: _UNO('.uno:VerticalText'), uno: '.uno:VerticalText'},
 				{type: 'separator'},
 				{uno: '.uno:InsertSection', id: 'insertsection'},
 				{uno: '.uno:PageNumberWizard', id: 'pagenumberwizard'},
@@ -194,7 +203,11 @@ L.Control.Menubar = L.Control.extend({
 				{type: 'separator'},
 				{uno: '.uno:InsertQrCode'},
 				{uno: '.uno:InsertSymbol'},
-				{uno: '.uno:InsertObjectStarMath'},
+        // Hide button as the UX is bad: text box collapses so tightly to the
+        // text you can't actually see what you're typing. Also users cant
+        // move / edit / interact with it after its set. I think it might also
+        // disable clicking on other parts of the document?
+				// // {uno: '.uno:InsertObjectStarMath'},
 				{name: _UNO('.uno:FormattingMarkMenu', 'text'), type: 'menu', menu: [
 					{uno: '.uno:InsertNonBreakingSpace'},
 					{uno: '.uno:InsertHardHyphen'},
@@ -424,10 +437,11 @@ L.Control.Menubar = L.Control.extend({
 				{name: _UNO('.uno:SetDocumentProperties', 'presentation'), uno: '.uno:SetDocumentProperties', id: 'properties'},
 				{name: _UNO('.uno:Signature', 'presentation'), uno: '.uno:Signature', id: 'signature'},
 				{type: 'separator'},
-				{name: L.Control.MenubarShortcuts.addShortcut(_UNO('.uno:Print', 'presentation'), L.Control.MenubarShortcuts.shortcuts.PRINT), id: 'print', type: 'menu', menu: [
-					{name: _('Full Page Slides'), id: 'print', type: 'action'},
-					{name: _('Notes Pages'), id: 'print-notespages' , type: 'action'},
-				]},
+        // Hide print button as it does not work in Chromium
+				// // {name: L.Control.MenubarShortcuts.addShortcut(_UNO('.uno:Print', 'presentation'), L.Control.MenubarShortcuts.shortcuts.PRINT), id: 'print', type: 'menu', menu: [
+				// // 	{name: _('Full Page Slides'), id: 'print', type: 'action'},
+				// // 	{name: _('Notes Pages'), id: 'print-notespages' , type: 'action'},
+				// // ]},
 				{name: _('Close document'), id: 'closedocument', type: 'action'}
 			]},
 			{name: _UNO('.uno:EditMenu', 'presentation'), id: 'editmenu', type: 'menu', menu: [
@@ -579,7 +593,8 @@ L.Control.Menubar = L.Control.extend({
 				]},
 				{name: _('Save Comments'), id: 'savecomments', type: 'action'},
 				{name: _('Share...'), id:'shareas', type: 'action'},
-				{name: _UNO('.uno:Print', 'presentation'), id: 'print', type: 'action'},
+        // Hide print button as it does not work in Chromium
+				// // {name: _UNO('.uno:Print', 'presentation'), id: 'print', type: 'action'},
 				{name: _('See revision history'), id: 'rev-history', type: 'action'},
 				{name: !window.ThisIsAMobileApp ? _('Download as') : _('Export as'), id: 'downloadas', type: 'menu', menu: [
 					{name: _('PDF Document (.pdf)'), id: !window.ThisIsAMobileApp ? 'exportdirectpdf' : 'downloadas-pdf', type: 'action'},
@@ -732,10 +747,11 @@ L.Control.Menubar = L.Control.extend({
 				{name: _UNO('.uno:SetDocumentProperties', 'spreadsheet'), uno: '.uno:SetDocumentProperties', id: 'properties'},
 				{name: _UNO('.uno:Signature', 'spreadsheet'), uno: '.uno:Signature', id: 'signature'},
 				{type: 'separator'},
-				{name: L.Control.MenubarShortcuts.addShortcut(_UNO('.uno:Print', 'spreadsheet'), L.Control.MenubarShortcuts.shortcuts.PRINT), id: 'print', type: 'menu', menu: [
-					{name: _('Active sheet'), id: 'print-active-sheet', type: 'action'},
-					{name: _('All Sheets'), id: 'print-all-sheets', type: 'action'},
-				]},
+        // Hide print button as it does not work in Chromium
+				// // {name: L.Control.MenubarShortcuts.addShortcut(_UNO('.uno:Print', 'spreadsheet'), L.Control.MenubarShortcuts.shortcuts.PRINT), id: 'print', type: 'menu', menu: [
+				// // 	{name: _('Active sheet'), id: 'print-active-sheet', type: 'action'},
+				// // 	{name: _('All Sheets'), id: 'print-all-sheets', type: 'action'},
+				// // ]},
 				{name: _('Close document'), id: 'closedocument', type: 'action'}
 			]},
 			{name: _UNO('.uno:EditMenu', 'spreadsheet'), id: 'editmenu', type: 'menu', menu: [
@@ -849,11 +865,12 @@ L.Control.Menubar = L.Control.extend({
 				{type: 'separator'},
 				{uno: '.uno:FormatPaintbrush'},
 				{uno: '.uno:ResetAttributes'},
-				{name: _UNO('.uno:PrintRangesMenu', 'spreadsheet'), type: 'menu', menu: [
-					{uno: '.uno:DefinePrintArea'},
-					{uno: '.uno:AddPrintArea'},
-					{uno: '.uno:EditPrintArea'},
-					{uno: '.uno:DeletePrintArea'}]},
+        // Hide print button as it does not work in Chromium
+				// // {name: _UNO('.uno:PrintRangesMenu', 'spreadsheet'), type: 'menu', menu: [
+				// // 	{uno: '.uno:DefinePrintArea'},
+				// // 	{uno: '.uno:AddPrintArea'},
+				// // 	{uno: '.uno:EditPrintArea'},
+				// // 	{uno: '.uno:DeletePrintArea'}]},
 				{name: _UNO('.uno:FormatSparklineMenu', 'spreadsheet'), type: 'menu', menu: [
 				    {uno: '.uno:InsertSparkline'},
 				    {uno: '.uno:DeleteSparkline'},
@@ -1007,8 +1024,9 @@ L.Control.Menubar = L.Control.extend({
 				]},
 				{name: _('Share...'), id:'shareas', type: 'action'},
 				{name: _('See revision history'), id: 'rev-history', type: 'action'},
-				{type: 'separator'},
-				{name: _UNO('.uno:Print', 'text'), id: 'print', type: 'action'},
+        // Hide print button as it does not work in Chromium
+				// // {type: 'separator'},
+				// // {name: _UNO('.uno:Print', 'text'), id: 'print', type: 'action'},
 			]},
 			{name: !window.ThisIsAMobileApp ? _('Download as') : _('Export as'), id: 'downloadas', type: 'menu', menu: [
 				{name: _('PDF Document (.pdf)'), id: !window.ThisIsAMobileApp ? 'exportdirectpdf' : 'downloadas-pdf', type: 'action'},
@@ -1073,8 +1091,9 @@ L.Control.Menubar = L.Control.extend({
 				]},
 				{name: _('Share...'), id:'shareas', type: 'action'},
 				{name: _('See revision history'), id: 'rev-history', type: 'action'},
-				{type: 'separator'},
-				{name: _UNO('.uno:Print', 'presentation'), id: 'print', type: 'action'},
+        // Hide print button as it does not work in Chromium
+				// // {type: 'separator'},
+				// // {name: _UNO('.uno:Print', 'presentation'), id: 'print', type: 'action'},
 			]},
 			{name: !window.ThisIsAMobileApp ? _('Download as') : _('Export as'), id:'downloadas', type: 'menu', menu: [
 				{name: _('PDF Document (.pdf)'), id: !window.ThisIsAMobileApp ? 'exportdirectpdf' : 'downloadas-pdf', type: 'action'},
@@ -1138,7 +1157,8 @@ L.Control.Menubar = L.Control.extend({
 					{name: _('PDF Document (.pdf)'), id: 'exportas-pdf', type: 'action'}
 				]},
 				{name: _('Share...'), id:'shareas', type: 'action'},
-				{name: _UNO('.uno:Print', 'presentation'), id: 'print', type: 'action'},
+        // Hide print button as it does not work in Chromium
+				// // {name: _UNO('.uno:Print', 'presentation'), id: 'print', type: 'action'},
 				{name: _('See revision history'), id: 'rev-history', type: 'action'},
 			]},
 			{name: !window.ThisIsAMobileApp ? _('Download as') : _('Export as'), id:'downloadas', type: 'menu', menu: [
@@ -1196,7 +1216,8 @@ L.Control.Menubar = L.Control.extend({
 				{name: _('Share...'), id:'shareas', type: 'action'},
 				{name: _('See revision history'), id: 'rev-history', type: 'action'},
 				{type: 'separator'},
-				{name: _UNO('.uno:Print', 'spreadsheet'), id: 'print', type: 'action'},
+        // Hide print button as it does not work in Chromium
+				// // {name: _UNO('.uno:Print', 'spreadsheet'), id: 'print', type: 'action'},
 				{name: _('Define print area', 'spreadsheet'), uno: '.uno:DefinePrintArea' },
 				{name: _('Remove print area', 'spreadsheet'), uno: '.uno:DeletePrintArea' },
 			]},
@@ -1386,7 +1407,7 @@ L.Control.Menubar = L.Control.extend({
 
 		allowedViewModeActions: [
 			() => app.sectionContainer.getSectionWithName(L.CSections.CommentList.name).hasAnyComments() ? 'savecomments' : undefined,
-			'shareas', 'print', // file menu
+			'shareas', /* 'print', */ // file menu
 			'downloadas-odt', 'downloadas-doc', 'downloadas-docx', 'downloadas-rtf', // file menu
 			'downloadas-odp', 'downloadas-ppt', 'downloadas-pptx', 'downloadas-odg', 'exportpdf' , // file menu
 			!window.ThisIsAMobileApp ? 'exportdirectpdf' : 'downloadas-pdf', !window.ThisIsAMobileApp ? 'exportepub' : 'downloadas-epub', // file menu
@@ -2257,7 +2278,10 @@ L.Control.Menubar = L.Control.extend({
 			}
 		}
 
-		if (menuItem.id === 'print' && this._map['wopi'].HidePrintOption)
+    // Hide print button as it does not work in Chromium
+		// // if (menuItem.id === 'print' && this._map['wopi'].HidePrintOption)
+		// // 	return false;
+		if (menuItem.id === 'print')
 			return false;
 
 		if (menuItem.id === 'save' && this._map['wopi'].HideSaveOption)

@@ -102,13 +102,15 @@ class TopToolbar extends JSDialog.Toolbar {
 		var items = [
 			{type: 'customtoolitem',  id: 'closemobile', desktop: false, mobile: false, tablet: true, visible: false},
 			{type: 'customtoolitem',  id: 'save', command: 'save', text: _UNO('.uno:Save'), lockUno: '.uno:Save'},
-			{type: 'customtoolitem',  id: 'print', command: 'print', text: _UNO('.uno:Print', 'text'), mobile: false, tablet: false, lockUno: '.uno:Print'},
-			{type: 'menubutton',  id: 'printoptions',  command: 'printoptions', noLabel: true, text: _UNO('.uno:Print', 'text'), mobile: false, tablet: false, lockUno: '.uno:Print',
-				menu: [
-					{id: 'print-active-sheet', action: 'print-active-sheet', text: _('Active Sheet')},
-					{id: 'print-all-sheets', action: 'print-all-sheets', text: _('All Sheets')},
-				]
-			},
+			// Hide print button as it does not work in Chromium
+			// // {type: 'customtoolitem',  id: 'print', command: 'print', text: _UNO('.uno:Print', 'text'), mobile: false, tablet: false, lockUno: '.uno:Print'},
+			// Hide print button as it does not work in Chromium
+			// // {type: 'menubutton',  id: 'printoptions',  command: 'printoptions', noLabel: true, text: _UNO('.uno:Print', 'text'), mobile: false, tablet: false, lockUno: '.uno:Print',
+			// // 	menu: [
+			// // 		{id: 'print-active-sheet', action: 'print-active-sheet', text: _('Active Sheet')},
+			// // 		{id: 'print-all-sheets', action: 'print-all-sheets', text: _('All Sheets')},
+			// // 	]
+			// // },
 			{type: 'separator', orientation: 'vertical', id: 'savebreak', mobile: false},
 			{type: 'toolitem',  id: 'undo', text: _UNO('.uno:Undo'), command: '.uno:Undo', mobile: false},
 			{type: 'toolitem',  id: 'redo', text: _UNO('.uno:Redo'), command: '.uno:Redo', mobile: false},
@@ -272,7 +274,7 @@ class TopToolbar extends JSDialog.Toolbar {
 				['reset', 'textalign', 'wraptextbutton', 'breakspacing', 'insertannotation', 'conditionalformatdialog',
 					'numberformatcurrency', 'numberformatpercent',
 					'numberformatincdecimals', 'numberformatdecdecimals', 'break-number', 'togglemergecells', 'breakmergecells',
-					'setborderstyle', 'sortascending', 'sortdescending', 'breaksorting', 'backgroundcolor', 'breaksidebar', /* 'sidebar', */ 'printoptions'
+					'setborderstyle', 'sortascending', 'sortdescending', 'breaksorting', 'backgroundcolor', 'breaksidebar', /* 'sidebar', 'printoptions' */
 				].forEach((id) => {
 					this.showItem(id, true);
 				});
@@ -371,9 +373,11 @@ class TopToolbar extends JSDialog.Toolbar {
 		if (e.HideSaveOption) {
 			this.showItem('save', false);
 		}
-		if (e.HidePrintOption) {
-			this.showItem('print', false);
-		}
+		// Hide print button as it does not work in Chromium
+		// // if (e.HidePrintOption) {
+		// // 	this.showItem('print', false);
+		// // }
+		this.showItem('print', false);
 
 		// On desktop we only have Save and Print buttons before the first
 		// splitter/break. Hide the splitter if we hid both save and print.

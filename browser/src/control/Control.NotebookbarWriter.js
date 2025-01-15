@@ -132,7 +132,8 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 
 	getFileTab: function() {
 		var hasRevisionHistory = L.Params.revHistoryEnabled;
-		var hasPrint = !this._map['wopi'].HidePrintOption;
+    // Hide print button as it does not work in Chromium
+		// // var hasPrint = !this._map['wopi'].HidePrintOption;
 		var hasRepair = !this._map['wopi'].HideRepairOption;
 		var hasSaveAs = !this._map['wopi'].UserCanNotWriteRelative;
 		var hasShare = this._map['wopi'].EnableShare;
@@ -252,16 +253,17 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 			});
 		}
 
-		if (hasPrint) {
-			saveExportGroup.children.push(
-			{
-				'id': 'print',
-				'type': 'bigtoolitem',
-				'text': _UNO('.uno:Print', 'text'),
-				'command': '.uno:Print',
-				'accessibility': { focusBack: true,	combination: 'P', de: 'P' }
-			});
-		}
+    // Hide button as this does not work with Chromium
+		// // if (hasPrint) {
+		// // 	saveExportGroup.children.push(
+		// // 	{
+		// // 		'id': 'print',
+		// // 		'type': 'bigtoolitem',
+		// // 		'text': _UNO('.uno:Print', 'text'),
+		// // 		'command': '.uno:Print',
+		// // 		'accessibility': { focusBack: true,	combination: 'P', de: 'P' }
+		// // 	});
+		// // }
 
 		if (!hideDownload) {
 			saveExportGroup.children.push({
@@ -341,18 +343,20 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 			});
 		}
 
-		repairGroup.children.push({
-			'type': 'container',
-			'children': [
-				{
-					'id': 'renamedocument',
-					'class': 'unoRenameDocument',
-					'type': 'bigcustomtoolitem',
-					'text': _('Rename'),
-					'accessibility': { focusBack: true,	combination: 'RN' }
-				}
-			]
-		});
+    // Hide button as we have not implemented renaming files in our backend
+    // so it will cause the document to bug if the user does this
+		// // repairGroup.children.push({
+		// // 	'type': 'container',
+		// // 	'children': [
+		// // 		{
+		// // 			'id': 'renamedocument',
+		// // 			'class': 'unoRenameDocument',
+		// // 			'type': 'bigcustomtoolitem',
+		// // 			'text': _('Rename'),
+		// // 			'accessibility': { focusBack: true,	combination: 'RN' }
+		// // 		}
+		// // 	]
+		// // });
 
 		content.push(repairGroup);
 
@@ -1192,47 +1196,54 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 						'command': 'charmapcontrol',
 						'accessibility': { focusBack: false,	combination: 'ZS',	de: null }
 					},
-					{
-						'id': 'insert-insert-objects-star-math',
-						'type': 'bigtoolitem',
-						'text': _UNO('.uno:InsertObjectStarMath', 'text'),
-						'command': '.uno:InsertObjectStarMath',
-						'accessibility': { focusBack: true,	combination: 'ET',	de:	null }
-					}
+          // Hide button as the UX is bad: text box collapses so tightly to the
+          // text you can't actually see what you're typing. Also users cant
+          // move / edit / interact with it after its set. I think it might also
+          // disable clicking on other parts of the document?
+					// // {
+					// // 	'id': 'insert-insert-objects-star-math',
+					// // 	'type': 'bigtoolitem',
+					// // 	'text': _UNO('.uno:InsertObjectStarMath', 'text'),
+					// // 	'command': '.uno:InsertObjectStarMath',
+					// // 	'accessibility': { focusBack: true,	combination: 'ET',	de:	null }
+					// // }
 				],
 				vertical: false,
 			},
-			{
-				type: 'container',
-				children: [
-					{
-						'id': 'insert-draw-text',
-						'type': 'bigtoolitem',
-						'text': _UNO('.uno:DrawText'),
-						'command': '.uno:DrawText',
-						'accessibility': { focusBack: true,	combination: 'X',	de:	null }
-					},
-					{
-						'type': 'container',
-						'children': [
-							{
-								'type': 'toolbox',
-								'children': [
-									{
-										'id': 'insert-insert-vertical-text',
-										'type': 'toolitem',
-										'text': _UNO('.uno:VerticalText', 'text'),
-										'command': '.uno:VerticalText',
-										'accessibility': { focusBack: false,	combination: 'VT',	de:	null }
-									}
-								]
-							},
-						],
-						'vertical': 'true'
-					},
-				],
-				vertical: false,
-			},
+      // Hide insert textbox buttons in word as it is hard to select in Chromium
+      // trying to click in its area invariably selects something else.
+      // Idk could be due to it be layered behind other stuff?
+			// // {
+			// // 	type: 'container',
+			// // 	children: [
+			// // 		{
+			// // 			'id': 'insert-draw-text',
+			// // 			'type': 'bigtoolitem',
+			// // 			'text': _UNO('.uno:DrawText'),
+			// // 			'command': '.uno:DrawText',
+			// // 			'accessibility': { focusBack: true,	combination: 'X',	de:	null }
+			// // 		},
+			// // 		{
+			// // 			'type': 'container',
+			// // 			'children': [
+			// // 				{
+			// // 					'type': 'toolbox',
+			// // 					'children': [
+			// // 						{
+			// // 							'id': 'insert-insert-vertical-text',
+			// // 							'type': 'toolitem',
+			// // 							'text': _UNO('.uno:VerticalText', 'text'),
+			// // 							'command': '.uno:VerticalText',
+			// // 							'accessibility': { focusBack: false,	combination: 'VT',	de:	null }
+			// // 						}
+			// // 					]
+			// // 				},
+			// // 			],
+			// // 			'vertical': 'true'
+			// // 		},
+			// // 	],
+			// // 	vertical: false,
+			// // },
 			{
 				'type': 'container',
 				'children': [
@@ -1617,6 +1628,13 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 						'command': '.uno:FormatColumns',
 						'accessibility': { focusBack: false, combination: 'J', de: 'R' }
 					},
+          {
+            'id': 'layout-line-numbering-dialog',
+            'type': 'bigtoolitem',
+            'text': _UNO('.uno:LineNumberingDialog', 'text'),
+            'command': '.uno:LineNumberingDialog',
+            'accessibility': { focusBack: true, combination: 'LN', de: null }
+          }
 				],
 				vertical: false,
 			},
@@ -1650,36 +1668,25 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 				],
 				'vertical': 'true'
 			},
-			{
-				'type': 'container',
-				'children': [
-					{
-						'type': 'toolbox',
-						'children': [
-							{
-								'id': 'layout-hyphenate',
-								'type': 'toolitem',
-								'text':  _UNO('.uno:Hyphenate', 'text'),
-								'command': '.uno:Hyphenate',
-								'accessibility': { focusBack: true,	combination: 'H', de: null }
-							}
-						]
-					},
-					{
-						'type': 'toolbox',
-						'children': [
-							{
-								'id': 'layout-line-numbering-dialog',
-								'type': 'toolitem',
-								'text': _UNO('.uno:LineNumberingDialog', 'text'),
-								'command': '.uno:LineNumberingDialog',
-								'accessibility': { focusBack: true, combination: 'LN', de: null }
-							}
-						]
-					}
-				],
-				'vertical': 'true'
-			},
+      // Hide button as it does not work
+			// // {
+			// // 	'type': 'container',
+			// // 	'children': [
+			// // 		{
+			// // 			'type': 'toolbox',
+			// // 			'children': [
+			// // 				{
+			// // 					'id': 'layout-hyphenate',
+			// // 					'type': 'toolitem',
+			// // 					'text':  _UNO('.uno:Hyphenate', 'text'),
+			// // 					'command': '.uno:Hyphenate',
+			// // 					'accessibility': { focusBack: true,	combination: 'H', de: null }
+			// // 				}
+			// // 			]
+			// // 		},
+			// // 	],
+			// // 	'vertical': 'true'
+			// // },
 			{
 				'type': 'container',
 				'children': [
@@ -3008,45 +3015,48 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 				],
 				'vertical': 'true'
 			},
-			{
-				type: 'container',
-				children: [
-					{
-						'type': 'bigtoolitem',
-						'text': _UNO('.uno:Text'),
-						'command': '.uno:Text'
-					},
-					{
-						'type': 'container',
-						'children': [
-							{
-								'type': 'toolbox',
-								'children': [
-									{
-										'type': 'toolitem',
-										'text': _UNO('.uno:FontworkGalleryFloater'),
-										'command': '.uno:FontworkGalleryFloater',
-										// Fontwork export/import not supported in other formats.
-										'visible': isODF ? 'true' : 'false',
-									}
-								]
-							},
-							{
-								'type': 'toolbox',
-								'children': [
-									{
-										'type': 'toolitem',
-										'text': _UNO('.uno:VerticalText', 'text'),
-										'command': '.uno:VerticalText'
-									}
-								]
-							}
-						],
-						'vertical': 'true'
-					},
-				],
-				vertical: false,
-			},
+      // Hide insert textbox buttons in word as it is hard to select in Chromium
+      // trying to click in its area invariably selects something else.
+      // Idk could be due to it be layered behind other stuff?
+			// // {
+			// // 	type: 'container',
+			// // 	children: [
+			// // 		{
+			// // 			'type': 'bigtoolitem',
+			// // 			'text': _UNO('.uno:Text'),
+			// // 			'command': '.uno:Text'
+			// // 		},
+			// // 		{
+			// // 			'type': 'container',
+			// // 			'children': [
+			// // 				{
+			// // 					'type': 'toolbox',
+			// // 					'children': [
+			// // 						{
+			// // 							'type': 'toolitem',
+			// // 							'text': _UNO('.uno:FontworkGalleryFloater'),
+			// // 							'command': '.uno:FontworkGalleryFloater',
+			// // 							// Fontwork export/import not supported in other formats.
+			// // 							'visible': isODF ? 'true' : 'false',
+			// // 						}
+			// // 					]
+			// // 				},
+			// // 				{
+			// // 					'type': 'toolbox',
+			// // 					'children': [
+			// // 						{
+			// // 							'type': 'toolitem',
+			// // 							'text': _UNO('.uno:VerticalText', 'text'),
+			// // 							'command': '.uno:VerticalText'
+			// // 						}
+			// // 					]
+			// // 				}
+			// // 			],
+			// // 			'vertical': 'true'
+			// // 		},
+			// // 	],
+			// // 	vertical: false,
+			// // },
 		];
 
 		return this.getTabPage(drawTabName, content);

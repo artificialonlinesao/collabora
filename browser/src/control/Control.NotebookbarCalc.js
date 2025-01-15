@@ -184,15 +184,16 @@ L.Control.NotebookbarCalc = L.Control.NotebookbarWriter.extend({
 			}
 		);
 
-		if (!this._map['wopi'].HidePrintOption) {
-			saveExportGroup.children.push({
-				'id': 'Data-Print:Print',
-				'type': 'menubutton',
-				'text': _UNO('.uno:Print', 'spreadsheet'),
-				'command': '.uno:Print',
-				'accessibility': { focusBack: true,	combination: 'PT', de: null }
-			});
-		}
+		// Hide button as this does not work in Chromium
+		// // if (!this._map['wopi'].HidePrintOption) {
+		// // 	saveExportGroup.children.push({
+		// // 		'id': 'Data-Print:Print',
+		// // 		'type': 'menubutton',
+		// // 		'text': _UNO('.uno:Print', 'spreadsheet'),
+		// // 		'command': '.uno:Print',
+		// // 		'accessibility': { focusBack: true,	combination: 'PT', de: null }
+		// // 	});
+		// // }
 
 		if (!this._map['wopi'].HideExportOption) {
 			saveExportGroup.children.push({
@@ -271,19 +272,22 @@ L.Control.NotebookbarCalc = L.Control.NotebookbarWriter.extend({
 				]
 			});
 		}
-		repairGroup.children.push(
-			{
-				'type': 'container',
-				'children': [
-					{
-						'id': 'renamedocument',
-						'class': 'unoRenameDocument',
-						'type': 'bigcustomtoolitem',
-						'text': _('Rename'),
-					}
-				]
-			}
-		);
+
+		// Hide button as we have not implemented renaming files in our backend
+    // so it will cause the document to bug if the user does this
+		// // repairGroup.children.push(
+		// // 	{
+		// // 		'type': 'container',
+		// // 		'children': [
+		// // 			{
+		// // 				'id': 'renamedocument',
+		// // 				'class': 'unoRenameDocument',
+		// // 				'type': 'bigcustomtoolitem',
+		// // 				'text': _('Rename'),
+		// // 			}
+		// // 		]
+		// // 	}
+		// // );
 
 		content.push(repairGroup);
 
@@ -1916,13 +1920,6 @@ L.Control.NotebookbarCalc = L.Control.NotebookbarWriter.extend({
 						'accessibility': { focusBack: true,	combination: 'S', de: null }
 					},
 					{
-						'id': 'LanguageMenu',
-						'type': 'bigcustomtoolitem',
-						'text': _UNO('.uno:LanguageMenu'),
-						'command': 'languagemenu',
-						'accessibility': { focusBack: true,	combination: 'L', de: null }
-					},
-					{
 						'id': 'Review-Section-Language1',
 						'type': 'container',
 						'children': [
@@ -1944,12 +1941,20 @@ L.Control.NotebookbarCalc = L.Control.NotebookbarWriter.extend({
 								'type': 'toolbox',
 								'children': [
 									{
-										'id': 'review-hyphenate',
+										'id': 'LanguageMenu',
 										'type': 'toolitem',
-										'text': _UNO('.uno:Hyphenate', 'spreadsheet'),
-										'command': '.uno:Hyphenate',
-										'accessibility': { focusBack: true,	combination: 'H', de: null }
-									}
+										'text': _UNO('.uno:LanguageMenu'),
+										'command': 'languagemenu',
+										'accessibility': { focusBack: true,	combination: 'L', de: null }
+									},
+									// Hide button as it seems to open an unrelated modal
+									// // {
+									// // 	'id': 'review-hyphenate',
+									// // 	'type': 'toolitem',
+									// // 	'text': _UNO('.uno:Hyphenate', 'spreadsheet'),
+									// // 	'command': '.uno:Hyphenate',
+									// // 	'accessibility': { focusBack: true,	combination: 'H', de: null }
+									// // }
 								]
 							}
 						],

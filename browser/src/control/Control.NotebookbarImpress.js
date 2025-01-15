@@ -251,16 +251,17 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 			}
 		);
 
-		if (!this._map['wopi'].HidePrintOption) {
-			saveExportGroup.children.push(
-			{
-				'id': 'file-print:PrintOptions',
-				'type': 'exportmenubutton',
-				'text': _UNO('.uno:Print', 'presentation'),
-				'command': '.uno:Print',
-				'accessibility': { focusBack: true, combination: 'PF', de: null }
-			});
-		}
+		// Hide button as this does not work in Chromium
+		// // if (!this._map['wopi'].HidePrintOption) {
+		// // 	saveExportGroup.children.push(
+		// // 	{
+		// // 		'id': 'file-print:PrintOptions',
+		// // 		'type': 'exportmenubutton',
+		// // 		'text': _UNO('.uno:Print', 'presentation'),
+		// // 		'command': '.uno:Print',
+		// // 		'accessibility': { focusBack: true, combination: 'PF', de: null }
+		// // 	});
+		// // }
 
 		if (!this._map['wopi'].HideExportOption) {
 			saveExportGroup.children.push({
@@ -339,19 +340,22 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 				]
 			});
 		}
-		repairGroup.children.push(
-			{
-				'type': 'container',
-				'children': [
-					{
-						'id': 'renamedocument',
-						'class': 'unoRenameDocument',
-						'type': 'bigcustomtoolitem',
-						'text': _('Rename'),
-					}
-				]
-			}
-		);
+
+		// Hide button as we have not implemented renaming files in our backend
+    // so it will cause the document to bug if the user does this
+		// // repairGroup.children.push(
+		// // 	{
+		// // 		'type': 'container',
+		// // 		'children': [
+		// // 			{
+		// // 				'id': 'renamedocument',
+		// // 				'class': 'unoRenameDocument',
+		// // 				'type': 'bigcustomtoolitem',
+		// // 				'text': _('Rename'),
+		// // 			}
+		// // 		]
+		// // 	}
+		// // );
 
 		content.push(repairGroup);
 
@@ -1850,13 +1854,6 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 						'accessibility': { focusBack: false, combination: 'SD', de: null }
 					},
 					{
-						'id': 'LanguageMenu',
-						'type': 'bigcustomtoolitem',
-						'text': _UNO('.uno:LanguageMenu'),
-						'command': 'languagemenu',
-						'accessibility': { focusBack: false, combination: 'TM', de: null }
-					},
-					{
 						'id': 'Review-Section-Language1',
 						'type': 'container',
 						'children': [
@@ -1878,12 +1875,20 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 								'type': 'toolbox',
 								'children': [
 									{
-										'id': 'review-hyphenation',
+										'id': 'LanguageMenu',
 										'type': 'toolitem',
-										'text': _UNO('.uno:Hyphenation', 'presentation'),
-										'command': '.uno:Hyphenation',
-										'accessibility': { focusBack: true, combination: 'HY', de: null }
-									}
+										'text': _UNO('.uno:LanguageMenu'),
+										'command': 'languagemenu',
+										'accessibility': { focusBack: false, combination: 'TM', de: null }
+									},
+									// Hide button as it does't work
+									// // {
+									// // 	'id': 'review-hyphenation',
+									// // 	'type': 'toolitem',
+									// // 	'text': _UNO('.uno:Hyphenation', 'presentation'),
+									// // 	'command': '.uno:Hyphenation',
+									// // 	'accessibility': { focusBack: true, combination: 'HY', de: null }
+									// // }
 								]
 							}
 						],

@@ -213,17 +213,18 @@ L.Control.NotebookbarDraw = L.Control.NotebookbarImpress.extend({
 			}
 		);
 
-		if (!this._map['wopi'].HidePrintOption) {
-			content.push(
-				{
-					'id': 'print',
-					'type': 'bigtoolitem',
-					'text': _UNO('.uno:Print', 'presentation'),
-					'command': '.uno:Print',
-					'accessibility': { focusBack: true, combination: 'P', de: null }
-				}
-			);
-		}
+		// Hide button as this does not work in Chromium
+		// // if (!this._map['wopi'].HidePrintOption) {
+		// // 	content.push(
+		// // 		{
+		// // 			'id': 'print',
+		// // 			'type': 'bigtoolitem',
+		// // 			'text': _UNO('.uno:Print', 'presentation'),
+		// // 			'command': '.uno:Print',
+		// // 			'accessibility': { focusBack: true, combination: 'P', de: null }
+		// // 		}
+		// // 	);
+		// // }
 
 		if (!this._map['wopi'].HideExportOption) {
 			content.push({
@@ -309,19 +310,22 @@ L.Control.NotebookbarDraw = L.Control.NotebookbarImpress.extend({
 				}
 			);
 		}
-		content.push(
-			{
-				'type': 'container',
-				'children': [
-					{
-						'id': 'renamedocument',
-						'class': 'unoRenameDocument',
-						'type': 'bigcustomtoolitem',
-						'text': _('Rename'),
-					}
-				]
-			}
-		);
+
+		// Hide button as we have not implemented renaming files in our backend
+    // so it will cause the document to bug if the user does this
+		// // content.push(
+		// // 	{
+		// // 		'type': 'container',
+		// // 		'children': [
+		// // 			{
+		// // 				'id': 'renamedocument',
+		// // 				'class': 'unoRenameDocument',
+		// // 				'type': 'bigcustomtoolitem',
+		// // 				'text': _('Rename'),
+		// // 			}
+		// // 		]
+		// // 	}
+		// // );
 
 		return this.getTabPage('File', content);
 	},
@@ -451,12 +455,12 @@ L.Control.NotebookbarDraw = L.Control.NotebookbarImpress.extend({
 			// // 	'accessibility': { focusBack: true, combination: 'DT', de: null }
 			// // },
 			// // {
-      // //           'id':'invertbackground',
-      // //           'class': 'unoinvertbackground',
-      // //           'type': 'bigcustomtoolitem',
-      // //           'text': _('Invert Background'),
-      // //           'accessibility': { focusBack: true, combination: 'DT', de: null }
-      // //       },
+			// //           'id':'invertbackground',
+			// //           'class': 'unoinvertbackground',
+			// //           'type': 'bigcustomtoolitem',
+			// //           'text': _('Invert Background'),
+			// //           'accessibility': { focusBack: true, combination: 'DT', de: null }
+			// //       },
 			// // {
 			// // 	'id': 'view-sidebar',
 			// // 	'type': 'bigtoolitem',
