@@ -1296,22 +1296,21 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 				children: [
 					{
 						'id': 'insert-insert-graphic:InsertImageMenu',
-						'type': 'bigtoolitem',
+						'type': 'menubutton',
 						'text': _UNO('.uno:InsertGraphic'),
 						'command': '.uno:InsertGraphic',
 						'accessibility': { focusBack: true, combination: 'IG', de: null }
 					},
 					{
 						'id': 'insert-insert-multimedia:InsertMultimediaMenu',
-						'type': 'bigtoolitem',
+						'type': 'menubutton',
 						'text': _UNO('.uno:InsertAVMedia'),
 						'command': 'insertmultimedia',
 						'accessibility': { focusBack: true, combination: 'MM', de: null }, // IM was already taken, so 'MM' for MultiMedia
 					},
 					{
 						'id': 'insert-insert-table:InsertTableMenu',
-						'type': 'bigtoolitem',
-						'noLabel': true,
+						'type': 'menubutton',
 						'text': _UNO('.uno:InsertTable', 'presentation'),
 						'command': '.uno:InsertTable',
 						'accessibility': { focusBack: true, combination: 'IT', de: null }
@@ -1365,7 +1364,7 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 					{
 						'id': 'CharmapControl',
 						'class': 'unoCharmapControl',
-						'type': 'bigtoolitem',
+						'type': 'bigcustomtoolitem',
 						'text': _UNO('.uno:CharmapControl'),
 						'command': 'charmapcontrol',
 						'accessibility': { focusBack: true, combination: 'IM', de: null }
