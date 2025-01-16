@@ -71,6 +71,16 @@ L.Control.Tabs = L.Control.extend({
 			'.uno:Protect': {
 				name: _UNO('.uno:Protect', 'spreadsheet', true),
 				callback: (this._protectSheet).bind(this),
+				visible: function() {
+					return !this._isProtectedSheet(this._tabForContextMenu);
+				}.bind(this)
+			},
+			'.uno:Unprotect': {
+				name: _UNO('.uno:Unprotect', 'spreadsheet', true),
+				callback: (this._protectSheet).bind(this),
+				visible: function() {
+					return this._isProtectedSheet(this._tabForContextMenu);
+				}.bind(this)
 			},
 			'.uno:Show': {
 				name: _UNO('.uno:Show', 'spreadsheet', true),

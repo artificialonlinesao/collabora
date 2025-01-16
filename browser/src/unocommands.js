@@ -510,6 +510,8 @@ var unoCommandsArray = {
 	'UnfloatFrame':{text:{menu:_('Unfloat Frame Content'),},},
 	'Ungroup':{global:{menu:_('~Ungroup...'),},},
 	'UngroupSparklines':{spreadsheet:{menu:_('Ungroup Sparklines'),},},
+  // todo: translations for this
+  'Unprotect':{spreadsheet:{menu:_('Unprotect Sheet...'),},},
 	'UnsetCellsReadOnly':{text:{menu:_('Unprotect Cells'),},},
 	'UpSearch':{global:{menu:_('Find Previous'),},},
 	'UpdateAll':{text:{menu:_('~Update All'),},},
