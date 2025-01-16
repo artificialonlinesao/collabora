@@ -174,18 +174,19 @@ L.Control.Menubar = L.Control.extend({
 				// // {name: _UNO('.uno:VerticalText'), uno: '.uno:VerticalText'},
 				{type: 'separator'},
 				{uno: '.uno:InsertSection', id: 'insertsection'},
-				{uno: '.uno:PageNumberWizard', id: 'pagenumberwizard'},
-				{name: _UNO('.uno:InsertFieldCtrl', 'text'), type: 'menu', menu: [
-					{uno: '.uno:InsertPageNumberField'},
-					{uno: '.uno:InsertPageCountField'},
-					{uno: '.uno:InsertDateField'},
-					{uno: '.uno:InsertTimeField'},
-					{uno: '.uno:InsertTitleField'},
-					{uno: '.uno:InsertAuthorField'},
-					{uno: '.uno:InsertTopicField'},
-					{type: 'separator'},
-					{uno: '.uno:InsertField'},
-				]},
+        // Hide these buttons as they would open ancient-looking dialogs
+				// // {uno: '.uno:PageNumberWizard', id: 'pagenumberwizard'},
+				// // {name: _UNO('.uno:InsertFieldCtrl', 'text'), type: 'menu', menu: [
+				// // 	{uno: '.uno:InsertPageNumberField'},
+				// // 	{uno: '.uno:InsertPageCountField'},
+				// // 	{uno: '.uno:InsertDateField'},
+				// // 	{uno: '.uno:InsertTimeField'},
+				// // 	{uno: '.uno:InsertTitleField'},
+				// // 	{uno: '.uno:InsertAuthorField'},
+				// // 	{uno: '.uno:InsertTopicField'},
+				// // 	{type: 'separator'},
+				// // 	{uno: '.uno:InsertField'},
+				// // ]},
 				{name: _UNO('.uno:InsertHeaderFooterMenu', 'text'), type: 'menu', menu: [
 					{name: _UNO('.uno:InsertPageHeader', 'text'), type: 'menu', menu: [
 						{name: _('All'), disabled: true, id: 'insertheader', tag: '_ALL_', uno: '.uno:InsertPageHeader?'}]},
@@ -295,7 +296,8 @@ L.Control.Menubar = L.Control.extend({
 				{uno: '.uno:ParagraphDialog'},
 				// // {uno: '.uno:SidebarDeck.StyleListDeck'},
 				{uno: '.uno:OutlineBullet'},
-				{uno: '.uno:ThemeDialog'},
+        // Hide this button as it would open an ancient-looking dialog
+				// // {uno: '.uno:ThemeDialog'},
 				{type: 'separator'},
 				{uno: '.uno:PageDialog'},
 				{uno: '.uno:TitlePageDialog'},
@@ -318,8 +320,8 @@ L.Control.Menubar = L.Control.extend({
 				{uno: '.uno:InsertEndnote'},
 				{uno: '.uno:FootnoteDialog'},
 				{type: 'separator'},
-				{uno: '.uno:InsertBookmark'},
-				{uno: '.uno:InsertReferenceField'},
+				// // {uno: '.uno:InsertBookmark'},
+				// // {uno: '.uno:InsertReferenceField'},
 				{id: 'zoteroseparator', type: 'separator', hidden: !window.zoteroEnabled},
 				{name: _('Add Citation'), id: 'zoteroaddeditcitation', type: 'action', hidden: !window.zoteroEnabled},
 				{name: _('Add Citation Note'), id: 'zoteroaddnote', type: 'action', hidden: !window.zoteroEnabled},
@@ -386,7 +388,8 @@ L.Control.Menubar = L.Control.extend({
 				{name: _UNO('.uno:AutoFormatMenu', 'text'), type: 'menu', menu: [
 					{uno: '.uno:OnlineAutoFormat'}]},
 				{type: 'separator'},
-				{uno: '.uno:ChapterNumberingDialog'},
+        // Hide this button as it would open an ancient-looking dialog
+				// // {uno: '.uno:ChapterNumberingDialog'},
 				{uno: '.uno:LineNumberingDialog'},
 				{uno: '.uno:FootnoteDialog'},
 				{type: 'separator'},
@@ -529,8 +532,9 @@ L.Control.Menubar = L.Control.extend({
 				{uno: '.uno:ObjectTitleDescription'},
 				{type: 'separator'},
 				{uno: '.uno:OutlineBullet'},
-				{uno: '.uno:ThemeDialog'}]
-			},
+        // Hide this button as it would open an ancient-looking dialog
+				// // {uno: '.uno:ThemeDialog'}
+      ]},
 			{name: _UNO('.uno:TableMenu', 'text'/*HACK should be 'presentation', but not in xcu*/), id:'table', type: 'menu', menu: [
 				{name: _UNO('.uno:InsertTable', 'text'), uno: '.uno:InsertTable'},
 				{name: _UNO('.uno:TableInsertMenu', 'text'/*HACK should be 'presentation', but not in xcu*/), type: 'menu', menu: [
@@ -678,8 +682,9 @@ L.Control.Menubar = L.Control.extend({
 				{uno: '.uno:ObjectTitleDescription'},
 				{type: 'separator'},
 				{uno: '.uno:OutlineBullet'},
-				{uno: '.uno:ThemeDialog'}]
-			},
+        // Hide this button as it would open an ancient-looking dialog
+				// // {uno: '.uno:ThemeDialog'}
+      ]},
 			{name: _UNO('.uno:TableMenu', 'text'/*HACK should be 'presentation', but not in xcu*/), id: 'table', type: 'menu', menu: [
 				{name: _UNO('.uno:InsertTable', 'text'), uno: '.uno:InsertTable'},
 				{name: _UNO('.uno:TableInsertMenu', 'text'/*HACK should be 'presentation', but not in xcu*/), type: 'menu', menu: [
@@ -865,7 +870,7 @@ L.Control.Menubar = L.Control.extend({
 				{type: 'separator'},
 				{uno: '.uno:FormatPaintbrush'},
 				{uno: '.uno:ResetAttributes'},
-        // Hide print button as it does not work in Chromium
+        // Hide these buttons as it would open ancient-looking dialogs
 				// // {name: _UNO('.uno:PrintRangesMenu', 'spreadsheet'), type: 'menu', menu: [
 				// // 	{uno: '.uno:DefinePrintArea'},
 				// // 	{uno: '.uno:AddPrintArea'},
@@ -904,7 +909,8 @@ L.Control.Menubar = L.Control.extend({
 					{uno: '.uno:ColorScaleFormatDialog'},
 					{uno: '.uno:DataBarFormatDialog'},
 					{uno: '.uno:IconSetFormatDialog'},
-					{uno: '.uno:CondDateFormatDialog'},
+          // Hide this button as it would open an ancient-looking dialogs
+					// // {uno: '.uno:CondDateFormatDialog'},
 					{type: 'separator'},
 					{uno: '.uno:ConditionalFormatManagerDialog'}]},
 				{type: 'separator'},
@@ -922,7 +928,8 @@ L.Control.Menubar = L.Control.extend({
 				{uno: '.uno:TransformDialog'},
 				{uno: '.uno:FormatLine'},
 				{uno: '.uno:FormatArea'},
-				{uno: '.uno:ThemeDialog'}
+        // Hide this button as it would open an ancient-looking dialog
+				// // {uno: '.uno:ThemeDialog'}
 			]},
 			{name: _UNO('.uno:SheetMenu', 'spreadsheet'), id: 'sheet', type: 'menu', menu: [
 				{uno: '.uno:InsertCell'},
@@ -1291,15 +1298,16 @@ L.Control.Menubar = L.Control.extend({
 					{name: _UNO('.uno:InsertAnnotation', 'text'), id: 'insertcomment', type: 'action'},
 					{name: _UNO('.uno:TableMenu'), id: 'inserttable', type: 'action'},
 					{type: 'separator'},
-					{name: _UNO('.uno:InsertField', 'text'), id: 'insertfield', type: 'menu', menu: [
-						{uno: '.uno:InsertPageNumberField'},
-						{uno: '.uno:InsertPageCountField'},
-						{uno: '.uno:InsertDateField'},
-						{uno: '.uno:InsertTimeField'},
-						{uno: '.uno:InsertTitleField'},
-						{uno: '.uno:InsertAuthorField'},
-						{uno: '.uno:InsertTopicField'}
-					]},
+          // Hide these buttons as they would open ancient-looking dialogs
+					// // {name: _UNO('.uno:InsertField', 'text'), id: 'insertfield', type: 'menu', menu: [
+					// // 	{uno: '.uno:InsertPageNumberField'},
+					// // 	{uno: '.uno:InsertPageCountField'},
+					// // 	{uno: '.uno:InsertDateField'},
+					// // 	{uno: '.uno:InsertTimeField'},
+					// // 	{uno: '.uno:InsertTitleField'},
+					// // 	{uno: '.uno:InsertAuthorField'},
+					// // 	{uno: '.uno:InsertTopicField'}
+					// // ]},
 					{name: _UNO('.uno:InsertHeaderFooterMenu', 'text'), id: 'insertheaderfooter', type: 'menu', menu: [
 						{name: _UNO('.uno:InsertPageHeader', 'text'), id: 'insertpageheader', type: 'menu', menu: [
 							{name: _('All'), disabled: true, id: 'insertheader', tag: '_ALL_', uno: '.uno:InsertPageHeader?On:bool=true'}]},

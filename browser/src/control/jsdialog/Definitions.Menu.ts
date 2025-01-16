@@ -365,10 +365,11 @@ menuDefinitions.set('ConditionalFormatMenu', [
 		text: _UNO('.uno:IconSetFormatDialog', 'spreadsheet'),
 		items: [{ type: 'html', htmlId: 'iconset' }],
 	},
-	{
-		text: _UNO('.uno:CondDateFormatDialog', 'spreadsheet'),
-		uno: '.uno:CondDateFormatDialog',
-	},
+  // Hide this button as it would open an ancient-looking dialog
+	// // {
+	// // 	text: _UNO('.uno:CondDateFormatDialog', 'spreadsheet'),
+	// // 	uno: '.uno:CondDateFormatDialog',
+	// // },
 	{ type: 'separator' },
 	{
 		text: _UNO('.uno:ConditionalFormatManagerDialog', 'spreadsheet'),

@@ -1552,13 +1552,14 @@ L.Control.NotebookbarDraw = L.Control.NotebookbarImpress.extend({
 				],
 				'vertical': 'true'
 			},
-			{
-				'id': 'format-theme-dialog',
-				'type': 'bigtoolitem',
-				'text': _UNO('.uno:ThemeDialog'),
-				'command': '.uno:ThemeDialog',
-				'accessibility': { focusBack: false, combination: 'J', de: null }
-			}
+      // Hide this button as it would open an ancient-looking dialog
+			// // {
+			// // 	'id': 'format-theme-dialog',
+			// // 	'type': 'bigtoolitem',
+			// // 	'text': _UNO('.uno:ThemeDialog'),
+			// // 	'command': '.uno:ThemeDialog',
+			// // 	'accessibility': { focusBack: false, combination: 'J', de: null }
+			// // }
 		];
 
 		return this.getTabPage('Format', content);

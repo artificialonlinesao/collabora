@@ -1024,13 +1024,14 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 						'command': '.uno:EditRegion',
 						'accessibility': { focusBack: false, combination: 'F', de: null }
 					},
-					{
-						'id': 'format-chapter-numbering-dialog',
-						'type': 'bigtoolitem',
-						'text': _UNO('.uno:ChapterNumberingDialog', 'text'),
-						'command': '.uno:ChapterNumberingDialog',
-						'accessibility': { focusBack: false, combination: 'I', de: null }
-					},
+          // Hide this button as it would open an ancient-looking dialog
+					// // {
+					// // 	'id': 'format-chapter-numbering-dialog',
+					// // 	'type': 'bigtoolitem',
+					// // 	'text': _UNO('.uno:ChapterNumberingDialog', 'text'),
+					// // 	'command': '.uno:ChapterNumberingDialog',
+					// // 	'accessibility': { focusBack: false, combination: 'I', de: null }
+					// // },
 				],
 				vertical: false,
 			},
@@ -1089,13 +1090,14 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 				],
 				'vertical': 'true'
 			},
-			{
-				'id': 'format-theme-dialog',
-				'type': 'bigtoolitem',
-				'text': _UNO('.uno:ThemeDialog'),
-				'command': '.uno:ThemeDialog',
-				'accessibility': { focusBack: false, combination: 'J', de: null }
-			}
+      // Hide this button as it would open an ancient-looking dialog
+			// // {
+			// // 	'id': 'format-theme-dialog',
+			// // 	'type': 'bigtoolitem',
+			// // 	'text': _UNO('.uno:ThemeDialog'),
+			// // 	'command': '.uno:ThemeDialog',
+			// // 	'accessibility': { focusBack: false, combination: 'J', de: null }
+			// // }
 		];
 
 		return this.getTabPage(formatTabName, content);
@@ -1314,36 +1316,6 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 								'type': 'toolbox',
 								'children': [
 									{
-										'id': 'insert-insert-page-number-wizard',
-										'type': 'toolitem',
-										'text': _UNO('.uno:PageNumberWizard', 'text'),
-										'command': '.uno:PageNumberWizard',
-										'accessibility': { focusBack: false,	combination: 'NU',	de:	null }
-									}
-								]
-							},
-							{
-								'type': 'toolbox',
-								'children': [
-									{
-										'id': 'insert-insert-field-control',
-										'type': 'toolitem',
-										'text': _UNO('.uno:InsertFieldCtrl', 'text'),
-										'command': '.uno:InsertFieldCtrl',
-										'accessibility': { focusBack: false,	combination: 'IE',	de:	null }
-									}
-								]
-							}
-						],
-						'vertical': 'true'
-					},
-					{
-						'type': 'container',
-						'children': [
-							{
-								'type': 'toolbox',
-								'children': [
-									{
 										'id': 'insert-insert-title-page-dialog',
 										'type': 'toolitem',
 										'text': _UNO('.uno:TitlePageDialog', 'text'),
@@ -1370,6 +1342,43 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 				],
 				vertical: false,
 			},
+      // Hide these buttons as they would open ancient-looking dialogs
+      // // {
+			// // 	type: 'container',
+			// // 	children: [
+			// // 		{
+			// // 			'type': 'container',
+			// // 			'children': [
+			// // 				{
+			// // 					'type': 'toolbox',
+			// // 					'children': [
+			// // 						{
+			// // 							'id': 'insert-insert-page-number-wizard',
+			// // 							'type': 'toolitem',
+			// // 							'text': _UNO('.uno:PageNumberWizard', 'text'),
+			// // 							'command': '.uno:PageNumberWizard',
+			// // 							'accessibility': { focusBack: false,	combination: 'NU',	de:	null }
+			// // 						}
+			// // 					]
+			// // 				},
+			// // 				{
+			// // 					'type': 'toolbox',
+			// // 					'children': [
+			// // 						{
+			// // 							'id': 'insert-insert-field-control',
+			// // 							'type': 'toolitem',
+			// // 							'text': _UNO('.uno:InsertFieldCtrl', 'text'),
+			// // 							'command': '.uno:InsertFieldCtrl',
+			// // 							'accessibility': { focusBack: false,	combination: 'IE',	de:	null }
+			// // 						}
+			// // 					]
+			// // 				}
+			// // 			],
+			// // 			'vertical': 'true'
+			// // 		},
+			// // 	],
+			// // 	vertical: false,
+			// // },
 			{
 				'id': 'insert-font-gallery-floater',
 				'type': 'bigtoolitem',
@@ -2007,36 +2016,37 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 				],
 				vertical: false,
 			},
-			{
-				'type': 'container',
-				'children': [
-					{
-						'type': 'toolbox',
-						'children': [
-							{
-								'id': 'references-insert-bookmark',
-								'type': 'toolitem',
-								'text': _UNO('.uno:InsertBookmark', 'text'),
-								'command': '.uno:InsertBookmark',
-								'accessibility': { focusBack: false, combination: 'IB', de: null }
-							}
-						]
-					},
-					{
-						'type': 'toolbox',
-						'children': [
-							{
-								'id': 'references-insert-reference-field',
-								'type': 'toolitem',
-								'text': _UNO('.uno:InsertReferenceField', 'text'),
-								'command': '.uno:InsertReferenceField',
-								'accessibility': { focusBack: false, combination: 'IR', de: null }
-							}
-						]
-					}
-				],
-				'vertical': 'true'
-			}
+      // Hide these buttons as they would open ancient-looking dialogs
+			// // {
+			// // 	'type': 'container',
+			// // 	'children': [
+			// // 		{
+			// // 			'type': 'toolbox',
+			// // 			'children': [
+			// // 				{
+			// // 					'id': 'references-insert-bookmark',
+			// // 					'type': 'toolitem',
+			// // 					'text': _UNO('.uno:InsertBookmark', 'text'),
+			// // 					'command': '.uno:InsertBookmark',
+			// // 					'accessibility': { focusBack: false, combination: 'IB', de: null }
+			// // 				}
+			// // 			]
+			// // 		},
+			// // 		{
+			// // 			'type': 'toolbox',
+			// // 			'children': [
+			// // 				{
+			// // 					'id': 'references-insert-reference-field',
+			// // 					'type': 'toolitem',
+			// // 					'text': _UNO('.uno:InsertReferenceField', 'text'),
+			// // 					'command': '.uno:InsertReferenceField',
+			// // 					'accessibility': { focusBack: false, combination: 'IR', de: null }
+			// // 				}
+			// // 			]
+			// // 		}
+			// // 	],
+			// // 	'vertical': 'true'
+			// // }
 		];
 		if (this._map.zotero) {
 			content.push(
@@ -2124,63 +2134,64 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 		}
 
 		content.push(
-			{
-				type: 'container',
-				children: [
-					{
-						'id': 'references-insert-field-control',
-						'type': 'bigtoolitem',
-						'text': _UNO('.uno:InsertFieldCtrl', 'text'),
-						'command': '.uno:InsertFieldCtrl',
-						'accessibility': { focusBack: false, combination: 'IF', de: null }
-					},
-					{
-						'type': 'container',
-						'children': [
-							{
-								'type': 'toolbox',
-								'children': [
-									{
-										'id': 'references-inset-page-number-field',
-										'type': 'toolitem',
-										'text': _UNO('.uno:InsertPageNumberField'),
-										'command': '.uno:InsertPageNumberField',
-										'accessibility': { focusBack: true, combination: 'PN', de: null }
-									},
-									{
-										'id': 'references-insert-page-count-field',
-										'type': 'toolitem',
-										'text': _UNO('.uno:InsertPageCountField', 'text'),
-										'command': '.uno:InsertPageCountField',
-										'accessibility': { focusBack: true, combination: 'PC', de: null }
-									},
-								]
-							},
-							{
-								'type': 'toolbox',
-								'children': [
-									{
-										'id': 'references-insert-date-field',
-										'type': 'toolitem',
-										'text': _UNO('.uno:InsertDateField', 'text'),
-										'command': '.uno:InsertDateField',
-										'accessibility': { focusBack: true, combination: 'ID', de: null }
-									},
-									{
-										'id': 'references-insert-title-field',
-										'type': 'toolitem',
-										'text': _UNO('.uno:InsertTitleField', 'text'),
-										'command': '.uno:InsertTitleField',
-										'accessibility': { focusBack: true, combination: 'IT', de: null }
-									}
-								]
-							}
-						],
-						'vertical': 'true'
-					},
-				],
-				vertical: false,
-			},
+      // Hide these buttons as they would open ancient-looking dialogs
+			// // {
+			// // 	type: 'container',
+			// // 	children: [
+			// // 		{
+			// // 			'id': 'references-insert-field-control',
+			// // 			'type': 'bigtoolitem',
+			// // 			'text': _UNO('.uno:InsertFieldCtrl', 'text'),
+			// // 			'command': '.uno:InsertFieldCtrl',
+			// // 			'accessibility': { focusBack: false, combination: 'IF', de: null }
+			// // 		},
+			// // 		{
+			// // 			'type': 'container',
+			// // 			'children': [
+			// // 				{
+			// // 					'type': 'toolbox',
+			// // 					'children': [
+			// // 						{
+			// // 							'id': 'references-inset-page-number-field',
+			// // 							'type': 'toolitem',
+			// // 							'text': _UNO('.uno:InsertPageNumberField'),
+			// // 							'command': '.uno:InsertPageNumberField',
+			// // 							'accessibility': { focusBack: true, combination: 'PN', de: null }
+			// // 						},
+			// // 						{
+			// // 							'id': 'references-insert-page-count-field',
+			// // 							'type': 'toolitem',
+			// // 							'text': _UNO('.uno:InsertPageCountField', 'text'),
+			// // 							'command': '.uno:InsertPageCountField',
+			// // 							'accessibility': { focusBack: true, combination: 'PC', de: null }
+			// // 						},
+			// // 					]
+			// // 				},
+			// // 				{
+			// // 					'type': 'toolbox',
+			// // 					'children': [
+			// // 						{
+			// // 							'id': 'references-insert-date-field',
+			// // 							'type': 'toolitem',
+			// // 							'text': _UNO('.uno:InsertDateField', 'text'),
+			// // 							'command': '.uno:InsertDateField',
+			// // 							'accessibility': { focusBack: true, combination: 'ID', de: null }
+			// // 						},
+			// // 						{
+			// // 							'id': 'references-insert-title-field',
+			// // 							'type': 'toolitem',
+			// // 							'text': _UNO('.uno:InsertTitleField', 'text'),
+			// // 							'command': '.uno:InsertTitleField',
+			// // 							'accessibility': { focusBack: true, combination: 'IT', de: null }
+			// // 						}
+			// // 					]
+			// // 				}
+			// // 			],
+			// // 			'vertical': 'true'
+			// // 		},
+			// // 	],
+			// // 	vertical: false,
+			// // },
 			{
 				'id': 'references-update-all',
 				'type': 'bigtoolitem',

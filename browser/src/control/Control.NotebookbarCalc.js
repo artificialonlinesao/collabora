@@ -937,14 +937,15 @@ L.Control.NotebookbarCalc = L.Control.NotebookbarWriter.extend({
 				'command': '.uno:SheetRightToLeft',
 				'accessibility': { focusBack: true,	combination: 'RL', de: null }
 			},
-			{
-				'id': 'Data-PrintRangesMenu:MenuPrintRanges',
-				'class': 'unoData-PrintRangesMenu',
-				'type': 'menubutton',
-				'text': _UNO('.uno:PrintRangesMenu', 'spreadsheet'),
-				'enabled': 'true',
-				'accessibility': { focusBack: true,	combination: 'PR', de: null }
-			},
+      // Hide this button as it would open an ancient-looking dialog
+			// // {
+			// // 	'id': 'Data-PrintRangesMenu:MenuPrintRanges',
+			// // 	'class': 'unoData-PrintRangesMenu',
+			// // 	'type': 'menubutton',
+			// // 	'text': _UNO('.uno:PrintRangesMenu', 'spreadsheet'),
+			// // 	'enabled': 'true',
+			// // 	'accessibility': { focusBack: true,	combination: 'PR', de: null }
+			// // },
 			{
 				type: 'container',
 				children: [
@@ -2115,13 +2116,14 @@ L.Control.NotebookbarCalc = L.Control.NotebookbarWriter.extend({
 				'enabled': 'true',
 				'accessibility': { focusBack: true,	combination: 'SM', de: null }
 			},
-			{
-				'id': 'format-theme-dialog',
-				'type': 'bigtoolitem',
-				'text': _UNO('.uno:ThemeDialog'),
-				'command': '.uno:ThemeDialog',
-				'accessibility': { focusBack: false, combination: 'J', de: null }
-			}
+      // Hide this button as it would open an ancient-looking dialog
+			// // {
+			// // 	'id': 'format-theme-dialog',
+			// // 	'type': 'bigtoolitem',
+			// // 	'text': _UNO('.uno:ThemeDialog'),
+			// // 	'command': '.uno:ThemeDialog',
+			// // 	'accessibility': { focusBack: false, combination: 'J', de: null }
+			// // }
 		];
 
 		return this.getTabPage('Format', content);
