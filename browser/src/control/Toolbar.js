@@ -780,7 +780,7 @@ L.Map.include({
 	_createAndRunHyperlinkDialog: function(defaultText, defaultLink) {
 		var map = this;
 		var id = 'hyperlink';
-		var title = _('Insert hyperlink');
+		var title = defaultLink ? _('Hyperlink') : _('Insert hyperlink');
 
 		let focusId = 'hyperlink-link-box-input';
 		if (defaultText === '') {
