@@ -553,12 +553,12 @@ L.Control.NotebookbarCalc = L.Control.NotebookbarWriter.extend({
 										'accessibility': { focusBack: true,	combination: '8', de: null }
 									},
 									{
-										'id': 'home-para-left-to-right',
+										'id': 'home-wrap-text',
 										'type': 'toolitem',
-										'text': _UNO('.uno:ParaLeftToRight'),
-										'command': '.uno:ParaLeftToRight',
-										'accessibility': { focusBack: true,	combination: 'RL', de: null }
-									}
+										'text': _UNO('.uno:WrapText', 'spreadsheet'),
+										'command': '.uno:WrapText',
+										'accessibility': { focusBack: true,	combination: 'W', de: null }
+									},
 								]
 							}
 						],
@@ -601,11 +601,11 @@ L.Control.NotebookbarCalc = L.Control.NotebookbarWriter.extend({
 										'accessibility': { focusBack: true,	combination: 'AO', de: null }
 									},
 									{
-										'id': 'home-wrap-text',
+										'id': 'home-para-left-to-right',
 										'type': 'toolitem',
-										'text': _UNO('.uno:WrapText', 'spreadsheet'),
-										'command': '.uno:WrapText',
-										'accessibility': { focusBack: true,	combination: 'W', de: null }
+										'text': _UNO('.uno:ParaLeftToRight'),
+										'command': '.uno:ParaLeftToRight',
+										'accessibility': { focusBack: true,	combination: 'RL', de: null }
 									},
 									{
 										'id': 'home-para-right-to-left',

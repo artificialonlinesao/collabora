@@ -778,6 +778,14 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 										'text': _UNO('.uno:Color'),
 										'command': '.uno:Color',
 										'accessibility': { focusBack: true, combination: 'FC', de: null }
+									},
+									{
+										'id': 'home-line-spacing:LineSpacingMenu',
+										'type': 'menubutton',
+										'noLabel': true,
+										'text': _UNO('.uno:LineSpacing'),
+										'command': '.uno:LineSpacing',
+										'accessibility': { focusBack: false, combination: 'SL', de: null }
 									}
 								]
 							}
@@ -882,27 +890,6 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 								'type': 'toolbox',
 								'children': [
 									{
-										'id': 'home-cell-vertical-top',
-										'type': 'toolitem',
-										'text': _UNO('.uno:CellVertTop'),
-										'command': '.uno:CellVertTop',
-										'accessibility': { focusBack: true, combination: 'LT', de: null }
-									},
-									{
-										'id': 'home-cell-vertical-center',
-										'type': 'toolitem',
-										'text': _UNO('.uno:CellVertCenter'),
-										'command': '.uno:CellVertCenter',
-										'accessibility': { focusBack: true, combination: 'LC', de: null }
-									},
-									{
-										'id': 'home-cell-vertical-bottom',
-										'type': 'toolitem',
-										'text': _UNO('.uno:CellVertBottom'),
-										'command': '.uno:CellVertBottom',
-										'accessibility': { focusBack: true, combination: 'LB', de: null }
-									},
-									{
 										'id': 'home-para-left-to-right',
 										'type': 'toolitem',
 										'text': _UNO('.uno:ParaLeftToRight'),
@@ -929,27 +916,26 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 								'type': 'toolbox',
 								'children': [
 									{
-										'id': 'home-para-space-increase',
+										'id': 'home-cell-vertical-top',
 										'type': 'toolitem',
-										'text': _UNO('.uno:ParaspaceIncrease'),
-										'command': '.uno:ParaspaceIncrease',
-										'accessibility': { focusBack: true, combination: 'SI', de: null }
+										'text': _UNO('.uno:CellVertTop'),
+										'command': '.uno:CellVertTop',
+										'accessibility': { focusBack: true, combination: 'LT', de: null }
 									},
 									{
-										'id': 'home-para-space-decrease',
+										'id': 'home-cell-vertical-center',
 										'type': 'toolitem',
-										'text': _UNO('.uno:ParaspaceDecrease'),
-										'command': '.uno:ParaspaceDecrease',
-										'accessibility': { focusBack: true, combination: 'SR', de: null }
+										'text': _UNO('.uno:CellVertCenter'),
+										'command': '.uno:CellVertCenter',
+										'accessibility': { focusBack: true, combination: 'LC', de: null }
 									},
 									{
-										'id': 'home-line-spacing:LineSpacingMenu',
-										'type': 'menubutton',
-										'noLabel': true,
-										'text': _UNO('.uno:LineSpacing'),
-										'command': '.uno:LineSpacing',
-										'accessibility': { focusBack: false, combination: 'SL', de: null }
-									}
+										'id': 'home-cell-vertical-bottom',
+										'type': 'toolitem',
+										'text': _UNO('.uno:CellVertBottom'),
+										'command': '.uno:CellVertBottom',
+										'accessibility': { focusBack: true, combination: 'LB', de: null }
+									},
 								]
 							},
 						],

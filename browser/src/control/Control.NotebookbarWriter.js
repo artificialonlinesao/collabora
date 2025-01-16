@@ -2728,21 +2728,6 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 								'children': [
 									{
 										'type': 'toolitem',
-										'text': _UNO('.uno:TableCellBackgroundColor', 'text'),
-										'command': '.uno:TableCellBackgroundColor',
-									},
-									{
-										'type': 'toolitem',
-										'text': _UNO('.uno:NumberFormatPercent', 'text'),
-										'command': '.uno:NumberFormatPercent'
-									}
-								]
-							},
-							{
-								'type': 'toolbox',
-								'children': [
-									{
-										'type': 'toolitem',
 										'text': _UNO('.uno:NumberFormatCurrency', 'text'),
 										'command': '.uno:NumberFormatCurrency'
 									},
@@ -2751,6 +2736,21 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 										'text': _UNO('.uno:NumberFormatDate', 'text'),
 										'command': '.uno:NumberFormatDate'
 									}
+								]
+							},
+							{
+								'type': 'toolbox',
+								'children': [
+									{
+										'type': 'toolitem',
+										'text': _UNO('.uno:NumberFormatPercent', 'text'),
+										'command': '.uno:NumberFormatPercent'
+									},
+                  {
+										'type': 'toolitem',
+										'text': _UNO('.uno:TableCellBackgroundColor', 'text'),
+										'command': '.uno:TableCellBackgroundColor',
+									},
 								]
 							},
 						],
