@@ -651,7 +651,7 @@ msgstr "Path"
 #: src/control/Control.DocumentRepair.js:27
 #: src/control/Control.DocumentRepair.js:28
 msgid "Repair Document"
-msgstr "Repair Document"
+msgstr "Rollback Document"
 
 #: src/control/Control.DocumentRepair.js:124
 #: src/control/Control.UserList.ts:385
@@ -1295,7 +1295,7 @@ msgstr "Close document"
 #: src/control/Control.NotebookbarImpress.js:294
 #: src/control/Control.NotebookbarWriter.js:294
 msgid "Repair"
-msgstr "Repair"
+msgstr "Rollback"
 
 #: src/control/Control.Menubar.js:134 src/control/Control.Menubar.js:140
 #: src/control/Control.Menubar.js:445 src/control/Control.Menubar.js:451
@@ -2369,7 +2369,7 @@ msgid ""
 "Conflict Undo/Redo with multiple users. Please use document repair to "
 "resolve"
 msgstr ""
-"Conflict Undo/Redo with multiple users. Please use document repair to resolve"
+"Conflict Undo/Redo with multiple users. Please use Document Rollback to resolve"
 
 #: src/control/Control.TopToolbar.js:108
 msgid "Active Sheet"
@@ -2473,7 +2473,7 @@ msgstr ""
 
 #: src/control/Control.Zotero.js:244 src/core/Socket.js:1338
 msgid "Loading..."
-msgstr "Loading…"
+msgstr "Loading..."
 
 #: src/control/Control.Zotero.js:262
 msgid "Language:"
@@ -3420,7 +3420,7 @@ msgstr "Close popup to ignore paste special"
 
 #: src/map/Map.js:216
 msgid "Initializing..."
-msgstr "Initialising…"
+msgstr "Initialising..."
 
 #: src/map/Map.js:461 src/map/Map.js:464 src/map/Map.js:467 src/map/Map.js:470
 msgid "Last saved:"
@@ -3566,7 +3566,7 @@ msgstr "Previous"
 
 #: src/slideshow/PresenterConsole.js:32
 msgid "Next"
-msgstr "Text"
+msgstr "Next"
 
 #: src/slideshow/PresenterConsole.js:34
 msgid "Slides"

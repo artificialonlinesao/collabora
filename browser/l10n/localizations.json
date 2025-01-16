@@ -1,5 +1,5 @@
 {
-    "en": false,
+    "en": "%SERVICE_ROOT%/browser/%VERSION%/l10n/ui-en.json",
     "ab": "%SERVICE_ROOT%/browser/%VERSION%/l10n/ui-ab.json",
     "af": "%SERVICE_ROOT%/browser/%VERSION%/l10n/ui-af.json",
     "am": "%SERVICE_ROOT%/browser/%VERSION%/l10n/ui-am.json",

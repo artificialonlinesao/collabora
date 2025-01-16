@@ -1884,7 +1884,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h4:421-5
 msgid "Document repair"
-msgstr "Document repair"
+msgstr "Document rollback"
 
 #: html/cool-help.html%2Bdiv.div.div.p:422-5
 msgid ""
@@ -1895,7 +1895,7 @@ msgid ""
 msgstr ""
 "When multiple people edit the same document concurrently, it is possible for "
 "their changes to conflict and this can cause some confusion. The Document "
-"Repair function allows users to undo other editor’s changes to the document "
+"Rollback function allows users to undo other editor’s changes to the document "
 "to a previous state."
 
 #: html/cool-help.html%2Bdiv.div.div.p:423-5
@@ -1908,7 +1908,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:424-29
 msgid "document repair"
-msgstr "document repair"
+msgstr "document rollback"
 
 #: html/cool-help.html%2Bdiv.div.div.p:425-5
 msgid ""

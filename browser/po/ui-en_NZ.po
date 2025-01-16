@@ -651,7 +651,7 @@ msgstr "Path"
 #: src/control/Control.DocumentRepair.js:27
 #: src/control/Control.DocumentRepair.js:28
 msgid "Repair Document"
-msgstr "Repair Document"
+msgstr "Rollback Document"
 
 #: src/control/Control.DocumentRepair.js:124
 #: src/control/Control.UserList.ts:385
@@ -1295,7 +1295,7 @@ msgstr "Close document"
 #: src/control/Control.NotebookbarImpress.js:294
 #: src/control/Control.NotebookbarWriter.js:294
 msgid "Repair"
-msgstr "Repair"
+msgstr "Rollback"
 
 #: src/control/Control.Menubar.js:134 src/control/Control.Menubar.js:140
 #: src/control/Control.Menubar.js:445 src/control/Control.Menubar.js:451
@@ -2211,7 +2211,7 @@ msgstr "No problems with SSL verification detected"
 
 #: src/control/Control.ServerAuditDialog.ts:81
 msgid "PostMessage API is initialized"
-msgstr "PostMessage API is initialized"
+msgstr "PostMessage API is initialised"
 
 #: src/control/Control.ServerAuditDialog.ts:86
 msgid "Integrator is not ready for PostMessage calls"
@@ -2369,7 +2369,7 @@ msgid ""
 "Conflict Undo/Redo with multiple users. Please use document repair to "
 "resolve"
 msgstr ""
-"Conflict Undo/Redo with multiple users. Please use document repair to resolve"
+"Conflict Undo/Redo with multiple users. Please use Document Rollback to resolve"
 
 #: src/control/Control.TopToolbar.js:108
 msgid "Active Sheet"
@@ -2851,7 +2851,7 @@ msgstr "Ctrl+Shift+Alt+D to exit"
 
 #: src/core/Socket.js:67
 msgid "Oops, there is a problem connecting to {productname}: "
-msgstr "Oops, there is a problem connecting the document "
+msgstr "Oops, there is a problem connecting to {productname}: "
 
 #: src/core/Socket.js:685
 msgid "Server is now reachable. We have to refresh the page now."
@@ -3039,7 +3039,7 @@ msgstr "Theme colours"
 
 #: src/docstate.js:113
 msgid "Document colors"
-msgstr "Document colors"
+msgstr "Document colours"
 
 #: src/docstatefunctions.js:176
 msgid ", cluster configuration error: mis-matching serverid"
@@ -3243,7 +3243,7 @@ msgid ""
 "Save failed due to no storage space left. Document will now be read-only. "
 "Please make sure enough disk space is available and try to save again."
 msgstr ""
-"Save failed due to no storage space left. Document will now be read-only. "
+"Save failed due to no storage space left. The document will now be read-only. "
 "Please make sure enough disk space is available and try to save again."
 
 #: src/errormessages.js:55
@@ -3420,7 +3420,7 @@ msgstr "Close popup to ignore paste special"
 
 #: src/map/Map.js:216
 msgid "Initializing..."
-msgstr "Initializing..."
+msgstr "Initialising..."
 
 #: src/map/Map.js:461 src/map/Map.js:464 src/map/Map.js:467 src/map/Map.js:470
 msgid "Last saved:"
@@ -3708,6 +3708,13 @@ msgstr ""
 
 #~ msgid "Headings and objects that you add to the document will appear here"
 #~ msgstr "Headings and objects that you add to the document will appear here"
+
+#~ msgid ""
+#~ "The async Clipboard API is not supported by your browser, switching to "
+#~ "HTTPS is meant to fix that."
+#~ msgstr ""
+#~ "The async Clipboard API is not supported by your browser, switching to HTTPS "
+#~ "is meant to fix that."
 
 #~ msgid ""
 #~ "<p>Your browser has very limited access to the clipboard, so use these "
@@ -4187,3 +4194,42 @@ msgstr ""
 
 #~ msgid "Oops, there is a problem connecting to Collabora Online : "
 #~ msgstr "Oops, there is a problem connecting to Collabora Online : "
+
+#~ msgid "Number of views"
+#~ msgstr "Number of views"
+
+#~ msgid "Documents"
+#~ msgstr "Documents"
+
+#~ msgid "First sheet"
+#~ msgstr "First sheet"
+
+#~ msgid "Previous sheet"
+#~ msgstr "Previous sheet"
+
+#~ msgid "Next sheet"
+#~ msgstr "Next sheet"
+
+#~ msgid "Last sheet"
+#~ msgstr "Last sheet"
+
+#~ msgid "Gradient"
+#~ msgstr "Gradient"
+
+#~ msgid "Hatching"
+#~ msgstr "Hatching"
+
+#~ msgid "Pattern"
+#~ msgstr "Pattern"
+
+#~ msgid "Portrait"
+#~ msgstr "Portrait"
+
+#~ msgid "Landscape"
+#~ msgstr "Landscape"
+
+#~ msgid "Toggle Page Orientation"
+#~ msgstr "Toggle Page Orientation"
+
+#~ msgid "Save as PDF"
+#~ msgstr "Save as PDF"
