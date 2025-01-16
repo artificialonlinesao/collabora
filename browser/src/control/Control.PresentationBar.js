@@ -202,11 +202,11 @@ class PresentationBar {
 
 		if (!app.impress.isSlideHidden(this.map.getCurrentPartNumber())) {
 			this.showItem('showslide', false);
-			this.showItem('hideslide', false);
+			this.showItem('hideslide', true);
 		}
 		else {
 			this.showItem('showslide', true);
-			this.showItem('hideslide', true);
+			this.showItem('hideslide', false);
 		}
 	}
 }
