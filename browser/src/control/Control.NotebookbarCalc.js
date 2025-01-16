@@ -1551,13 +1551,17 @@ L.Control.NotebookbarCalc = L.Control.NotebookbarWriter.extend({
 				],
 				'vertical': 'true'
 			},
-			{
-				'id': 'insert-edit-header-and-footer',
-				'type': 'bigtoolitem',
-				'text': _UNO('.uno:EditHeaderAndFooter', 'spreadsheet'),
-				'command': '.uno:EditHeaderAndFooter',
-				'accessibility': { focusBack: true,	combination: 'IH', de: null }
-			},
+      // Hide this button as we have not properly implemented file info like the
+      // filepath, or dates, so the options in this modal look very unpolished.
+      // It is also unlikely many users would use this feature for
+      // spreadsheets in the first place
+			// // {
+			// // 	'id': 'insert-edit-header-and-footer',
+			// // 	'type': 'bigtoolitem',
+			// // 	'text': _UNO('.uno:EditHeaderAndFooter', 'spreadsheet'),
+			// // 	'command': '.uno:EditHeaderAndFooter',
+			// // 	'accessibility': { focusBack: true,	combination: 'IH', de: null }
+			// // },
 			{
 				'id': 'insert-insert-annotation',
 				'type': 'bigtoolitem',

@@ -819,7 +819,11 @@ L.Control.Menubar = L.Control.extend({
 					{uno: '.uno:InsertCurrentDate'},
 					{uno: '.uno:InsertCurrentTime'}
 				]},
-				{uno: '.uno:EditHeaderAndFooter'} /*todo: add to Control.Notebookbar.Calc.js (as Insert tab)*/
+        // Hide this button as we have not properly implemented file info like the
+        // filepath, or dates, so the options in this modal look very unpolished.
+        // It is also unlikely many users would use this feature for
+        // spreadsheets in the first place
+				// // {uno: '.uno:EditHeaderAndFooter'} /*todo: add to Control.Notebookbar.Calc.js (as Insert tab)*/
 			]},
 			{name: _UNO('.uno:FormatMenu', 'spreadsheet'), id: 'format', type: 'menu', menu: [
 				{name: _UNO('.uno:FormatTextMenu', 'spreadsheet'), type: 'menu', menu: [
