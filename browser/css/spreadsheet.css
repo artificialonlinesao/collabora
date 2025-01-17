@@ -266,7 +266,7 @@
 
 #spreadsheet-toolbar {
 	width: 100%;
-	z-index: 1000;
+	z-index: 11;
 	display: grid;
 	grid-template-columns: 170px auto;
 	align-items: center;
