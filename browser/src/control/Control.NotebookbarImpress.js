@@ -111,38 +111,41 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 				'accessibility': { focusBack: false, combination: 'O', de: null }
 			},
 			{
-				'id': 'Table-tab-label',
-				'text': _('Table'),
-				'name': 'Table',
-				'context': 'Table',
-				'accessibility': { focusBack: false, combination: 'T', de: null }
-			},
-			{
-				'id': 'Draw-tab-label',
-				'text': 'Draw',
-				'name': 'Draw',
-				'context': 'Draw|DrawLine|3DObject|MultiObject|Graphic|DrawFontwork',
-				'accessibility': { focusBack: false, combination: 'D', de: null }
-			},
-			{
-				'id': 'MasterPage-tab-label',
-				'text': _('Master'),
-				'name': 'MasterPage',
-				'context': 'MasterPage',
-				'accessibility': { focusBack: false, combination: 'M', de: null }
-			},
-			{
-				'id': 'View-tab-label',
+        'id': 'View-tab-label',
 				'text': _('View'),
 				'name': 'View',
 				'accessibility': { focusBack: false, combination: 'W', de: null }
 			},
 			{
-				'id': 'Help-tab-label',
+        'id': 'Help-tab-label',
 				'text': _('Help'),
 				'name': 'Help',
 				'accessibility': { focusBack: false, combination: 'Y', de: null }
-			}
+			},
+      {
+        'id': 'Table-tab-label',
+        'class': 'visible-with-context',
+        'text': _('Table'),
+        'name': 'Table',
+        'context': 'Table',
+        'accessibility': { focusBack: false, combination: 'T', de: null }
+      },
+      {
+        'id': 'Draw-tab-label',
+        'class': 'visible-with-context',
+        'text': 'Draw',
+        'name': 'Draw',
+        'context': 'Draw|DrawLine|3DObject|MultiObject|Graphic|DrawFontwork',
+        'accessibility': { focusBack: false, combination: 'D', de: null }
+      },
+      {
+        'id': 'MasterPage-tab-label',
+        'class': 'visible-with-context',
+        'text': _('Master'),
+        'name': 'MasterPage',
+        'context': 'MasterPage',
+        'accessibility': { focusBack: false, combination: 'M', de: null }
+      },
 		];
 	},
 
@@ -155,11 +158,11 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 				this.getLayoutTab(),
 				this.getReviewTab(),
 				this.getFormatTab(),
+				this.getViewTab(),
+				this.getHelpTab(),
 				this.getTableTab(),
 				this.getDrawTab(),
 				this.getMasterTab(),
-				this.getViewTab(),
-				this.getHelpTab()
 			], selectedId);
 	},
 

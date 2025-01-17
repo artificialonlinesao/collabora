@@ -34,6 +34,10 @@ button.ui-tab.notebookbar {
 	color: var(--color-main-text);
 }
 
+button.ui-tab.notebookbar.visible-with-context {
+	color: rgb(var(--doc-type)) !important;
+}
+
 .ui-tab.notebookbar[style*='block'] {
 	display: inline-flex !important;
 }

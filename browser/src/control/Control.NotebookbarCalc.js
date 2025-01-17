@@ -62,24 +62,25 @@ L.Control.NotebookbarCalc = L.Control.NotebookbarWriter.extend({
 				'accessibility': { focusBack: true,	combination: 'M', de: null }
 			},
 			{
-				'id': 'Draw-tab-label',
-				'text': _('Draw'),
-				'name': 'Draw',
-				'context': 'Draw|DrawLine|3DObject|MultiObject|Graphic|DrawFontwork',
-				'accessibility': { focusBack: true,	combination: 'D', de: null }
-			},
-			{
-				'id': 'View-tab-label',
+        'id': 'View-tab-label',
 				'text': _('View'),
 				'name': 'View',
 				'accessibility': { focusBack: true,	combination: 'W', de: null }
 			},
 			{
-				'id': 'Help-tab-label',
+        'id': 'Help-tab-label',
 				'text': _('Help'),
 				'name': 'Help',
 				'accessibility': { focusBack: true,	combination: 'Y1', de: null }
-			}
+			},
+      {
+        'id': 'Draw-tab-label',
+        'class': 'visible-with-context',
+        'text': _('Draw'),
+        'name': 'Draw',
+        'context': 'Draw|DrawLine|3DObject|MultiObject|Graphic|DrawFontwork',
+        'accessibility': { focusBack: true,	combination: 'D', de: null }
+      },
 		];
 	},
 
@@ -93,9 +94,9 @@ L.Control.NotebookbarCalc = L.Control.NotebookbarWriter.extend({
 				this.getDataTab(),
 				this.getReviewTab(),
 				this.getFormatTab(),
-				this.getDrawTab(),
 				this.getViewTab(),
-				this.getHelpTab()
+				this.getHelpTab(),
+				this.getDrawTab(),
 			], selectedId);
 	},
 

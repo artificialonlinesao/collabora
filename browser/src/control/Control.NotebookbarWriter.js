@@ -82,20 +82,6 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 				'accessibility': { focusBack: true, combination: 'M' }
 			},
 			{
-				'text': _('Table'),
-				'id': tableTabName + '-tab-label',
-				'name': tableTabName,
-				'context': 'Table',
-				'accessibility': { focusBack: true, combination: '' }
-			},
-			{
-				'text': _('Draw'),
-				'id': drawTabName + '-tab-label',
-				'name': drawTabName,
-				'context': 'Draw|DrawLine|3DObject|MultiObject|Graphic|DrawFontwork',
-				'accessibility': { focusBack: true, combination: 'JI', de: 'JI' }
-			},
-			{
 				'text': _('View'),
 				'id': viewTabName + '-tab-label',
 				'name': viewTabName,
@@ -106,7 +92,23 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 				'id': helpTabName + '-tab-label',
 				'name': helpTabName,
 				'accessibility': { focusBack: true, combination: 'Y', de: 'E' }
-			}
+			},
+			{
+				'text': _('Table'),
+				'id': tableTabName + '-tab-label',
+        'class': 'visible-with-context',
+				'name': tableTabName,
+				'context': 'Table',
+				'accessibility': { focusBack: true, combination: '' }
+			},
+			{
+				'text': _('Draw'),
+				'id': drawTabName + '-tab-label',
+        'class': 'visible-with-context',
+				'name': drawTabName,
+				'context': 'Draw|DrawLine|3DObject|MultiObject|Graphic|DrawFontwork',
+				'accessibility': { focusBack: true, combination: 'JI', de: 'JI' }
+			},
 		];
 	},
 
@@ -121,10 +123,10 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 				this.getReviewTab(),
 				this.getFormatTab(),
 				this.getFormTab(),
+				this.getViewTab(),
+				this.getHelpTab(),
 				this.getTableTab(),
 				this.getDrawTab(),
-				this.getViewTab(),
-				this.getHelpTab()
 			 ], selectedId);
 
 		return t;

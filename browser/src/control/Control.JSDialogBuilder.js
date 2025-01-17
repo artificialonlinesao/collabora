@@ -992,6 +992,9 @@ L.Control.JSDialogBuilder = L.Control.extend({
 				builder._setAccessKey(tab, builder._getAccessKeyFromText(item.text));
 				builder._stressAccessKey(tab, tab.accessKey);
 
+				if (item.class)
+					tab.classList.add(item.class);
+
 				var isSelectedTab = data.selected == item.id;
 				if (isSelectedTab) {
 					$(tab).addClass('selected');
