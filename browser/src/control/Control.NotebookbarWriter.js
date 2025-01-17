@@ -96,7 +96,7 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 			{
 				'text': _('Table'),
 				'id': tableTabName + '-tab-label',
-        'class': 'visible-with-context',
+				'class': 'visible-with-context',
 				'name': tableTabName,
 				'context': 'Table',
 				'accessibility': { focusBack: true, combination: '' }
@@ -104,7 +104,7 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 			{
 				'text': _('Draw'),
 				'id': drawTabName + '-tab-label',
-        'class': 'visible-with-context',
+				'class': 'visible-with-context',
 				'name': drawTabName,
 				'context': 'Draw|DrawLine|3DObject|MultiObject|Graphic|DrawFontwork',
 				'accessibility': { focusBack: true, combination: 'JI', de: 'JI' }
@@ -134,7 +134,7 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 
 	getFileTab: function() {
 		var hasRevisionHistory = L.Params.revHistoryEnabled;
-    // Hide print button as it does not work in Chromium
+		// Hide print button as it does not work in Chromium
 		// // var hasPrint = !this._map['wopi'].HidePrintOption;
 		var hasRepair = !this._map['wopi'].HideRepairOption;
 		var hasSaveAs = !this._map['wopi'].UserCanNotWriteRelative;
@@ -255,7 +255,7 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 			});
 		}
 
-    // Hide button as this does not work with Chromium
+		// Hide button as this does not work with Chromium
 		// // if (hasPrint) {
 		// // 	saveExportGroup.children.push(
 		// // 	{
@@ -345,8 +345,8 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 			});
 		}
 
-    // Hide button as we have not implemented renaming files in our backend
-    // so it will cause the document to bug if the user does this
+		// Hide button as we have not implemented renaming files in our backend
+		// so it will cause the document to bug if the user does this
 		// // repairGroup.children.push({
 		// // 	'type': 'container',
 		// // 	'children': [
@@ -1026,7 +1026,7 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 						'command': '.uno:EditRegion',
 						'accessibility': { focusBack: false, combination: 'F', de: null }
 					},
-          // Hide this button as it would open an ancient-looking dialog
+					// Hide this button as it would open an ancient-looking dialog
 					// // {
 					// // 	'id': 'format-chapter-numbering-dialog',
 					// // 	'type': 'bigtoolitem',
@@ -1092,7 +1092,7 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 				],
 				'vertical': 'true'
 			},
-      // Hide this button as it would open an ancient-looking dialog
+			// Hide this button as it would open an ancient-looking dialog
 			// // {
 			// // 	'id': 'format-theme-dialog',
 			// // 	'type': 'bigtoolitem',
@@ -1200,10 +1200,10 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 						'command': 'charmapcontrol',
 						'accessibility': { focusBack: false,	combination: 'ZS',	de: null }
 					},
-          // Hide button as the UX is bad: text box collapses so tightly to the
-          // text you can't actually see what you're typing. Also users cant
-          // move / edit / interact with it after its set. I think it might also
-          // disable clicking on other parts of the document?
+					// Hide button as the UX is bad: text box collapses so tightly to the
+					// text you can't actually see what you're typing. Also users cant
+					// move / edit / interact with it after its set. I think it might also
+					// disable clicking on other parts of the document?
 					// // {
 					// // 	'id': 'insert-insert-objects-star-math',
 					// // 	'type': 'bigtoolitem',
@@ -1214,9 +1214,9 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 				],
 				vertical: false,
 			},
-      // Hide insert textbox buttons in word as it is hard to select in Chromium
-      // trying to click in its area invariably selects something else.
-      // Idk could be due to it be layered behind other stuff?
+			// Hide insert textbox buttons in word as it is hard to select in Chromium
+			// trying to click in its area invariably selects something else.
+			// Idk could be due to it be layered behind other stuff?
 			// // {
 			// // 	type: 'container',
 			// // 	children: [
@@ -1344,8 +1344,8 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 				],
 				vertical: false,
 			},
-      // Hide these buttons as they would open ancient-looking dialogs
-      // // {
+			// Hide these buttons as they would open ancient-looking dialogs
+			// // {
 			// // 	type: 'container',
 			// // 	children: [
 			// // 		{
@@ -1639,13 +1639,13 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 						'command': '.uno:FormatColumns',
 						'accessibility': { focusBack: false, combination: 'J', de: 'R' }
 					},
-          {
-            'id': 'layout-line-numbering-dialog',
-            'type': 'bigtoolitem',
-            'text': _UNO('.uno:LineNumberingDialog', 'text'),
-            'command': '.uno:LineNumberingDialog',
-            'accessibility': { focusBack: true, combination: 'LN', de: null }
-          }
+					{
+						'id': 'layout-line-numbering-dialog',
+						'type': 'bigtoolitem',
+						'text': _UNO('.uno:LineNumberingDialog', 'text'),
+						'command': '.uno:LineNumberingDialog',
+						'accessibility': { focusBack: true, combination: 'LN', de: null }
+					}
 				],
 				vertical: false,
 			},
@@ -1679,7 +1679,7 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 				],
 				'vertical': 'true'
 			},
-      // Hide button as it does not work
+			// Hide button as it does not work
 			// // {
 			// // 	'type': 'container',
 			// // 	'children': [
@@ -2018,7 +2018,7 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 				],
 				vertical: false,
 			},
-      // Hide these buttons as they would open ancient-looking dialogs
+			// Hide these buttons as they would open ancient-looking dialogs
 			// // {
 			// // 	'type': 'container',
 			// // 	'children': [
@@ -2136,7 +2136,7 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 		}
 
 		content.push(
-      // Hide these buttons as they would open ancient-looking dialogs
+			// Hide these buttons as they would open ancient-looking dialogs
 			// // {
 			// // 	type: 'container',
 			// // 	children: [
@@ -2748,7 +2748,7 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 										'text': _UNO('.uno:NumberFormatPercent', 'text'),
 										'command': '.uno:NumberFormatPercent'
 									},
-                  {
+									{
 										'type': 'toolitem',
 										'text': _UNO('.uno:TableCellBackgroundColor', 'text'),
 										'command': '.uno:TableCellBackgroundColor',
@@ -3028,9 +3028,9 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 				],
 				'vertical': 'true'
 			},
-      // Hide insert textbox buttons in word as it is hard to select in Chromium
-      // trying to click in its area invariably selects something else.
-      // Idk could be due to it be layered behind other stuff?
+			// Hide insert textbox buttons in word as it is hard to select in Chromium
+			// trying to click in its area invariably selects something else.
+			// Idk could be due to it be layered behind other stuff?
 			// // {
 			// // 	type: 'container',
 			// // 	children: [

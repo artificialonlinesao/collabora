@@ -62,25 +62,25 @@ L.Control.NotebookbarCalc = L.Control.NotebookbarWriter.extend({
 				'accessibility': { focusBack: true,	combination: 'M', de: null }
 			},
 			{
-        'id': 'View-tab-label',
+				'id': 'View-tab-label',
 				'text': _('View'),
 				'name': 'View',
 				'accessibility': { focusBack: true,	combination: 'W', de: null }
 			},
 			{
-        'id': 'Help-tab-label',
+				'id': 'Help-tab-label',
 				'text': _('Help'),
 				'name': 'Help',
 				'accessibility': { focusBack: true,	combination: 'Y1', de: null }
 			},
-      {
-        'id': 'Draw-tab-label',
-        'class': 'visible-with-context',
-        'text': _('Draw'),
-        'name': 'Draw',
-        'context': 'Draw|DrawLine|3DObject|MultiObject|Graphic|DrawFontwork',
-        'accessibility': { focusBack: true,	combination: 'D', de: null }
-      },
+			{
+				'id': 'Draw-tab-label',
+				'class': 'visible-with-context',
+				'text': _('Draw'),
+				'name': 'Draw',
+				'context': 'Draw|DrawLine|3DObject|MultiObject|Graphic|DrawFontwork',
+				'accessibility': { focusBack: true,	combination: 'D', de: null }
+			},
 		];
 	},
 
@@ -275,7 +275,7 @@ L.Control.NotebookbarCalc = L.Control.NotebookbarWriter.extend({
 		}
 
 		// Hide button as we have not implemented renaming files in our backend
-    // so it will cause the document to bug if the user does this
+		// so it will cause the document to bug if the user does this
 		// // repairGroup.children.push(
 		// // 	{
 		// // 		'type': 'container',
@@ -938,7 +938,7 @@ L.Control.NotebookbarCalc = L.Control.NotebookbarWriter.extend({
 				'command': '.uno:SheetRightToLeft',
 				'accessibility': { focusBack: true,	combination: 'RL', de: null }
 			},
-      // Hide this button as it would open an ancient-looking dialog
+			// Hide this button as it would open an ancient-looking dialog
 			// // {
 			// // 	'id': 'Data-PrintRangesMenu:MenuPrintRanges',
 			// // 	'class': 'unoData-PrintRangesMenu',
@@ -1552,10 +1552,10 @@ L.Control.NotebookbarCalc = L.Control.NotebookbarWriter.extend({
 				],
 				'vertical': 'true'
 			},
-      // Hide this button as we have not properly implemented file info like the
-      // filepath, or dates, so the options in this modal look very unpolished.
-      // It is also unlikely many users would use this feature for
-      // spreadsheets in the first place
+			// Hide this button as we have not properly implemented file info like the
+			// filepath, or dates, so the options in this modal look very unpolished.
+			// It is also unlikely many users would use this feature for
+			// spreadsheets in the first place
 			// // {
 			// // 	'id': 'insert-edit-header-and-footer',
 			// // 	'type': 'bigtoolitem',
@@ -2121,7 +2121,7 @@ L.Control.NotebookbarCalc = L.Control.NotebookbarWriter.extend({
 				'enabled': 'true',
 				'accessibility': { focusBack: true,	combination: 'SM', de: null }
 			},
-      // Hide this button as it would open an ancient-looking dialog
+			// Hide this button as it would open an ancient-looking dialog
 			// // {
 			// // 	'id': 'format-theme-dialog',
 			// // 	'type': 'bigtoolitem',

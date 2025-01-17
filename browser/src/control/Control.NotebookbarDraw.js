@@ -312,7 +312,7 @@ L.Control.NotebookbarDraw = L.Control.NotebookbarImpress.extend({
 		}
 
 		// Hide button as we have not implemented renaming files in our backend
-    // so it will cause the document to bug if the user does this
+		// so it will cause the document to bug if the user does this
 		// // content.push(
 		// // 	{
 		// // 		'type': 'container',
@@ -1552,7 +1552,7 @@ L.Control.NotebookbarDraw = L.Control.NotebookbarImpress.extend({
 				],
 				'vertical': 'true'
 			},
-      // Hide this button as it would open an ancient-looking dialog
+			// Hide this button as it would open an ancient-looking dialog
 			// // {
 			// // 	'id': 'format-theme-dialog',
 			// // 	'type': 'bigtoolitem',

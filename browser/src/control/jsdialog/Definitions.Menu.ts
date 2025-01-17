@@ -365,7 +365,7 @@ menuDefinitions.set('ConditionalFormatMenu', [
 		text: _UNO('.uno:IconSetFormatDialog', 'spreadsheet'),
 		items: [{ type: 'html', htmlId: 'iconset' }],
 	},
-  // Hide this button as it would open an ancient-looking dialog
+	// Hide this button as it would open an ancient-looking dialog
 	// // {
 	// // 	text: _UNO('.uno:CondDateFormatDialog', 'spreadsheet'),
 	// // 	uno: '.uno:CondDateFormatDialog',
