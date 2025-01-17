@@ -12,12 +12,19 @@
 
 #main-menu.readonly {
 	top: 0px;
+	display: flex !important;
+	align-items: stretch;
 }
 
 #document-header {
 	position: relative;
 	background: transparent;
 }
+
+.readonly #document-header {
+	margin: auto 0;
+}
+
 /*avoid multiple document-headers in readonly mode*/
 .main-nav.hasnotebookbar.readonly > #main-menu #document-header {
 	display: none;
@@ -144,7 +151,8 @@ nav.hasnotebookbar #save.saved::after {
 	height: var(--header-height); /* on mouseover menubar items, border emerges */
 	width: 100%;
 	background: var(--color-background-lighter);
-	padding: 3px 3px 3px 0;
+	padding: 0px var(--side-padding);
+	box-sizing: border-box;
 	white-space: nowrap;
 	z-index: 12;
 	display: flex;
@@ -165,10 +173,7 @@ nav.hasnotebookbar #save.saved::after {
 }
 .main-nav.hasnotebookbar:not(.readonly) {
 	background: var(--color-main-background);
-	padding: 0px var(--side-padding);
 	overflow: scroll hidden;
-	width: 100%;
-	box-sizing: border-box;
 }
 
 /* Customizations to sm-simple theme to make it look like LO menu, lo-menu class */
