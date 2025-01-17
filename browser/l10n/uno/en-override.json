@@ -1,3 +1,7 @@
 {
-"~Record":"~Track changes"
+"~Date (fixed)":"~Date (static)",
+"Dat~e (variable)":"Dat~e (auto)",
+"~Record":"~Track changes",
+"~Time (fixed)":"~Time (static)",
+"T~ime (variable)":"T~ime (auto)"
 }

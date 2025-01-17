@@ -1455,69 +1455,113 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 				vertical: false,
 			},
 			{
-				'type': 'container',
-				'children': [
+				type: 'container',
+				children: [
 					{
-						'type': 'toolbox',
-						'children': [
-							{
-								'id': 'insert-insert-slide-field',
-								'type': 'toolitem',
-								'text': _UNO('.uno:InsertSlideField', 'presentation'),
-								'command': '.uno:InsertPageField',
-								'accessibility': { focusBack: true, combination: 'SF', de: null }
-							},
-							{
-								'id': 'insert-insert-slides-field',
-								'type': 'toolitem',
-								'text': _UNO('.uno:InsertSlidesField', 'presentation'),
-								'command': '.uno:InsertPagesField',
-								'accessibility': { focusBack: true, combination: 'SM', de: null }
-							},
-							{
-								'id': 'insert-insert-slide-title-field',
-								'type': 'toolitem',
-								'text': _UNO('.uno:InsertSlideTitleField', 'presentation'),
-								'command': '.uno:InsertPageTitleField',
-								'accessibility': { focusBack: true, combination: 'PT', de: null }
-							}
-						]
+						'id': 'insert-insert-slide-title-field',
+						'type': 'bigtoolitem',
+						'text': _UNO('.uno:InsertSlideTitleField', 'presentation'),
+						'command': '.uno:InsertPageTitleField',
+						'accessibility': { focusBack: true, combination: 'PT', de: null }
 					},
 					{
-						'type': 'toolbox',
+						'type': 'container',
 						'children': [
 							{
-								'id': 'insert-insert-date-field-fix',
-								'type': 'toolitem',
-								'text': _UNO('.uno:InsertDateFieldFix', 'presentation'),
-								'command': '.uno:InsertDateFieldFix',
-								'accessibility': { focusBack: true, combination: 'DF', de: null }
+								'id': 'LineA153',
+								'type': 'toolbox',
+								'children': [
+									{
+										'id': 'insert-insert-slide-field',
+										'type': 'toolitem',
+										'text': _UNO('.uno:InsertSlideField', 'presentation'),
+										'command': '.uno:InsertPageField',
+										'accessibility': { focusBack: true, combination: 'SF', de: null }
+									},
+								]
 							},
 							{
-								'id': 'insert-insert-date-field-var',
-								'type': 'toolitem',
-								'text': _UNO('.uno:InsertDateFieldVar', 'presentation'),
-								'command': '.uno:InsertDateFieldVar',
-								'accessibility': { focusBack: true, combination: 'DV', de: null }
+								'id': 'LineB163',
+								'type': 'toolbox',
+								'children': [
+									{
+										'id': 'insert-insert-slides-field',
+										'type': 'toolitem',
+										'text': _UNO('.uno:InsertSlidesField', 'presentation'),
+										'command': '.uno:InsertPagesField',
+										'accessibility': { focusBack: true, combination: 'SM', de: null }
+									},
+								]
+							},
+						],
+						'vertical': 'true'
+					},
+					{
+						'type': 'container',
+						'children': [
+							{
+								'id': 'LineA153',
+								'type': 'toolbox',
+								'children': [
+									{
+										'id': 'insert-insert-date-field-var',
+										'type': 'toolitem',
+										'text': _UNO('.uno:InsertDateFieldVar', 'presentation'),
+										'command': '.uno:InsertDateFieldVar',
+										'accessibility': { focusBack: true, combination: 'DV', de: null }
+									},
+								]
 							},
 							{
-								'id': 'insert-insert-time-field-fix',
-								'type': 'toolitem',
-								'text': _UNO('.uno:InsertTimeFieldFix', 'presentation'),
-								'command': '.uno:InsertTimeFieldFix',
-								'accessibility': { focusBack: true, combination: 'TF', de: null }
+								'id': 'LineB163',
+								'type': 'toolbox',
+								'children': [
+									{
+										'id': 'insert-insert-date-field-fix',
+										'type': 'toolitem',
+										'text': _UNO('.uno:InsertDateFieldFix', 'presentation'),
+										'command': '.uno:InsertDateFieldFix',
+										'accessibility': { focusBack: true, combination: 'DF', de: null }
+									},
+								]
+							},
+						],
+						'vertical': 'true'
+					},
+					{
+						'type': 'container',
+						'children': [
+							{
+								'id': 'LineA153',
+								'type': 'toolbox',
+								'children': [
+									{
+										'id': 'insert-insert-time-field-var',
+										'type': 'toolitem',
+										'text': _UNO('.uno:InsertTimeFieldVar', 'presentation'),
+										'command': '.uno:InsertTimeFieldVar',
+										'accessibility': { focusBack: true, combination: 'TV', de: null }
+									},
+								]
 							},
 							{
-								'id': 'insert-insert-time-field-var',
-								'type': 'toolitem',
-								'text': _UNO('.uno:InsertTimeFieldVar', 'presentation'),
-								'command': '.uno:InsertTimeFieldVar',
-								'accessibility': { focusBack: true, combination: 'TV', de: null }
+								'id': 'LineB163',
+								'type': 'toolbox',
+								'children': [
+									{
+										'id': 'insert-insert-time-field-fix',
+										'type': 'toolitem',
+										'text': _UNO('.uno:InsertTimeFieldFix', 'presentation'),
+										'command': '.uno:InsertTimeFieldFix',
+										'accessibility': { focusBack: true, combination: 'TF', de: null }
+									},
+								]
 							},
-						]
+						],
+						'vertical': 'true'
 					},
 				],
-				'vertical': 'true'
+				vertical: false,
 			},
 			{
 				'id': 'insert-header-and-footer',
