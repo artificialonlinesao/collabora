@@ -98,9 +98,6 @@ div#autoFillPreviewTooltip .lokdialog.ui-dialog-content.ui-widget-content {
 	line-height: 1.5;
 	font-size: var(--default-font-size);
 
-	.jsdialog-overlay.cancellable .jsdialog-window.modalpopup & {
-		max-height: calc(50vh);
-	}
 	.jsdialog-window:not(.modalpopup) & {
 		max-height: calc( 90vh - 34px);
 	}
