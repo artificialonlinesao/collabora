@@ -878,21 +878,21 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 						'type': 'toolbox',
 						'children': [
 							{
-								'id': 'home-insert-table:InsertTableMenu',
-								'type': 'menubutton',
-								'noLabel': true,
-								'text': _UNO('.uno:InsertTable', 'text'),
-								'command': '.uno:InsertTable',
-								'accessibility': { focusBack: false,	combination: 'IT',	de:	null }
-							},
-							{
 								'id': 'home-insert-graphic:InsertImageMenu',
 								'type': 'menubutton',
 								'noLabel': true,
 								'text': _UNO('.uno:InsertGraphic'),
 								'command': '.uno:InsertGraphic',
 								'accessibility': { focusBack: true, 	combination: 'IG',	de: null }
-							}
+							},
+							{
+								'id': 'CharmapControl',
+								'class': 'unoCharmapControl',
+								'type': 'customtoolitem',
+								'text': _UNO('.uno:CharmapControl'),
+								'command': 'charmapcontrol',
+								'accessibility': { focusBack: false,	combination: 'IS',	de:	null }
+							},
 						]
 					},
 					{
@@ -906,13 +906,13 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 								'accessibility': { focusBack: true, 	combination: 'IP',	de: null }
 							},
 							{
-								'id': 'CharmapControl',
-								'class': 'unoCharmapControl',
-								'type': 'customtoolitem',
-								'text': _UNO('.uno:CharmapControl'),
-								'command': 'charmapcontrol',
-								'accessibility': { focusBack: false,	combination: 'IS',	de:	null }
-							}
+								'id': 'home-insert-table:InsertTableMenu',
+								'type': 'menubutton',
+								'noLabel': true,
+								'text': _UNO('.uno:InsertTable', 'text'),
+								'command': '.uno:InsertTable',
+								'accessibility': { focusBack: false,	combination: 'IT',	de:	null }
+							},
 						]
 					}
 				],
@@ -1255,6 +1255,18 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 						'type': 'toolbox',
 						'children': [
 							{
+								'id': 'insert-frame',
+								'type': 'toolitem',
+								'text': _UNO('.uno:InsertFrame', 'text'),
+								'command': '.uno:InsertFrame',
+								'accessibility': { focusBack: false,	combination: 'PT',	de: null }
+							}
+						]
+					},
+					{
+						'type': 'toolbox',
+						'children': [
+							{
 								'id': 'insert-QrCode',
 								'type': 'toolitem',
 								'text': _UNO('.uno:InsertQrCode', 'text'),
@@ -1263,18 +1275,6 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 							},
 						]
 					},
-					{
-						'type': 'toolbox',
-						'children': [
-							{
-								'id': 'insert-frame',
-								'type': 'toolitem',
-								'text': _UNO('.uno:InsertFrame', 'text'),
-								'command': '.uno:InsertFrame',
-								'accessibility': { focusBack: false,	combination: 'PT',	de: null }
-							}
-						]
-					}
 				],
 				'vertical': 'true'
 			},
@@ -1307,7 +1307,7 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 										'accessibility': { focusBack: true,	combination: 'O',	de:	null }
 									}
 								]
-							}
+							},
 						],
 						'vertical': 'true'
 					},
@@ -1505,6 +1505,18 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 								'type': 'toolbox',
 								'children': [
 									{
+										'id': 'zoomin',
+										'class': 'unozoomin',
+										'type': 'customtoolitem',
+										'text': _UNO('.uno:ZoomPlus'),
+										'accessibility': { focusBack: true, combination: 'ZI', de: null }
+									}
+								]
+							},
+							{
+								'type': 'toolbox',
+								'children': [
+									{
 										'id': 'zoomout',
 										'class': 'unozoomout',
 										'type': 'customtoolitem',
@@ -1513,18 +1525,6 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 									}
 								]
 							},
-							{
-								'type': 'toolbox',
-								'children': [
-									{
-										'id': 'zoomin',
-										'class': 'unozoomin',
-										'type': 'customtoolitem',
-										'text': _UNO('.uno:ZoomPlus'),
-										'accessibility': { focusBack: true, combination: 'ZI', de: null }
-									}
-								]
-							}
 						],
 						'vertical': 'true'
 					},
@@ -2246,6 +2246,18 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 								'type': 'toolbox',
 								'children': [
 									{
+										'id': 'review-word-count-dialog',
+										'type': 'toolitem',
+										'text': _UNO('.uno:WordCountDialog', 'text'),
+										'command': '.uno:WordCountDialog',
+										'accessibility': { focusBack: false, combination: 'W', de: 'W' }
+									}
+								]
+							},
+							{
+								'type': 'toolbox',
+								'children': [
+									{
 										'id': 'review-spell-online',
 										'type': 'toolitem',
 										'text': _UNO('.uno:SpellOnline'),
@@ -2254,18 +2266,6 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 									}
 								]
 							},
-							{
-								'type': 'toolbox',
-								'children': [
-									{
-										'id': 'review-word-count-dialog',
-										'type': 'toolitem',
-										'text': _UNO('.uno:WordCountDialog', 'text'),
-										'command': '.uno:WordCountDialog',
-										'accessibility': { focusBack: false, combination: 'W', de: 'W' }
-									}
-								]
-							}
 						],
 						'vertical': 'true'
 					},
@@ -2812,6 +2812,18 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 						'type': 'toolbox',
 						'children': [
 							{
+								'id': 'draw-tab-fillcolor:ColorPickerMenu',
+								'noLabel': true,
+								'type': 'toolitem',
+								'text': _UNO('.uno:FillColor'),
+								'command': '.uno:FillColor'
+							}
+						]
+					},
+					{
+						'type': 'toolbox',
+						'children': [
+							{
 								'id': 'draw-tab-xlinecolor:ColorPickerMenu',
 								'noLabel': true,
 								'type': 'toolitem',
@@ -2820,18 +2832,6 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 							}
 						]
 					},
-					{
-						'type': 'toolbox',
-						'children': [
-							{
-								'id': 'draw-tab-fillcolor:ColorPickerMenu',
-								'noLabel': true,
-								'type': 'toolitem',
-								'text': _UNO('.uno:FillColor'),
-								'command': '.uno:FillColor'
-							}
-						]
-					}
 				],
 				'vertical': 'true'
 			},
@@ -3007,6 +3007,16 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 						'type': 'toolbox',
 						'children': [
 							{
+								'type': 'toolitem',
+								'text': _UNO('.uno:Line', 'text'),
+								'command': '.uno:Line'
+							}
+						]
+					},
+					{
+						'type': 'toolbox',
+						'children': [
+							{
 								'id': 'draw-tab-shapes:InsertShapesMenu',
 								'type': 'menubutton',
 								'noLabel': true,
@@ -3015,16 +3025,6 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 							}
 						]
 					},
-					{
-						'type': 'toolbox',
-						'children': [
-							{
-								'type': 'toolitem',
-								'text': _UNO('.uno:Line', 'text'),
-								'command': '.uno:Line'
-							}
-						]
-					}
 				],
 				'vertical': 'true'
 			},
