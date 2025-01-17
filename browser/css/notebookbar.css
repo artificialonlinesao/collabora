@@ -510,6 +510,10 @@ html[data-theme='dark'] .savemodified.unotoolbutton .unobutton img {
 	height: 30px;
 }
 
+#stylesview::after {
+	content: none;
+}
+
 /* Insert Tab */
 
 /* Layout Tab */
