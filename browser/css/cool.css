@@ -549,6 +549,7 @@ body {
 	font-family: var(--cool-font) !important;
 	content: '\2713';
 	color: var(--color-main-text) !important;
+    width: 1em !important;
 }
 .context-menu-icon-lo-checkmark:before {
 	content: '\2713';
