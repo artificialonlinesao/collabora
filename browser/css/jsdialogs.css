@@ -1548,6 +1548,7 @@ input[type='number']:hover::-webkit-outer-spin-button {
 	cursor: pointer;
 	width: 16px;
 	height: 16px;
+	border-radius: 2px;
 }
 
 .ui-color-picker-entry:hover {
