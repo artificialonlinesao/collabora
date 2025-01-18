@@ -1956,6 +1956,12 @@ input[type='number']:hover::-webkit-outer-spin-button {
 	border-inline-start: none !important;
 	background-color: var(--color-main-background) !important;
 	width: var(--btn-size);
+	padding: 0;
+
+	img {
+		width: var(--btn-img-size);
+		height: var(--btn-img-size);
+	}
 }
 
 /* Zotero dialog*/
@@ -2293,10 +2299,10 @@ kbd,
 	margin-left: 30px;
 }
 
-#PageFormatPage #grid2, 
-#PageFormatPage #grid5, 
-#ColorPicker #box1, 
-[id^='FL_POSITION'][id*='-content'] > * > * > *, 
+#PageFormatPage #grid2,
+#PageFormatPage #grid5,
+#ColorPicker #box1,
+[id^='FL_POSITION'][id*='-content'] > * > * > *,
 #FL_ANGLE-content > * > * > *,
 #FL_SIZE-content > * > * > * {
 	gap: 24px;
@@ -2341,11 +2347,11 @@ label#lineposft {
 	}
 }
 
-#ContentControlDialog, 
-#ThemeColorEditDialog, 
-#indexentrygrid, 
-#FootnotePage, 
-#SwPosSizePage, 
+#ContentControlDialog,
+#ThemeColorEditDialog,
+#indexentrygrid,
+#FootnotePage,
+#SwPosSizePage,
 [id^='HeaderFooterTab'],
 #RID_SVXPAGE_PAGE,
 [id^='FL_POSITION'][id*='-content'],
@@ -2381,8 +2387,8 @@ label#lineposft {
 }
 
 #HeaderFooterTab, #HeaderFooterTab0 {
-	[id^='datetime_cb'] ~ [id^='datetimebox'], 
-	[id^='header_cb'] ~ [id^='header_box'], 
+	[id^='datetime_cb'] ~ [id^='datetimebox'],
+	[id^='header_cb'] ~ [id^='header_box'],
 	[id^='footer_cb'] ~ [id^='footer_box'] {
 		margin-left: 30px;
 	}
