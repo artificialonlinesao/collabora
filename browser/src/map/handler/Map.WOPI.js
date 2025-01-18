@@ -131,6 +131,9 @@ L.Map.WOPI = L.Handler.extend({
 		this.UserCanWrite = !!wopiInfo['UserCanWrite'];
 		this.DisablePresentation = wopiInfo['DisablePresentation'];
 
+    window.wopiInfo = wopiInfo;
+    window.DisablePresentation = this.DisablePresentation;
+
 		if (this.UserCanWrite && !app.isReadOnly()) // There are 2 places that set the file permissions, WOPI and URI. Don't change permission if URI doesn't allow.
 			app.setPermission('edit');
 
