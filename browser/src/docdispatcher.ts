@@ -443,33 +443,57 @@ class Dispatcher {
 		this.actionsMap['presentation'] = this.actionsMap[
 			'fullscreen-presentation'
 		] = () => {
-			if ((window as any).canvasSlideshowEnabled) app.map.fire('newfullscreen');
-			else app.map.fire('fullscreen');
+			// Disable presentations as it causes bad UX in Space:
+			// 1. Presenting a ppt will cause the user's browser to fullscreen, taking
+			// 		them away from the call.
+			// 2. It would only show the presentation view for the user - the other
+			// 		people in the call wont see it. So it is confusing UX to have the
+			// 		button there.
+			// // if ((window as any).canvasSlideshowEnabled) app.map.fire('newfullscreen');
+			// // else app.map.fire('fullscreen');
 		};
 
 		this.actionsMap['presentation-currentslide'] = this.actionsMap[
 			'presentation-currentslide'
 		] = () => {
-			if ((window as any).canvasSlideshowEnabled)
-				app.map.fire('newfullscreen', {
-					startSlideNumber: app.map.getCurrentPartNumber(),
-				});
-			else
-				app.map.fire('fullscreen', {
-					startSlideNumber: app.map.getCurrentPartNumber(),
-				});
+			// Disable presentations as it causes bad UX in Space:
+			// 1. Presenting a ppt will cause the user's browser to fullscreen, taking
+			// 		them away from the call.
+			// 2. It would only show the presentation view for the user - the other
+			// 		people in the call wont see it. So it is confusing UX to have the
+			// 		button there.
+			// // if ((window as any).canvasSlideshowEnabled)
+			// // 	app.map.fire('newfullscreen', {
+			// // 		startSlideNumber: app.map.getCurrentPartNumber(),
+			// // 	});
+			// // else
+			// // 	app.map.fire('fullscreen', {
+			// // 		startSlideNumber: app.map.getCurrentPartNumber(),
+			// // 	});
 		};
 
 		this.actionsMap['presentinwindow'] = this.actionsMap['present-in-window'] =
 			() => {
-				if ((window as any).canvasSlideshowEnabled)
-					app.map.fire('newpresentinwindow');
-				else app.map.fire('presentinwindow');
+				// Disable presentations as it causes bad UX in Space:
+				// 1. Presenting a ppt will cause the user's browser to fullscreen, taking
+				// 		them away from the call.
+				// 2. It would only show the presentation view for the user - the other
+				// 		people in the call wont see it. So it is confusing UX to have the
+				// 		button there.
+				// // if ((window as any).canvasSlideshowEnabled)
+				// // 	app.map.fire('newpresentinwindow');
+				// // else app.map.fire('presentinwindow');
 			};
 
 		this.actionsMap['presenterconsole'] = () => {
-			if ((window as any).canvasSlideshowEnabled)
-				app.map.fire('newpresentinconsole');
+			// Disable presentations as it causes bad UX in Space:
+			// 1. Presenting a ppt will cause the user's browser to fullscreen, taking
+			// 		them away from the call.
+			// 2. It would only show the presentation view for the user - the other
+			// 		people in the call wont see it. So it is confusing UX to have the
+			// 		button there.
+			// // if ((window as any).canvasSlideshowEnabled)
+			// // 	app.map.fire('newpresentinconsole');
 		};
 
 		this.actionsMap['fullscreen-drawing'] = () => {

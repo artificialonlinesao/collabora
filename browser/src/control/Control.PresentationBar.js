@@ -48,12 +48,18 @@ class PresentationBar {
 				id: 'presentation-buttons-toolbar',
 				type: 'toolbox',
 				children: [
-					{
-						id: 'presentation',
-						type: 'customtoolitem',
-						text: this._getItemUnoName('presentation'),
-						command: 'presentation'
-					},
+					// Disable presentation button as it causes bad UX in Space:
+					// 1. Presenting a ppt will cause the user's browser to fullscreen, taking
+					// 		them away from the call.
+					// 2. It would only show the presentation view for the user - the other 
+					// 		people in the call wont see it. So it is confusing UX to have the 
+					// 		button there.
+					// // {
+					// // 	id: 'presentation',
+					// // 	type: 'customtoolitem',
+					// // 	text: this._getItemUnoName('presentation'),
+					// // 	command: 'presentation'
+					// // },
 					{
 						id: 'insertpage',
 						type: 'customtoolitem',

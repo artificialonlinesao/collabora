@@ -374,36 +374,42 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 					'text': _('Read mode'),
 					'command': 'closetablet'
 				} : {},
-			{
-				type: 'container',
-				children: [
-					{
-						'id': 'view-presentation:Presentation',
-						'class': 'unoPresentation',
-						'type': 'menubutton',
-						'text': _('Presentation'),
-						'command': 'presentation',
-						'accessibility': { focusBack: true, combination: 'PR', de: null }
-					},
-					!window.ThisIsAMobileApp ?
-						{
-							'id': 'view-presentation-in-window',
-							'type': 'bigcustomtoolitem',
-							'text': _('Present in Window'),
-							'command': 'presentinwindow',
-							'accessibility': { focusBack: true, combination: 'PW', de: null }
-						} : {},
-					!window.ThisIsAMobileApp && window.canvasSlideshowEnabled ?
-									{
-							'id': 'view-presentation-in-console',
-							'type': 'bigcustomtoolitem',
-							'text': _('Presenter Console'),
-							'command': 'presenterconsole',
-							'accessibility': { focusBack: true, combination: 'PW', de: null }
-						}: {},
-				],
-				vertical: false,
-			},
+			// Hide button as it causes bad UX in Space:
+			// 1. Presenting a ppt will cause the user's browser to fullscreen, taking
+			// 		them away from the call.
+			// 2. It would only show the presentation view for the user - the other 
+			// 		people in the call wont see it. So it is confusing UX to have the 
+			// 		button there.
+			// // {
+			// // 	type: 'container',
+			// // 	children: [
+			// // 		{
+			// // 			'id': 'view-presentation:Presentation',
+			// // 			'class': 'unoPresentation',
+			// // 			'type': 'menubutton',
+			// // 			'text': _('Presentation'),
+			// // 			'command': 'presentation',
+			// // 			'accessibility': { focusBack: true, combination: 'PR', de: null }
+			// // 		},
+			// // 		!window.ThisIsAMobileApp ?
+			// // 			{
+			// // 				'id': 'view-presentation-in-window',
+			// // 				'type': 'bigcustomtoolitem',
+			// // 				'text': _('Present in Window'),
+			// // 				'command': 'presentinwindow',
+			// // 				'accessibility': { focusBack: true, combination: 'PW', de: null }
+			// // 			} : {},
+			// // 		!window.ThisIsAMobileApp && window.canvasSlideshowEnabled ?
+			// // 						{
+			// // 				'id': 'view-presentation-in-console',
+			// // 				'type': 'bigcustomtoolitem',
+			// // 				'text': _('Presenter Console'),
+			// // 				'command': 'presenterconsole',
+			// // 				'accessibility': { focusBack: true, combination: 'PW', de: null }
+			// // 			}: {},
+			// // 	],
+			// // 	vertical: false,
+			// // },
 			{
 				'id': 'fullscreen',
 				'type': 'bigtoolitem',
@@ -1088,14 +1094,20 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 				],
 				'vertical': 'true'
 			},
-			{
-				'id': 'home-presentation:Presentation',
-				'class': 'unoPresentation',
-				'type': 'menubutton',
-				'text': _('Presentation'),
-				'command': 'presentation',
-				'accessibility': { focusBack: true, combination: 'PR', de: null }
-			},
+			// Hide button as it causes bad UX in Space:
+			// 1. Presenting a ppt will cause the user's browser to fullscreen, taking
+			// 		them away from the call.
+			// 2. It would only show the presentation view for the user - the other
+			// 		people in the call wont see it. So it is confusing UX to have the
+			// 		button there.
+			// // {
+			// // 	'id': 'home-presentation:Presentation',
+			// // 	'class': 'unoPresentation',
+			// // 	'type': 'menubutton',
+			// // 	'text': _('Presentation'),
+			// // 	'command': 'presentation',
+			// // 	'accessibility': { focusBack: true, combination: 'PR', de: null }
+			// // },
 			{
 				'type': 'container',
 				'children': [
