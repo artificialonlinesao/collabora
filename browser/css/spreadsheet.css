@@ -268,7 +268,7 @@
 	width: 100%;
 	z-index: 11;
 	display: grid;
-	grid-template-columns: 170px auto;
+	grid-template-columns: auto 1fr;
 	align-items: center;
 	text-align: center;
 	vertical-align: middle;
@@ -286,6 +286,11 @@
 #sheets-buttons-toolbox .unotoolbutton {
 	width: var(--btn-size);
 	height: var(--btn-size);
+}
+
+#sheets-buttons-toolbox .unotoolbutton img {
+	width: calc(0.8 * var(--btn-img-size));
+	height: calc(0.8 * var(--btn-img-size));
 }
 
 .tab-drop-area {
