@@ -76,7 +76,10 @@ function setupResizeHandler(container: Element, scrollable: Element) {
 	}.bind(this);
 
 	window.addEventListener('resize', handler);
-	window.addEventListener('scroll', handler);
+
+	// No longer need to listen for scroll events, as we've made the toolbar
+	// unscrollable. You'd need to use the arrow buttons instead.
+	// // window.addEventListener('scroll', handler);
 }
 
 JSDialog.MakeScrollable = function (parent: Element, scrollable: Element) {
