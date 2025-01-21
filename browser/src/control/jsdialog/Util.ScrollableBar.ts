@@ -76,7 +76,52 @@ function setupResizeHandler(container: Element, scrollable: Element) {
 	}.bind(this);
 
 	window.addEventListener('resize', handler);
-	window.addEventListener('scroll', handler);
+
+	// No longer need to listen for scroll events, as we've made the toolbar
+	// unscrollable. You'd need to use the arrow buttons instead.
+	// // window.addEventListener('scroll', handler);
+
+	// This will watch to see if a tabpanel is being shown / hidden, as that would
+	// indicate the user has switched menu tabs.
+	// So we'll recalculate whether or not we need the scroll arrows.
+	const tabPanelUnhiddenObserver = new MutationObserver((mutationsList) => {
+		for (const mutation of mutationsList) {
+			// We're just going to assume any changes to classes means we are
+			// toggling the 'hidden' class, and hence switching tabs.
+			if (
+				mutation.type === 'attributes' &&
+				mutation.attributeName === 'class'
+			) {
+				handler();
+			}
+		}
+	});
+
+	// At the time this function is called, the tab panels have not been created
+	// yet, so we need to watch for them to be created.
+	const tabPanelsAddedObserver = new MutationObserver((mutationsList) => {
+		for (const mutation of mutationsList) {
+			if (mutation.type === 'childList') {
+				mutation.addedNodes.forEach((node) => {
+					if (
+						node instanceof HTMLElement &&
+						node.matches('.ui-content.notebookbar')
+					) {
+						// New tab panel added
+						// Now watch for it to be hidden / shown
+						tabPanelUnhiddenObserver.observe(node, {
+							attributes: true, // Observe attribute changes
+							attributeFilter: ['class'], // Only watch for class attribute changes
+						});
+					}
+				});
+			}
+		}
+	});
+	tabPanelsAddedObserver.observe(container, {
+		childList: true,
+		subtree: true,
+	});
 }
 
 JSDialog.MakeScrollable = function (parent: Element, scrollable: Element) {
