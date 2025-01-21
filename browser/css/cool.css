@@ -32,6 +32,8 @@
 	--tooltip-font-size: 12px;
 	--default-font-size: 12px;
 	--header-font-size: 12px;
+	--loading-screen-font-size: 16px;
+
 	/* tab min font-size */
 	--tb-min-fs: 11px;
 	/* tab min font-size without units*/
