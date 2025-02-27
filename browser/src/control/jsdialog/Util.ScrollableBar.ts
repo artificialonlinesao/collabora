@@ -25,18 +25,24 @@ function createScrollButtons(parent: Element, scrollable: Element) {
 
 	JSDialog.AddOnClick(left, () => {
 		const scroll = $(scrollable).scrollLeft() - 300;
-		$(scrollable).animate({ scrollLeft: scroll }, 300);
+		$(scrollable).animate(
+			{ scrollLeft: scroll },
+			{ easing: 'easeOut', duration: 200 },
+		);
 		setTimeout(function () {
 			JSDialog.RefreshScrollables();
-		}, 350);
+		}, 250);
 	});
 
 	JSDialog.AddOnClick(right, () => {
 		const scroll = $(scrollable).scrollLeft() + 300;
-		$(scrollable).animate({ scrollLeft: scroll }, 300);
+		$(scrollable).animate(
+			{ scrollLeft: scroll },
+			{ easing: 'easeOut', duration: 200 },
+		);
 		setTimeout(function () {
 			JSDialog.RefreshScrollables();
-		}, 350);
+		}, 250);
 	});
 }
 
