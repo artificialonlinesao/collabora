@@ -320,13 +320,13 @@ class InitializerBase {
 
 		if (window.mode.isMobile()) {
 			link.setAttribute("href", this.uriPrefix + 'device-mobile.css');
-			brandingLink.setAttribute("href", this.brandingUriPrefix + theme_prefix + 'branding-mobile.css');
+			// brandingLink.setAttribute("href", this.brandingUriPrefix + theme_prefix + 'branding-mobile.css');
 		} else if (window.mode.isTablet()) {
 			link.setAttribute("href", this.uriPrefix + 'device-tablet.css');
-			brandingLink.setAttribute("href", this.brandingUriPrefix + theme_prefix + 'branding-tablet.css');
+			// brandingLink.setAttribute("href", this.brandingUriPrefix + theme_prefix + 'branding-tablet.css');
 		} else {
 			link.setAttribute("href", this.uriPrefix + 'device-desktop.css');
-			brandingLink.setAttribute("href", this.brandingUriPrefix + theme_prefix + 'branding-desktop.css');
+			// brandingLink.setAttribute("href", this.brandingUriPrefix + theme_prefix + 'branding-desktop.css');
 		}
 
 		const otherStylesheets = document.querySelectorAll('link[rel="stylesheet"]');
