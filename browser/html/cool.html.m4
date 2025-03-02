@@ -66,13 +66,13 @@ m4_ifelse(BUNDLE,[],
 ]),
 [<link rel="stylesheet" href="][m4_ifelse(MOBILEAPP,[],[%SERVICE_ROOT%/browser/%VERSION%/])][bundle.css" />])
 
-<!--%BRANDING_CSS%--> <!-- add your logo here -->
-m4_ifelse(IOSAPP,[true],
-  [<link rel="stylesheet" href="Branding/branding.css">])
-m4_ifelse(ANDROIDAPP,[true],
-  [<link rel="stylesheet" href="branding.css">])
-m4_ifelse(EMSCRIPTENAPP,[true],
-  [<link rel="stylesheet" href="branding.css">])
+# <!--%BRANDING_CSS%--> <!-- add your logo here -->
+# m4_ifelse(IOSAPP,[true],
+#   [<link rel="stylesheet" href="Branding/branding.css">])
+# m4_ifelse(ANDROIDAPP,[true],
+#   [<link rel="stylesheet" href="branding.css">])
+# m4_ifelse(EMSCRIPTENAPP,[true],
+#   [<link rel="stylesheet" href="branding.css">])
 
 m4_dnl Handle localization
 m4_ifelse(MOBILEAPP,[true],
@@ -259,6 +259,6 @@ m4_ifelse(MOBILEAPP,[true],
         ])
 )m4_dnl
 
-m4_ifelse(MOBILEAPP, [true], [<script src="m4_ifelse(IOSAPP, [true], [Branding/])branding.js"></script>],
-        [<!--%BRANDING_JS%--> <!-- logo onclick handler -->])
+# m4_ifelse(MOBILEAPP, [true], [<script src="m4_ifelse(IOSAPP, [true], [Branding/])branding.js"></script>],
+#         [<!--%BRANDING_JS%--> <!-- logo onclick handler -->])
 </body></html>
