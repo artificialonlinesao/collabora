@@ -20,9 +20,9 @@ namespace cool {
 export class ScrollSection extends CanvasSectionObject {
 	// Scrolling animation constants. Unlabelled units are fractions of the line
 	// height, so that they're somewhat DPI-independent.
-	static readonly scrollAnimationAcceleration: number = 0.2;
-	static readonly scrollAnimationMaxVelocity: number = 2.5;
-	static readonly scrollAnimationMaxDelta: number = 75;
+	static readonly scrollAnimationAcceleration: number = 1;
+	static readonly scrollAnimationMaxVelocity: number = 1000;
+	static readonly scrollAnimationMaxDelta: number = 500;
 	static readonly scrollDirectTimeoutMs: number = 100;
 
 	name: string = L.CSections.Scroll.name;
