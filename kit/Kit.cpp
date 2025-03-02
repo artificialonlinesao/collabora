@@ -2992,7 +2992,7 @@ int pollCallback(void* data, int timeoutUs)
 
 // Do we have any pending input events from coolwsd ?
 // FIXME: we could helpfully poll our incoming socket too here.
-bool anyInputCallback(void* data, [[maybe_unused]] int _)
+bool anyInputCallback(void* data)
 {
     auto kitSocketPoll = reinterpret_cast<KitSocketPoll*>(data);
     std::shared_ptr<Document> document = kitSocketPoll->getDocument();
