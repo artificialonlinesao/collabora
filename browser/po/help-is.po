@@ -2814,11 +2814,11 @@ msgstr "Veldu textann með fyrirliggjandi sniðinu"
 #, fuzzy
 msgid ""
 "Click on the clone formatting icon <img class=\"icon-size\" alt=\"\" src="
-"\"images/lc_formatpaintbrush.svg\" />. The mouse pointer turns to a paint "
+"\"https://collab-images.kyzon.com/img.svg/lc_formatpaintbrush.svg\" />. The mouse pointer turns to a paint "
 "bucket."
 msgstr ""
 "Smelltu á táknið til að klóna snið <img style=\"height:0.6cm;width:0.6cm;\" "
-"alt=\"\" src=\"images/lc_formatpaintbrush.svg\">. Músarbendilinn breytist þá "
+"alt=\"\" src=\"https://collab-images.kyzon.com/img.svg/lc_formatpaintbrush.svg\">. Músarbendilinn breytist þá "
 "í málningarfötu."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li.p:757-11
@@ -2923,7 +2923,7 @@ msgid ""
 "/lc_formatpaintbrush.svg\" />. The mouse pointer turns to a paint bucket."
 msgstr ""
 "Smelltu á táknið til að klóna snið <img style=\"height:0.6cm;width:0.6cm;\" "
-"alt=\"\" src=\"images/lc_formatpaintbrush.svg\">. Músarbendilinn breytist þá "
+"alt=\"\" src=\"https://collab-images.kyzon.com/img.svg/lc_formatpaintbrush.svg\">. Músarbendilinn breytist þá "
 "í málningarfötu."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li.p:800-11

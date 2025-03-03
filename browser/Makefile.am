@@ -49,18 +49,18 @@ MOCHA_TS_JS_FILES := $(MOCHA_TS_FILES:.ts=.js)
 $(MOCHA_TS_JS_FILES): %.js: %.ts
 	$(QUIET_TSC) $(builddir)/node_modules/typescript/bin/tsc $< --outfile $@ --module none --lib dom,es2016 --target ES5 || (rm -f $@ && false)
 
-JQUERY_LIGHTNESS_IMAGE_PATH = $(srcdir)/images/jquery-ui-lightness
-JQUERY_LIGHTNESS_IMAGES = $(wildcard $(JQUERY_LIGHTNESS_IMAGE_PATH)/*.png)
-JQUERY_LIGHTNESS_DIST_IMAGES = $(patsubst $(JQUERY_LIGHTNESS_IMAGE_PATH)/%.png,$(DIST_FOLDER)/images/%.png,$(JQUERY_LIGHTNESS_IMAGES))
+# JQUERY_LIGHTNESS_IMAGE_PATH = $(srcdir)/images/jquery-ui-lightness
+# JQUERY_LIGHTNESS_IMAGES = $(wildcard $(JQUERY_LIGHTNESS_IMAGE_PATH)/*.png)
+# JQUERY_LIGHTNESS_DIST_IMAGES = $(patsubst $(JQUERY_LIGHTNESS_IMAGE_PATH)/%.png,$(DIST_FOLDER)/images/%.png,$(JQUERY_LIGHTNESS_IMAGES))
 
-JQUERY_MINIFIED_IMAGE_PATH = node_modules/jquery-ui/themes/base/images
-JQUERY_MINIFIED_IMAGES = $(wildcard $(JQUERY_MINIFIED_IMAGE_PATH)/*.png)
-JQUERY_MINIFIED_DIST_IMAGES = $(patsubst $(JQUERY_MINIFIED_IMAGE_PATH)/%.png,$(DIST_FOLDER)/images/%.png,$(JQUERY_MINIFIED_IMAGES))
+# JQUERY_MINIFIED_IMAGE_PATH = node_modules/jquery-ui/themes/base/images
+# JQUERY_MINIFIED_IMAGES = $(wildcard $(JQUERY_MINIFIED_IMAGE_PATH)/*.png)
+# JQUERY_MINIFIED_DIST_IMAGES = $(patsubst $(JQUERY_MINIFIED_IMAGE_PATH)/%.png,$(DIST_FOLDER)/images/%.png,$(JQUERY_MINIFIED_IMAGES))
 
-COOL_IMAGES_SRC = $(shell find $(srcdir)/images -name '*.*')
-COOL_IMAGES_DST = $(patsubst $(srcdir)/%,$(DIST_FOLDER)/%,$(COOL_IMAGES_SRC))
-COOL_IMAGES_CUSTOM_SRC = $(shell if test -n "$(CUSTOM_ICONS_DIRECTORY)"; then find $(CUSTOM_ICONS_DIRECTORY) -name '*.*'; fi)
-COOL_IMAGES_CUSTOM_DST = $(patsubst $(CUSTOM_ICONS_DIRECTORY)/%,$(DIST_FOLDER)/images/%,$(COOL_IMAGES_CUSTOM_SRC))
+# COOL_IMAGES_SRC = $(shell find $(srcdir)/images -name '*.*')
+# COOL_IMAGES_DST = $(patsubst $(srcdir)/%,$(DIST_FOLDER)/%,$(COOL_IMAGES_SRC))
+# COOL_IMAGES_CUSTOM_SRC = $(shell if test -n "$(CUSTOM_ICONS_DIRECTORY)"; then find $(CUSTOM_ICONS_DIRECTORY) -name '*.*'; fi)
+# COOL_IMAGES_CUSTOM_DST = $(patsubst $(CUSTOM_ICONS_DIRECTORY)/%,$(DIST_FOLDER)/images/%,$(COOL_IMAGES_CUSTOM_SRC))
 COOL_L10N_SRC = $(shell find $(srcdir)/l10n -name '*.json')
 if !ENABLE_MOBILEAPP
 COOL_L10N_DST =  $(patsubst $(srcdir)/l10n/%,$(DIST_FOLDER)/l10n/%,$(COOL_L10N_SRC))
@@ -704,10 +704,6 @@ build-cool: \
 	$(COOL_L10N_DST) \
 	$(L10N_JSON) \
 	$(SRC_TS_JS_DST) \
-	$(COOL_IMAGES_DST) \
-	$(COOL_IMAGES_CUSTOM_DST) \
-	$(JQUERY_LIGHTNESS_DIST_IMAGES) \
-	$(JQUERY_MINIFIED_DIST_IMAGES) \
 	$(ADMIN_BUNDLE) \
 	$(DIST_FOLDER)/bundle.css \
 	$(DIST_FOLDER)/device-mobile.css \
@@ -815,13 +811,13 @@ $(DIST_FOLDER)/plugins/%.js: $(srcdir)/plugins/%.js
 		`ln -sf $(abs_srcdir)/$< $@`; \
 	fi
 
-$(DIST_FOLDER)/images/%: $(CUSTOM_ICONS_DIRECTORY)/%
-	@mkdir -p $(dir $@)
-	@cp $< $@
+# $(DIST_FOLDER)/images/%: $(CUSTOM_ICONS_DIRECTORY)/%
+# 	@mkdir -p $(dir $@)
+# 	@cp $< $@
 
-$(DIST_FOLDER)/images/%: $(srcdir)/images/%
-	@mkdir -p $(dir $@)
-	@cp $< $@
+# $(DIST_FOLDER)/images/%: $(srcdir)/images/%
+# 	@mkdir -p $(dir $@)
+# 	@cp $< $@
 
 $(DIST_FOLDER)/%.html: $(srcdir)/html/%.html
 	@mkdir -p $(dir $@)
@@ -873,21 +869,21 @@ $(DIST_FOLDER)/node_modules/%.js: $(builddir)/node_modules/%.js
 	@mkdir -p $(dir $@)
 	@cp $< $@
 
-$(DIST_FOLDER)/$(JQUERY_LIGHTNESS_IMAGE_PATH)/%.png: $(JQUERY_LIGHTNESS_IMAGE_PATH)/%.png
-	@mkdir -p $(dir $@)
-	@cp $< $@
+# $(DIST_FOLDER)/$(JQUERY_LIGHTNESS_IMAGE_PATH)/%.png: $(JQUERY_LIGHTNESS_IMAGE_PATH)/%.png
+# 	@mkdir -p $(dir $@)
+# 	@cp $< $@
 
-$(DIST_FOLDER)/images/%.png: $(JQUERY_LIGHTNESS_IMAGE_PATH)/%.png
-	@mkdir -p $(dir $@)
-	@cp $< $@
+# $(DIST_FOLDER)/images/%.png: $(JQUERY_LIGHTNESS_IMAGE_PATH)/%.png
+# 	@mkdir -p $(dir $@)
+# 	@cp $< $@
 
-$(DIST_FOLDER)/$(JQUERY_MINIFIED_IMAGE_PATH)/%.png: $(JQUERY_MINIFIED_IMAGE_PATH)/%.png
-	@mkdir -p $(dir $@)
-	@cp $< $@
+# $(DIST_FOLDER)/$(JQUERY_MINIFIED_IMAGE_PATH)/%.png: $(JQUERY_MINIFIED_IMAGE_PATH)/%.png
+# 	@mkdir -p $(dir $@)
+# 	@cp $< $@
 
-$(DIST_FOLDER)/images/%.png: $(JQUERY_MINIFIED_IMAGE_PATH)/%.png
-	@mkdir -p $(dir $@)
-	@cp $< $@
+# $(DIST_FOLDER)/images/%.png: $(JQUERY_MINIFIED_IMAGE_PATH)/%.png
+# 	@mkdir -p $(dir $@)
+# 	@cp $< $@
 
 $(DIST_FOLDER)/l10n/%: $(srcdir)/l10n/%
 	@mkdir -p $(dir $@)

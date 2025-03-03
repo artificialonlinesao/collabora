@@ -415,7 +415,7 @@ td.jsdialog > [id^='table-box']:not(.sidebar) {
 	content: 'V';
 	color: transparent;
 	margin-inline-end: 7px;
-	background: transparent url('images/lc_menu_chevron.svg') no-repeat center right;
+	background: transparent url('https://collab-images.kyzon.com/lc_menu_chevron.svg') no-repeat center right;
 	filter: brightness(0.5);
 }
 
@@ -426,7 +426,7 @@ td.jsdialog > [id^='table-box']:not(.sidebar) {
 	color: transparent;
 	margin-inline-end: 7px;
 	transform: rotate(90deg);
-	background: transparent url('images/lc_menu_chevron.svg') no-repeat center;
+	background: transparent url('https://collab-images.kyzon.com/lc_menu_chevron.svg') no-repeat center;
 	filter: brightness(0.5);
 }
 
@@ -638,22 +638,22 @@ input[type='checkbox'].autofilter, .jsdialog input[type='checkbox'] {
 	appearance: none;
 	width: 20px;
 	height: 20px;
-	background: url('images/lc_checkboxoff.svg') no-repeat center;
+	background: url('https://collab-images.kyzon.com/lc_checkboxoff.svg') no-repeat center;
 	margin: 1px 8px;
 	margin-left: 0px;
 }
 
 [data-theme='dark'] input[type='checkbox'].autofilter, [data-theme='dark'] .jsdialog input[type='checkbox'] {
-	background: url('images/dark/lc_checkboxoff.svg') no-repeat center;
+	background: url('https://collab-images.kyzon.com/dark/lc_checkboxoff.svg') no-repeat center;
 }
 
 input[type='checkbox']:checked.autofilter, .jsdialog input[type='checkbox']:checked {
 	border-color: transparent;
-	background-image: url('images/lc_checkbox.svg');
+	background-image: url('https://collab-images.kyzon.com/lc_checkbox.svg');
 }
 
 [data-theme='dark'] input[type='checkbox']:checked.autofilter, [data-theme='dark'] .jsdialog input[type='checkbox']:checked {
-	background-image: url('images/dark/lc_checkbox.svg');
+	background-image: url('https://collab-images.kyzon.com/dark/lc_checkbox.svg');
 }
 
 .ui-treeview-entry div span {
@@ -935,7 +935,7 @@ input[type='number']:hover::-webkit-outer-spin-button {
 
 .ui-listbox-arrow {
 	content: '';
-	background: url('images/jquery-ui-lightness/ui-icons_222222_256x240.png') no-repeat transparent;
+	background: url('https://collab-images.kyzon.com/jquery-ui-lightness/ui-icons_222222_256x240.png') no-repeat transparent;
 	background-position: -67px -17px !important;
 	display: inline-block;
 	position: relative;
@@ -948,7 +948,7 @@ input[type='number']:hover::-webkit-outer-spin-button {
 }
 
 [data-theme='dark'] .ui-listbox-arrow {
-	background: url('images/jquery-ui-lightness/ui-icons_ffffff_256x240.png') no-repeat transparent;
+	background: url('https://collab-images.kyzon.com/jquery-ui-lightness/ui-icons_ffffff_256x240.png') no-repeat transparent;
 }
 
 .ui-listbox[disabled='disabled'] ~ .ui-listbox-arrow,
@@ -1091,7 +1091,7 @@ input[type='number']:hover::-webkit-outer-spin-button {
 	content: '';
 	display: inline-block;
 	width: 9px;
-	background: url('images/lc_menu_chevron.svg') no-repeat;
+	background: url('https://collab-images.kyzon.com/lc_menu_chevron.svg') no-repeat;
 	height: 9px;
 }
 
@@ -1230,12 +1230,12 @@ input[type='number']:hover::-webkit-outer-spin-button {
 
 #mobile-wizard #toggle_all.checkbutton + #select_current,
 .autofilter-container #select_current {
-	background: url('images/lc_checkbox.svg') no-repeat center;
+	background: url('https://collab-images.kyzon.com/lc_checkbox.svg') no-repeat center;
 }
 
 [data-theme='dark'] #mobile-wizard #toggle_all.checkbutton + #select_current,
 .autofilter-container #select_current {
-	background: url('images/dark/lc_checkbox.svg') no-repeat center;
+	background: url('https://collab-images.kyzon.com/dark/lc_checkbox.svg') no-repeat center;
 }
 
 .autofilter-container #select_current {
@@ -1248,12 +1248,12 @@ input[type='number']:hover::-webkit-outer-spin-button {
 
 #mobile-wizard #toggle_all.checkbutton + #select_current + #unselect_current,
 .autofilter-container #unselect_current {
-	background: url('images/lc_checkboxoff.svg') no-repeat center;
+	background: url('https://collab-images.kyzon.com/lc_checkboxoff.svg') no-repeat center;
 }
 
 [data-theme='dark'] #mobile-wizard #toggle_all.checkbutton + #select_current + #unselect_current,
 .autofilter-container #unselect_current {
-	background: url('images/dark/lc_checkboxoff.svg') no-repeat center;
+	background: url('https://collab-images.kyzon.com/dark/lc_checkboxoff.svg') no-repeat center;
 }
 
 .autofilter-container #unselect_current {
@@ -2243,7 +2243,7 @@ kbd,
 	display: none;
 }
 #ServerAuditDialog div:first-child .ui-treeview-header-sort-icon {
-	background: url('images/lc_serverauditheader.svg') no-repeat center;
+	background: url('https://collab-images.kyzon.com/lc_serverauditheader.svg') no-repeat center;
 	width: 16px;
 	display: table-caption;
 	height: 16px;

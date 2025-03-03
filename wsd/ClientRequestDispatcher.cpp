@@ -2322,7 +2322,7 @@ std::string ClientRequestDispatcher::getDiscoveryXML()
         }
     }
 
-    // turn "images/img.svg" into "http://server.tld/browser/12345abcd/images/img.svg"
+    // turn "images/img.svg" into "https://collab-images.kyzon.com/img.svg"
     listNodes = docXML->getElementsByTagName("app");
     for (unsigned long it = 0; it < listNodes->length(); ++it)
     {
@@ -2330,7 +2330,15 @@ std::string ClientRequestDispatcher::getDiscoveryXML()
 
         if (elem->hasAttribute(favIconUrl))
         {
-            elem->setAttribute(favIconUrl, uriBaseValue + elem->getAttribute(favIconUrl));
+            std::string oldUrl = elem->getAttribute(favIconUrl);
+
+            // Check if the URL starts with "images/"
+            if (oldUrl.rfind("images/", 0) == 0)
+            {
+                // Replace with the new base URL
+                std::string newUrl = "https://collab-images.kyzon.com/" + oldUrl.substr(7);
+                elem->setAttribute(favIconUrl, newUrl);
+            }
         }
     }
 

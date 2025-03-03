@@ -3249,7 +3249,7 @@ msgstr "இருக்கும் வடிவத்துடன் உரை�
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li.p:756-11
 msgid ""
 "Click on the clone formatting icon <img class=\"icon-size\" alt=\"\" src="
-"\"images/lc_formatpaintbrush.svg\" />. The mouse pointer turns to a paint "
+"\"https://collab-images.kyzon.com/img.svg/lc_formatpaintbrush.svg\" />. The mouse pointer turns to a paint "
 "bucket."
 msgstr ""
 "நகலி வடிவமைப்பு படவுரு <img வகுப்பு = \"icon-size\" மாற்று = \"\" SRC = \"படங"

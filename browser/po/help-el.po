@@ -3227,11 +3227,11 @@ msgstr "Επιλέξτε το κείμενο με την υφιστάμενη μ
 #, fuzzy
 msgid ""
 "Click on the clone formatting icon <img class=\"icon-size\" alt=\"\" src="
-"\"images/lc_formatpaintbrush.svg\" />. The mouse pointer turns to a paint "
+"\"https://collab-images.kyzon.com/img.svg/lc_formatpaintbrush.svg\" />. The mouse pointer turns to a paint "
 "bucket."
 msgstr ""
 "Πατήστε στο εικονίδιο μορφοποίησης κλώνου <img style=\"height:0.6cm;width:0."
-"6cm;\" alt=\"\" src=\"images/lc_formatpaintbrush.svg\">. Ο δείκτης του "
+"6cm;\" alt=\"\" src=\"https://collab-images.kyzon.com/img.svg/lc_formatpaintbrush.svg\">. Ο δείκτης του "
 "ποντικιού γίνεται κουβάς βαφής."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li.p:757-11
@@ -3366,7 +3366,7 @@ msgid ""
 "/lc_formatpaintbrush.svg\" />. The mouse pointer turns to a paint bucket."
 msgstr ""
 "Πατήστε στο εικονίδιο μορφοποίησης κλώνου <img style=\"height:0.6cm;width:0."
-"6cm;\" alt=\"\" src=\"images/lc_formatpaintbrush.svg\">. Ο δείκτης του "
+"6cm;\" alt=\"\" src=\"https://collab-images.kyzon.com/img.svg/lc_formatpaintbrush.svg\">. Ο δείκτης του "
 "ποντικιού γίνεται κουβάς βαφής."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li.p:800-11
@@ -3467,8 +3467,8 @@ msgstr "Ορίστε τις ιδιότητες του στοιχείου του 
 #~ "στην κορυφή και περιλαμβάνει πολλές επιλογές, εντολές εκτύπωσης, "
 #~ "επεξεργασίας, προβολής και άλλες προχωρημένες εντολές. Μπορείτε να "
 #~ "αποκρύψετε τη γραμμή μενού πατώντας στο εικονίδιο <img style=\"height:0."
-#~ "6cm;width:0.6cm;\" src=\"images/fold.svg\"> έξω δεξιά. Πατήστε το εικονίδιο "
-#~ "<img style=\"height:0.6cm;width:0.6cm;\" src=\"images/unfold.svg\"> για "
+#~ "6cm;width:0.6cm;\" src=\"https://collab-images.kyzon.com/img.svg/fold.svg\"> έξω δεξιά. Πατήστε το εικονίδιο "
+#~ "<img style=\"height:0.6cm;width:0.6cm;\" src=\"https://collab-images.kyzon.com/img.svg/unfold.svg\"> για "
 #~ "προβολή του μενού."
 
 #~ msgid "General"
@@ -3479,22 +3479,22 @@ msgstr "Ορίστε τις ιδιότητες του στοιχείου του 
 
 #~ msgid ""
 #~ "Click on the submenu (<img style=\"height:0.6cm;width:0.6cm;\" alt=\"\" src="
-#~ "\"images/submenu.svg\">) icon to reply, move and delete comments."
+#~ "\"https://collab-images.kyzon.com/img.svg/submenu.svg\">) icon to reply, move and delete comments."
 #~ msgstr ""
 #~ "Πατήστε στο εικονίδιο υπομενού (<img style=\"height:0.6cm;width:0.6cm;\" alt="
-#~ "\"\" src=\"images/submenu.svg\">) για να απαντήσετε, να μετακινήσετε και να "
+#~ "\"\" src=\"https://collab-images.kyzon.com/img.svg/submenu.svg\">) για να απαντήσετε, να μετακινήσετε και να "
 #~ "διαγράψετε σχόλια."
 
 #~ msgid ""
 #~ "Either choose <span class=\"ui\">Slide Show</span> → <span class=\"ui\">Full "
 #~ "Screen Presentation</span> or click on the left-most icon in the bottom of "
 #~ "the slide panel: <img style=\"height:0.6cm;width:0.6cm;\" alt=\"\" src=\""
-#~ "images/lc_dia.svg\">"
+#~ "https://collab-images.kyzon.com/img.svg/lc_dia.svg\">"
 #~ msgstr ""
 #~ "Είτε επιλέξτε <span class=\"ui\">Παρουσίαση προβολής</span> → <span class=\""
 #~ "ui\">Παρουσίαση πλήρους οθόνης</span>, είτε πατήστε στο πιο αριστερό "
 #~ "εικονίδιο στο τέλος του παραθύρου διαφανειών: <img style=\""
-#~ "height:0.6cm;width:0.6cm;\" alt=\"\" src=\"images/lc_dia.svg\">"
+#~ "height:0.6cm;width:0.6cm;\" alt=\"\" src=\"https://collab-images.kyzon.com/img.svg/lc_dia.svg\">"
 
 #, fuzzy
 #~ msgid ""
