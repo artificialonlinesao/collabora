@@ -704,10 +704,6 @@ build-cool: \
 	$(COOL_L10N_DST) \
 	$(L10N_JSON) \
 	$(SRC_TS_JS_DST) \
-	# $(COOL_IMAGES_DST) \
-	# $(COOL_IMAGES_CUSTOM_DST) \
-	# $(JQUERY_LIGHTNESS_DIST_IMAGES) \
-	# $(JQUERY_MINIFIED_DIST_IMAGES) \
 	$(ADMIN_BUNDLE) \
 	$(DIST_FOLDER)/bundle.css \
 	$(DIST_FOLDER)/device-mobile.css \
