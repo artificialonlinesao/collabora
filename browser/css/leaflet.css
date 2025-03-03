@@ -223,7 +223,7 @@
 }
 
 .anchor-marker {
-	background: url('images/lc_anchormenu.svg') rgba(255,255,255,.85) no-repeat center;
+	background: url('https://collab-images.kyzon.com/lc_anchormenu.svg') rgba(255,255,255,.85) no-repeat center;
 	border: 1px solid transparent;
 	border-radius: 4px;
 }
@@ -388,12 +388,12 @@ a.leaflet-control-buttons:hover:first-child {
 	background-color: var(--color-main-background);
 }
 .leaflet-control-layers-toggle {
-	background-image: url('images/layers.png');
+	background-image: url('https://collab-images.kyzon.com/layers.png');
 	width: 36px;
 	height: 36px;
 }
 .leaflet-retina .leaflet-control-layers-toggle {
-	background-image: url('images/layers-2x.png');
+	background-image: url('https://collab-images.kyzon.com/layers-2x.png');
 	background-size: 26px 26px;
 }
 .leaflet-touch .leaflet-control-layers-toggle {
@@ -924,7 +924,7 @@ html[data-theme='dark'] .leaflet-progress-spinner::before {
 .cool-ruler-indentation-marker-down {
 	width: 14px;
 	height: 10px;
-	background: url('images/indentation_marker_down.svg');
+	background: url('https://collab-images.kyzon.com/indentation_marker_down.svg');
 	position: absolute;
 	left: 0;
 	top: 0;
@@ -935,7 +935,7 @@ html[data-theme='dark'] .leaflet-progress-spinner::before {
 .cool-ruler-indentation-marker-up {
 	width: 14px;
 	height: 10px;
-	background: url('images/indentation_marker_up.svg');
+	background: url('https://collab-images.kyzon.com/indentation_marker_up.svg');
 	position: absolute;
 	left: 0;
 	bottom: 0;
@@ -990,7 +990,7 @@ html[data-theme='dark'] .leaflet-progress-spinner::before {
 .cool-ruler-tabstop-left {
 	width: 20px;
 	height: 20px;
-	background: url('images/tabstop-left.svg');
+	background: url('https://collab-images.kyzon.com/tabstop-left.svg');
 	position: absolute;
 	pointer-events: none;
 }
@@ -998,7 +998,7 @@ html[data-theme='dark'] .leaflet-progress-spinner::before {
 .cool-ruler-tabstop-right {
 	width: 20px;
 	height: 20px;
-	background: url('images/tabstop-right.svg');
+	background: url('https://collab-images.kyzon.com/tabstop-right.svg');
 	position: absolute;
 	pointer-events: none;
 }
@@ -1006,7 +1006,7 @@ html[data-theme='dark'] .leaflet-progress-spinner::before {
 .cool-ruler-tabstop-center {
 	width: 20px;
 	height: 20px;
-	background: url('images/tabstop-center.svg');
+	background: url('https://collab-images.kyzon.com/tabstop-center.svg');
 	position: absolute;
 	pointer-events: none;
 }
@@ -1014,7 +1014,7 @@ html[data-theme='dark'] .leaflet-progress-spinner::before {
 .cool-ruler-tabstop-decimal {
 	width: 20px;
 	height: 20px;
-	background: url('images/tabstop-decimal.svg');
+	background: url('https://collab-images.kyzon.com/tabstop-decimal.svg');
 	position: absolute;
 	pointer-events: none;
 }

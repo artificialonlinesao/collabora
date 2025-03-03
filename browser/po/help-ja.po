@@ -3030,11 +3030,11 @@ msgstr "既存の形式でテキストを選択します"
 #, fuzzy
 msgid ""
 "Click on the clone formatting icon <img class=\"icon-size\" alt=\"\" src="
-"\"images/lc_formatpaintbrush.svg\" />. The mouse pointer turns to a paint "
+"\"https://collab-images.kyzon.com/img.svg/lc_formatpaintbrush.svg\" />. The mouse pointer turns to a paint "
 "bucket."
 msgstr ""
 "クローンフォーマットのアイコン <img style=\"height:0.6cm;width:0.6cm;\" alt="
-"\"\" src=\"images/lc_formatpaintbrush.svg\"> "
+"\"\" src=\"https://collab-images.kyzon.com/img.svg/lc_formatpaintbrush.svg\"> "
 "をクリックします。マウスポインタがペイントバケットに変わります。"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li.p:757-11
@@ -3156,7 +3156,7 @@ msgid ""
 "/lc_formatpaintbrush.svg\" />. The mouse pointer turns to a paint bucket."
 msgstr ""
 "クローンフォーマットのアイコン <img style=\"height:0.6cm;width:0.6cm;\" alt="
-"\"\" src=\"images/lc_formatpaintbrush.svg\"> "
+"\"\" src=\"https://collab-images.kyzon.com/img.svg/lc_formatpaintbrush.svg\"> "
 "をクリックします。マウスポインタがペイントバケットに変わります。"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li.p:800-11

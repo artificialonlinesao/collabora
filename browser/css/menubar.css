@@ -89,7 +89,7 @@
 }
 
 #save.saving img {
-	background: url('images/lc_saving.svg') no-repeat center;
+	background: url('https://collab-images.kyzon.com/lc_saving.svg') no-repeat center;
 }
 
 nav.hasnotebookbar #save::after {
@@ -105,7 +105,7 @@ nav.hasnotebookbar #save.saving::after {
 }
 
 #save.saved img {
-	background: url('images/lc_saved.svg') no-repeat center;
+	background: url('https://collab-images.kyzon.com/lc_saved.svg') no-repeat center;
 	filter: grayscale(0);
 }
 
@@ -115,7 +115,7 @@ nav.hasnotebookbar #save.saved::after {
 }
 
 [data-theme='dark'] #save.saving img {
-	background: url('images/dark/lc_saving.svg') no-repeat center;
+	background: url('https://collab-images.kyzon.com/dark/lc_saving.svg') no-repeat center;
 }
 #document-titlebar {
 	display: inline-table; /*new*/
@@ -258,7 +258,7 @@ nav.hasnotebookbar #save.saved::after {
 .lo-menu ul a span.sub-arrow {
 	right: 0;
 	margin-right: 5px;
-	background: transparent url('images/lc_menu_chevron.svg') no-repeat center right; /* we want them to be transparent always whether mobile or desktop */
+	background: transparent url('https://collab-images.kyzon.com/lc_menu_chevron.svg') no-repeat center right; /* we want them to be transparent always whether mobile or desktop */
 	color: transparent;
 	/*transform: rotate(180deg);*/
 }
@@ -361,7 +361,7 @@ nav.hasnotebookbar #save.saved::after {
 	position: absolute;
 	content: ' ';
 	left: 2px;
-	background: url('images/lc_listitem-selected.svg') no-repeat left -2px;
+	background: url('https://collab-images.kyzon.com/lc_listitem-selected.svg') no-repeat left -2px;
 	width: 20px;
 	height: 20px;
 }
@@ -373,28 +373,28 @@ nav.hasnotebookbar #save.saved::after {
 }
 
 /* .writer-icon-img {
-	background-image: url('images/x-office-document.svg');
+	background-image: url('https://collab-images.kyzon.com/x-office-document.svg');
 	background-size: 16px 16px;
 	background-repeat: no-repeat;
 	background-position: center;
 }
 
 .calc-icon-img {
-	background-image: url('images/x-office-spreadsheet.svg');
+	background-image: url('https://collab-images.kyzon.com/x-office-spreadsheet.svg');
 	background-size: 16px 16px;
 	background-repeat: no-repeat;
 	background-position: center;
 }
 
 .impress-icon-img {
-	background-image: url('images/x-office-presentation.svg');
+	background-image: url('https://collab-images.kyzon.com/x-office-presentation.svg');
 	background-size: 16px 16px;
 	background-repeat: no-repeat;
 	background-position: center;
 }
 
 .draw-icon-img {
-	background-image: url('images/x-office-drawing.svg');
+	background-image: url('https://collab-images.kyzon.com/x-office-drawing.svg');
 	background-size: 16px 16px;
 	background-repeat: no-repeat;
 	background-position: center;
@@ -416,7 +416,7 @@ nav.hasnotebookbar #save.saved::after {
 	color: var(--color-text-lighter) !important;
 	background-color: var(--color-background-lighter);
 	box-shadow: inset 0 0 2px 0 rgba(0,0,0,0.2);
-	background: url('images/lc_lock.svg') right top / 24px no-repeat
+	background: url('https://collab-images.kyzon.com/lc_lock.svg') right top / 24px no-repeat
 }
 
 #main-menu .locking-disabled {
@@ -435,7 +435,7 @@ nav.hasnotebookbar #save.saved::after {
 
 /* For notebook bar mode and sidebar*/
 .locking-disabled:not(.mobile-wizard) img.unobutton, #toolbar-up .locking-disabled .w2ui-tb-image.w2ui-icon {
-	background: url('images/lc_lock.svg') center top / 24px no-repeat !important;
+	background: url('https://collab-images.kyzon.com/lc_lock.svg') center top / 24px no-repeat !important;
 	width: 24px !important;
 	padding-left: 24px;
 	box-sizing: border-box;

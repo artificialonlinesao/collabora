@@ -115,12 +115,12 @@ button.ui-tab.notebookbar.visible-with-context {
 
 html:not([data-theme='dark']) .unoSave.savemodified .unobutton img,
 html:not([data-theme='dark']) .savemodified.unotoolbutton .unobutton img {
-	background: url('images/lc_savemodified.svg') no-repeat center;
+	background: url('https://collab-images.kyzon.com/lc_savemodified.svg') no-repeat center;
 }
 
 html[data-theme='dark'] .unoSave.savemodified .unobutton img,
 html[data-theme='dark'] .savemodified.unotoolbutton .unobutton img {
-	background: url('images/dark/lc_savemodified.svg') no-repeat center;
+	background: url('https://collab-images.kyzon.com/dark/lc_savemodified.svg') no-repeat center;
 }
 
 .notebookbar-shortcuts-bar .notebookbar.unotoolbutton {
@@ -288,7 +288,7 @@ html[data-theme='dark'] .savemodified.unotoolbutton .unobutton img {
 	font-family: var(--cool-font);
 	color: var(--color-main-text);
 	padding: 0px 5px !important;
-	line-height: normal;
+	line-height: 1.2;
 	grid-column: 2;
 }
 
@@ -643,85 +643,85 @@ html[data-theme='dark'] .savemodified.unotoolbutton .unobutton img {
 }
 
 [class*='as-odt-submenu-icon'] {
-	background: url('images/lc_downloadas-odt.svg') center;
+	background: url('https://collab-images.kyzon.com/lc_downloadas-odt.svg') center;
 }
 
 [class*='as-ods-submenu-icon'] {
-	background: url('images/lc_downloadas-ods.svg') center;
+	background: url('https://collab-images.kyzon.com/lc_downloadas-ods.svg') center;
 }
 
 [class*='as-odp-submenu-icon'] {
-	background: url('images/lc_downloadas-odp.svg') center;
+	background: url('https://collab-images.kyzon.com/lc_downloadas-odp.svg') center;
 }
 
 [class*='as-odg-submenu-icon'] {
-	background: url('images/lc_downloadas-odg.svg') center;
+	background: url('https://collab-images.kyzon.com/lc_downloadas-odg.svg') center;
 }
 
 [class*='as-png-submenu-icon'] {
-	background: url('images/lc_insertgraphic.svg') center;
+	background: url('https://collab-images.kyzon.com/lc_insertgraphic.svg') center;
 }
 
 [class*='as-bmp-submenu-icon'] {
-	background: url('images/lc_insertgraphic.svg') center;
+	background: url('https://collab-images.kyzon.com/lc_insertgraphic.svg') center;
 }
 
 [class*='as-gif-submenu-icon'] {
-	background: url('images/lc_insertgraphic.svg') center;
+	background: url('https://collab-images.kyzon.com/lc_insertgraphic.svg') center;
 }
 
 [class*='as-tiff-submenu-icon'] {
-	background: url('images/lc_insertgraphic.svg') center;
+	background: url('https://collab-images.kyzon.com/lc_insertgraphic.svg') center;
 }
 
 [class*='as-swf-submenu-icon'] {
-	background: url('images/lc_exportswf.svg') center;
+	background: url('https://collab-images.kyzon.com/lc_exportswf.svg') center;
 }
 
 [class*='as-svg-submenu-icon'] {
-	background: url('images/lc_exportsvg.svg') center;
+	background: url('https://collab-images.kyzon.com/lc_exportsvg.svg') center;
 }
 
 [class*='as-rtf-submenu-icon'] {
-	background: url('images/lc_downloadas-rtf.svg') center;
+	background: url('https://collab-images.kyzon.com/lc_downloadas-rtf.svg') center;
 }
 
 [class*='as-doc-submenu-icon'] {
-	background: url('images/lc_downloadas-doc.svg') center;
+	background: url('https://collab-images.kyzon.com/lc_downloadas-doc.svg') center;
 }
 
 [class*='as-docx-submenu-icon'] {
-	background: url('images/lc_downloadas-docx.svg') center;
+	background: url('https://collab-images.kyzon.com/lc_downloadas-docx.svg') center;
 }
 
 [class*='pdf-submenu-icon'] {
-	background: url('images/lc_exportpdf.svg') center;
+	background: url('https://collab-images.kyzon.com/lc_exportpdf.svg') center;
 }
 
 [class*='epub-submenu-icon'] {
-	background: url('images/lc_exportepub.svg') center;
+	background: url('https://collab-images.kyzon.com/lc_exportepub.svg') center;
 }
 
 [class*='as-xls-submenu-icon'] {
-	background: url('images/lc_downloadas-xls.svg') center;
+	background: url('https://collab-images.kyzon.com/lc_downloadas-xls.svg') center;
 }
 
 [class*='as-xlsx-submenu-icon'] {
-	background: url('images/lc_downloadas-xlsx.svg') center;
+	background: url('https://collab-images.kyzon.com/lc_downloadas-xlsx.svg') center;
 }
 
 [class*='as-csv-submenu-icon'] {
-	background: url('images/lc_downloadas-csv.svg') center;
+	background: url('https://collab-images.kyzon.com/lc_downloadas-csv.svg') center;
 }
 
 [class*='as-ppt-submenu-icon'] {
-	background: url('images/lc_downloadas-ppt.svg') center;
+	background: url('https://collab-images.kyzon.com/lc_downloadas-ppt.svg') center;
 }
 
 [class*='as-pptx-submenu-icon'] {
-	background: url('images/lc_downloadas-pptx.svg') center;
+	background: url('https://collab-images.kyzon.com/lc_downloadas-pptx.svg') center;
 }
 
 [class*='as-html-submenu-icon'] {
-	background: url('images/lc_downloadas-html.svg') center;
+	background: url('https://collab-images.kyzon.com/lc_downloadas-html.svg') center;
 }

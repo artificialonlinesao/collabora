@@ -105,7 +105,8 @@ L.Map.include({
 		if (this.Locking.unlockImageUrlPath) {
 			unlockImage.src = 'remote/static' + this.Locking.unlockImageUrlPath;
 		} else {
-			unlockImage.src = 'images/lock-illustration.svg';
+			unlockImage.src =
+				'https://collab-images.kyzon.com/img.svg/lock-illustration.svg';
 		}
 	},
 

@@ -116,7 +116,7 @@ L.LOUtil = {
 
 	isDarkModeItem: function(name) {
 		var strippedName = this.stripName(name);
-		
+
 		// Check if the stripped name is in the onlydarkModeItems array
 		return this.onlydarkModeItems.includes(strippedName);
 	},
@@ -173,17 +173,17 @@ L.LOUtil = {
 	},
 
 	getImageURL: function(imgName) {
-		var defaultImageURL = this.getURL('images/' + imgName);
-	
+		var defaultImageURL = 'https://collab-images.kyzon.com/' + imgName;;
+
 		// Check if the image name is in the commonItems list and return the normal image path
 		if (this.isCommonForAllMode(imgName)) {
 			return defaultImageURL;
 		}
-	
+
 		if (window.prefs.getBoolean('darkTheme')) {
-			return this.getURL('images/dark/' + imgName);
+			return 'https://collab-images.kyzon.com/dark/' + imgName;
 		}
-	
+
 		var dummyEmptyImg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
 		defaultImageURL = this.isDarkModeItem(imgName) ? dummyEmptyImg : defaultImageURL;
 		return defaultImageURL;
@@ -195,14 +195,14 @@ L.LOUtil = {
 				return;
 			}
 
-			if (imageElement.src && imageElement.src.includes('/images/branding/dark/')) {
-				imageElement.src = imageElement.src.replace('/images/branding/dark/', '/images/dark/');
+			if (imageElement.src && imageElement.src.startsWith('https://collab-images.kyzon.com/branding/dark/')) {
+				imageElement.src = imageElement.src.replace('https://collab-images.kyzon.com/branding/dark/', 'https://collab-images.kyzon.com/dark/');
 				e.loUtilProcessed = true;
 				return;
 			}
-			if (imageElement.src && (imageElement.src.includes('/images/dark/') || imageElement.src.includes('/images/branding/'))) {
-				imageElement.src = imageElement.src.replace('/images/dark/', '/images/');
-				imageElement.src = imageElement.src.replace('/images/branding/', '/images/');
+			if (imageElement.src && (imageElement.src.startsWith('https://collab-images.kyzon.com/dark/') || imageElement.src.startsWith('https://collab-images.kyzon.com/branding/'))) {
+				imageElement.src = imageElement.src.replace('https://collab-images.kyzon.com/dark/', 'https://collab-images.kyzon.com/');
+				imageElement.src = imageElement.src.replace('https://collab-images.kyzon.com/branding/', 'https://collab-images.kyzon.com/');
 				e.loUtilProcessed = true;
 				return;
 			}

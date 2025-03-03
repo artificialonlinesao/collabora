@@ -53,7 +53,7 @@
 .spreadsheet-tab.spreadsheet-tab-protected > .lock, .spreadsheet-tab.spreadsheet-tab-protected:hover > .lock {
 	width: 16px;
 	height: 16px;
-	background-image: url('images/lc_spreadsheet_protected.svg') !important;
+	background-image: url('https://collab-images.kyzon.com/lc_spreadsheet_protected.svg') !important;
 	background-repeat: no-repeat !important;
 }
 
@@ -183,7 +183,7 @@
 .spreadsheet-cell-autofill-marker {
 	margin-left: 0px;
 	margin-top: 0px;
-	background-image: url('images/cell-autofill-marker.svg');
+	background-image: url('https://collab-images.kyzon.com/cell-autofill-marker.svg');
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
 	cursor: crosshair;
@@ -194,7 +194,7 @@
 	margin-top: 0px;
 	width: 18px;
 	height: 17px;
-	background: url('images/drop-down-button.svg') center top/16px var(--color-background-lighter) no-repeat;
+	background: url('https://collab-images.kyzon.com/drop-down-button.svg') center top/16px var(--color-background-lighter) no-repeat;
 	border: 1px solid var(--color-border);
 	box-sizing: border-box;
 	box-shadow: 0 0 1px 0 var(--color-box-shadow);

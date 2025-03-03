@@ -1360,8 +1360,14 @@ function getInitializerClass() {
 
 				if (img.startsWith('url("images/'))
 				{
-					visitor(rules[r].style, img,
-						img.replace('url("images/', base + '/images/'));
+					visitor(
+						rules[r].style,
+						img,
+						img.replace(
+							'url("images/',
+							'url("https://collab-images.kyzon.com/',
+						),
+					);
 				}
 				if (img.startsWith('url("remote/'))
 				{

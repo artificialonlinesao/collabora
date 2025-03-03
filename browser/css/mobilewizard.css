@@ -49,7 +49,7 @@ span#main-menu-btn-icon {
 	width: 100%;
 }
 
-.ui-header.level-1.mobile-wizard.ui-widget img[src='images/lc_exportpdf.svg']{
+.ui-header.level-1.mobile-wizard.ui-widget img[src='https://collab-images.kyzon.com/lc_exportpdf.svg']{
 	visibility: visible;
 }
 
@@ -160,7 +160,7 @@ span#main-menu-btn-icon {
 	line-height: 28px;
 	font-weight: 300;
 	color: #ff0000 !important;
-	background: url('images/lc_square_rounded_unfilled.svg') no-repeat center;
+	background: url('https://collab-images.kyzon.com/lc_square_rounded_unfilled.svg') no-repeat center;
 	float: initial !important;
 }
 
@@ -175,7 +175,7 @@ span#main-menu-btn-icon {
 .colors-container-tint-mark {
 	width: 20px;
 	height: 20px;
-	background-image: url('images/lc_color-picker-selected.svg');
+	background-image: url('https://collab-images.kyzon.com/lc_color-picker-selected.svg');
 	margin-left: auto;
 	background-repeat: no-repeat;
 	background-size: auto;
@@ -205,7 +205,7 @@ p.mobile-wizard.ui-combobox-text:not(.selected) {
 }
 
 p.mobile-wizard.ui-combobox-text.selected {
-	background: url('images/lc_listitem-selected.svg') no-repeat right;
+	background: url('https://collab-images.kyzon.com/lc_listitem-selected.svg') no-repeat right;
 	background-position-x: 94%;
 	color: var(--color-primary) !important;
 }
@@ -220,7 +220,7 @@ p.mobile-wizard.ui-combobox-text.selected {
 	background: none !important;
 }
 #mobile-wizard.funcwizard div#mobile-wizard-content.showHelpBG {
-	background: url('images/lc_helpindex_secondary.svg') no-repeat right 16px bottom 88px / 124px !important;
+	background: url('https://collab-images.kyzon.com/lc_helpindex_secondary.svg') no-repeat right 16px bottom 88px / 124px !important;
 }
 
 #ParaPropertyPanel + .ui-content{
@@ -269,7 +269,7 @@ p.mobile-wizard.ui-combobox-text.selected {
 	background-position-x: center;
 }
 .mobile-wizard-back {
-	background-image: url('images/lc_closedocmobile.svg');
+	background-image: url('https://collab-images.kyzon.com/lc_closedocmobile.svg');
 	background-repeat: no-repeat;
 	width: 48px;
 	background-position-x: 16px;
@@ -417,7 +417,7 @@ p.mobile-wizard.ui-combobox-text.selected {
 	display: table-cell;
 	padding-left: 10px;
 	padding-right: 10px;
-	background: url('images/lc_closedocmobile.svg') no-repeat left / 10px;
+	background: url('https://collab-images.kyzon.com/lc_closedocmobile.svg') no-repeat left / 10px;
 	font-size: 1.5em;
 	font-weight: bold;
 	color: transparent !important;
@@ -427,7 +427,7 @@ p.mobile-wizard.ui-combobox-text.selected {
 
 .func-info-icon {
 	display: block;
-	background: url('images/lc_helpindex.svg') no-repeat center;
+	background: url('https://collab-images.kyzon.com/lc_helpindex.svg') no-repeat center;
 	min-width: 28px;
 	min-height: 28px;
 }
@@ -605,13 +605,13 @@ input.ui-edit.mobile-wizard,
 }
 
 .inserttablecontrols #rows, .inserttablecontrols #cols{
-	background: url('images/lc_inserttable_row_mono.svg') no-repeat left;
+	background: url('https://collab-images.kyzon.com/lc_inserttable_row_mono.svg') no-repeat left;
 	border-bottom: 1px solid var(--color-border-lighter) !important;
 	width: 90%;
 	border-radius: none;
 }
 .inserttablecontrols #cols{
-	background: url('images/lc_inserttable_col_mono.svg') no-repeat left;
+	background: url('https://collab-images.kyzon.com/lc_inserttable_col_mono.svg') no-repeat left;
 }
 .inserttablecontrols .spinfield{
 	width: 35% !important;
@@ -815,15 +815,15 @@ div#mobile-wizard-content .spinfieldcontainer .spinfieldimage.disabled {
 	box-shadow: 0 0 0px 8px var(--color-primary-lighter);
 	border-radius: 0.1px;
 }
-#mobile-wizard #buttonbefore{background: url('images/sc_wrapleft.svg') no-repeat center;}
-#mobile-wizard #buttonafter{background: url('images/sc_wrapright.svg') no-repeat center;}
-#mobile-wizard #buttonoptimal{background: url('images/sc_wrapideal.svg') no-repeat center;}
-#mobile-wizard #buttonparallel{background: url('images/sc_wrapmenu.svg') no-repeat center;}
-#mobile-wizard #buttonnone{background: url('images/sc_wrapoff.svg') no-repeat center;}
-#mobile-wizard #buttonthrough{background: url('images/sc_wrapthrough.svg') no-repeat center;}
-#mobile-wizard #top{background: url('images/sc_aligntop.svg') no-repeat center;}
-#mobile-wizard #bottom{background: url('images/sc_alignbottom.svg') no-repeat center;}
-#mobile-wizard #standard{background: url('images/sc_alignverticalcenter.svg') no-repeat center;}
+#mobile-wizard #buttonbefore{background: url('https://collab-images.kyzon.com/sc_wrapleft.svg') no-repeat center;}
+#mobile-wizard #buttonafter{background: url('https://collab-images.kyzon.com/sc_wrapright.svg') no-repeat center;}
+#mobile-wizard #buttonoptimal{background: url('https://collab-images.kyzon.com/sc_wrapideal.svg') no-repeat center;}
+#mobile-wizard #buttonparallel{background: url('https://collab-images.kyzon.com/sc_wrapmenu.svg') no-repeat center;}
+#mobile-wizard #buttonnone{background: url('https://collab-images.kyzon.com/sc_wrapoff.svg') no-repeat center;}
+#mobile-wizard #buttonthrough{background: url('https://collab-images.kyzon.com/sc_wrapthrough.svg') no-repeat center;}
+#mobile-wizard #top{background: url('https://collab-images.kyzon.com/sc_aligntop.svg') no-repeat center;}
+#mobile-wizard #bottom{background: url('https://collab-images.kyzon.com/sc_alignbottom.svg') no-repeat center;}
+#mobile-wizard #standard{background: url('https://collab-images.kyzon.com/sc_alignverticalcenter.svg') no-repeat center;}
 #mobile-wizard .checkbutton,
 #mobile-wizard .radiobutton{
 	clear: both;
@@ -866,7 +866,7 @@ div#mobile-wizard-content .spinfieldcontainer .spinfieldimage.disabled {
 	box-shadow: 0px 0px 2px 1px var(--color-box-shadow);
 }
 #mobile-wizard input[type='checkbox']:checked{
-	background: url('images/lc_ok_white.svg') no-repeat center;
+	background: url('https://collab-images.kyzon.com/lc_ok_white.svg') no-repeat center;
 	background-color: var(--color-primary-lighter);
 	border-radius: var(--border-radius);
 	border: 2px solid var(--color-primary);
@@ -900,7 +900,7 @@ div#mobile-wizard-content .spinfieldcontainer .spinfieldimage.disabled {
 	box-shadow: #00000015 0px 0px 2px 1px;
 }
 #mobile-wizard input[type='radio']:checked{
-	background: url('images/lc_ok_white.svg') no-repeat center;
+	background: url('https://collab-images.kyzon.com/lc_ok_white.svg') no-repeat center;
 	background-color: var(--color-primary-lighter);
 	border: 2px solid var(--color-primary);
 	outline: none;

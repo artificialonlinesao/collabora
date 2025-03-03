@@ -59,14 +59,14 @@
 	--side-padding: 8px;
 
 	/* KYZON */
-	--kyzon-solutions-logo-light: url('images/KYZONSolutions_logo_black.svg') left center / contain no-repeat;
-	--kyzon-solutions-logo-dark: url('images/KYZONSolutions_logo_white.svg') left center / contain no-repeat;
+	--kyzon-solutions-logo-light: url('https://collab-images.kyzon.com/KYZONSolutions_logo_black.svg') left center / contain no-repeat;
+	--kyzon-solutions-logo-dark: url('https://collab-images.kyzon.com/KYZONSolutions_logo_white.svg') left center / contain no-repeat;
 	--kyzon-solutions-logo-aspect-ratio: 839.643 / 202.961;
-	--kyzon-flow-logo-light: url('images/KYZONFlow_logo_black.svg') left center / contain no-repeat;
-	--kyzon-flow-logo-dark: url('images/KYZONFlow_logo_white.svg') left center / contain no-repeat;
+	--kyzon-flow-logo-light: url('https://collab-images.kyzon.com/KYZONFlow_logo_black.svg') left center / contain no-repeat;
+	--kyzon-flow-logo-dark: url('https://collab-images.kyzon.com/KYZONFlow_logo_white.svg') left center / contain no-repeat;
 	--kyzon-flow-logo-aspect-ratio: 913.958 / 400;
-	--kyzon-space-logo-light: url('images/KYZONSpace_logo_black.svg') left center / contain no-repeat;
-	--kyzon-space-logo-dark: url('images/KYZONSpace_logo_white.svg') left center / contain no-repeat;
+	--kyzon-space-logo-light: url('https://collab-images.kyzon.com/KYZONSpace_logo_black.svg') left center / contain no-repeat;
+	--kyzon-space-logo-dark: url('https://collab-images.kyzon.com/KYZONSpace_logo_white.svg') left center / contain no-repeat;
 	--kyzon-space-logo-aspect-ratio: 1046.686 / 400;
 
 	--brand-600: #161617;
@@ -266,7 +266,7 @@ body {
 }
 
 .bucket-cursor {
-	cursor: url('images/cursors/fill.png') 4 18, auto !important;/*setting coordinates to align the tip of the brush icon */
+	cursor: url('https://collab-images.kyzon.com/cursors/fill.png') 4 18, auto !important;/*setting coordinates to align the tip of the brush icon */
 }
 .cool-scrollbar-show {
 	opacity: 1 !important;
@@ -279,7 +279,7 @@ body {
 	margin-top: 0px;
 	width: var(--btn-size);
 	height: var(--btn-size);
-	background-image: url('images/table-column-resize-marker.svg');
+	background-image: url('https://collab-images.kyzon.com/table-column-resize-marker.svg');
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
 	cursor: col-resize;
@@ -290,7 +290,7 @@ body {
 	margin-top: 0px;
 	width: var(--btn-size);
 	height: var(--btn-size);
-	background-image: url('images/table-column-resize-marker-hover.svg');
+	background-image: url('https://collab-images.kyzon.com/table-column-resize-marker-hover.svg');
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
 	cursor: col-resize;
@@ -301,7 +301,7 @@ body {
 	margin-top: 0px;
 	width: var(--btn-size);
 	height: var(--btn-size);
-	background-image: url('images/table-row-resize-marker.svg');
+	background-image: url('https://collab-images.kyzon.com/table-row-resize-marker.svg');
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
 	cursor: row-resize;
@@ -312,7 +312,7 @@ body {
 	margin-top: 0px;
 	width: var(--btn-size);
 	height: var(--btn-size);
-	background-image: url('images/table-row-resize-marker-hover.svg');
+	background-image: url('https://collab-images.kyzon.com/table-row-resize-marker-hover.svg');
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
 	cursor: row-resize;
@@ -322,7 +322,7 @@ body {
 	margin: 0px;
 	width: var(--btn-size);
 	height: var(--btn-size);
-	background: url('images/table-row-or-column-select-marker.svg') no-repeat center center /12px;
+	background: url('https://collab-images.kyzon.com/table-row-or-column-select-marker.svg') no-repeat center center /12px;
 	cursor: pointer;
 }
 
@@ -345,7 +345,7 @@ body {
 }
 
 .table-select-marker:hover {
-	background: url('images/table-row-or-column-select-marker-selected.svg') no-repeat center center /12px;
+	background: url('https://collab-images.kyzon.com/table-row-or-column-select-marker-selected.svg') no-repeat center center /12px;
 }
 
 .table-select-marker:hover::before {
@@ -357,7 +357,7 @@ body {
 	margin-top: 0px;
 	width: var(--btn-size);
 	height: var(--btn-size);
-	background-image: url('images/table-move-marker.svg');
+	background-image: url('https://collab-images.kyzon.com/table-move-marker.svg');
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
 	cursor: move;
@@ -459,7 +459,7 @@ body {
 	top: 16px;
 	width: var(--btn-size);
 	height: var(--btn-size);
-	background: url('images/baseline-edit-24px.svg') no-repeat center !important;
+	background: url('https://collab-images.kyzon.com/baseline-edit-24px.svg') no-repeat center !important;
 	transform: rotate(0deg);
 	transition: transform 0.5s;
 }
@@ -485,7 +485,7 @@ body {
 	width: 200px;
 	height: 22px;
 	padding-left: 22px;
-	background: url('images/lc_recsearch.svg') var(--color-background-lighter) no-repeat 5px;
+	background: url('https://collab-images.kyzon.com/lc_recsearch.svg') var(--color-background-lighter) no-repeat 5px;
 	background-size: 12px;
 }
 #search-input:focus {
@@ -517,7 +517,7 @@ body {
 	margin-top: 0px;
 	width: var(--btn-size);
 	height: var(--btn-size);
-	background-image: url('images/note.svg');
+	background-image: url('https://collab-images.kyzon.com/note.svg');
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
 	outline: none;
@@ -771,7 +771,7 @@ body {
 	box-sizing: border-box;
 	width: 32px; /* Width of new image */
 	height: 32px; /* Height of new image */
-	background: url('images/user.svg') center 3px no-repeat;
+	background: url('https://collab-images.kyzon.com/user.svg') center 3px no-repeat;
 }
 
 .leaflet-container .leaflet-pane.leaflet-calc-background-pane {
@@ -813,15 +813,15 @@ body {
 }
 
 .cool-redline-accept-button {
-	background: url('images/lc_acceptchanges.svg') no-repeat center !important;
+	background: url('https://collab-images.kyzon.com/lc_acceptchanges.svg') no-repeat center !important;
 }
 
 .cool-redline-reject-button {
-	background: url('images/lc_rejecttrackedchange.svg') no-repeat center !important;
+	background: url('https://collab-images.kyzon.com/lc_rejecttrackedchange.svg') no-repeat center !important;
 }
 
 .cool-annotation-menu, .cool-annotation-menu-redline {
-	background: url('images/submenu.svg') no-repeat center/contain !important;
+	background: url('https://collab-images.kyzon.com/submenu.svg') no-repeat center/contain !important;
 }
 
 .cool-annotation-menu:hover, .cool-annotation-menu-redline:hover, .cool-redline-accept-button:hover, .cool-redline-reject-button:hover {
@@ -1210,7 +1210,7 @@ body {
 }
 
 #datepicker .ui-datepicker-next span {
-	background-image: url('images/lc_nextrecord.svg');
+	background-image: url('https://collab-images.kyzon.com/lc_nextrecord.svg');
 }
 
 #datepicker .ui-icon-circle-triangle-e {
@@ -1218,7 +1218,7 @@ body {
 }
 
 #datepicker .ui-datepicker-prev span {
-	background-image: url('images/lc_prevrecord.svg');
+	background-image: url('https://collab-images.kyzon.com/lc_prevrecord.svg');
 }
 
 #datepicker .ui-icon-circle-triangle-w {

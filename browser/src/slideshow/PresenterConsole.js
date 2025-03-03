@@ -57,7 +57,7 @@ class PresenterConsole {
                                 <main id="main-content">
 								  <div id="toolbar">
 									<button type="button" id="close-slides" data-cooltip="${this.labels.goBack}" disabled>
-										<img src="images/presenterscreen-ArrowBack.svg">
+										<img src="https://collab-images.kyzon.com/img.svg/presenterscreen-ArrowBack.svg">
 									</button>
                                   </div>
                                   <div id="presentation-content">
@@ -66,10 +66,10 @@ class PresenterConsole {
 											<div id="timer"></div>
 											 <div id="timer-controls">
 												<button type="button" id="pause" data-cooltip="${this.labels.pause}" disabled>
-													<img src="images/presenterscreen-ButtonPauseTimerNormal.svg">
+													<img src="https://collab-images.kyzon.com/img.svg/presenterscreen-ButtonPauseTimerNormal.svg">
 												</button>
 												<button type="button" id="restart" data-cooltip="${this.labels.restart}" disabled>
-													<img src="images/presenterscreen-ButtonRestartTimerNormal.svg">
+													<img src="https://collab-images.kyzon.com/img.svg/presenterscreen-ButtonRestartTimerNormal.svg">
 												</button>
 											 </div>
 											<div id="today"></div>
@@ -79,19 +79,19 @@ class PresenterConsole {
 											<div id="slideshow-control-container">
 											<div id="navigation-container">
 												<button type="button" id="prev" data-cooltip="${this.labels.previous}" disabled>
-													<img src="images/presenterscreen-ButtonSlidePreviousSelected.svg">
+													<img src="https://collab-images.kyzon.com/img.svg/presenterscreen-ButtonSlidePreviousSelected.svg">
 												</button>
 												<div id="title-current">${this.labels.currentSlide}</div>
 												<button type="button" id="next" data-cooltip="${this.labels.next}" disabled>
-													<img src="images/presenterscreen-ButtonEffectNextSelected.svg">
+													<img src="https://collab-images.kyzon.com/img.svg/presenterscreen-ButtonEffectNextSelected.svg">
 												</button>
 											</div>
 											<div id="action-buttons-container">
 												<button type="button" id="notes" data-cooltip="${this.labels.notes}" disabled>
-													<img src="images/presenterscreen-ButtonNotesNormal.svg">
+													<img src="https://collab-images.kyzon.com/img.svg/presenterscreen-ButtonNotesNormal.svg">
 												</button>
 												<button type="button" id="slides" data-cooltip="${this.labels.slides}" disabled>
-													<img src="images/presenterscreen-ButtonSlideSorterNormal.svg">
+													<img src="https://collab-images.kyzon.com/img.svg/presenterscreen-ButtonSlideSorterNormal.svg">
 												</button>
 											</div>
 										</div>
@@ -690,7 +690,8 @@ class PresenterConsole {
 
 		// Create the image for the plus button
 		let plusImage = this._proxyPresenter.document.createElement('img');
-		plusImage.src = 'images/presenterscreen-ButtonPlusNormal.svg';
+		plusImage.src =
+			'https://collab-images.kyzon.com/img.svg/presenterscreen-ButtonPlusNormal.svg';
 		plusImage.alt = 'Increase Font'; // Optional: Add alt text for accessibility
 		// Add the image inside the plus button
 		plusButton.appendChild(plusImage);
@@ -701,7 +702,8 @@ class PresenterConsole {
 		minusButton.setAttribute('data-cooltip', this.labels.zoomOut); // Set the tooltip text
 		// Create the image for the minus button
 		let minusImage = this._proxyPresenter.document.createElement('img');
-		minusImage.src = 'images/presenterscreen-ButtonMinusNormal.svg';
+		minusImage.src =
+			'https://collab-images.kyzon.com/img.svg/presenterscreen-ButtonMinusNormal.svg';
 		minusImage.alt = 'Decrease Font'; // Optional: Add alt text for accessibility
 
 		// Add the image inside the minus button
@@ -738,10 +740,12 @@ class PresenterConsole {
 		let pauseBtn = this._proxyPresenter.document.querySelector('#pause');
 		let imgElem = this._proxyPresenter.document.querySelector('#pause>img');
 		if (this._pause) {
-			imgElem.src = 'images/presenterscreen-ButtonResumeTimerNormal.svg';
+			imgElem.src =
+				'https://collab-images.kyzon.com/img.svg/presenterscreen-ButtonResumeTimerNormal.svg';
 			pauseBtn.setAttribute('data-cooltip', this.labels.resume); // Set the tooltip text
 		} else {
-			imgElem.src = 'images/presenterscreen-ButtonPauseTimerNormal.svg';
+			imgElem.src =
+				'https://collab-images.kyzon.com/img.svg/presenterscreen-ButtonPauseTimerNormal.svg';
 			pauseBtn.setAttribute('data-cooltip', this.labels.pause); // Set the tooltip text
 		}
 

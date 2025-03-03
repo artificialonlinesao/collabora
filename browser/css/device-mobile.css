@@ -40,10 +40,10 @@ html[dir='rtl'] .sub-menu-arrow {
 	z-index: 1003;
 }
 .editmode-off {
-	background: url('images/lc_closedocmobile.svg') no-repeat center !important;
+	background: url('https://collab-images.kyzon.com/lc_closedocmobile.svg') no-repeat center !important;
 }
 .editmode-on {
-	background: url('images/lc_listitem-selected.svg') no-repeat center / 28px !important;
+	background: url('https://collab-images.kyzon.com/lc_listitem-selected.svg') no-repeat center / 28px !important;
 }
 
 /* Permisson mode status */
@@ -448,22 +448,22 @@ textarea.cool-annotation-textarea {
 	padding-left: 38px;
 }
 .context-menu-list .context-menu-item:nth-child(1) span {
-	background: url('images/lc_editannotation.svg') no-repeat left center /24px;
+	background: url('https://collab-images.kyzon.com/lc_editannotation.svg') no-repeat left center /24px;
 }
 .context-menu-list .context-menu-item:nth-child(2) span {
-	background: url('images/lc_replycomment.svg') no-repeat left center /24px;
+	background: url('https://collab-images.kyzon.com/lc_replycomment.svg') no-repeat left center /24px;
 }
 .context-menu-list .context-menu-item:nth-child(3) span {
-	background: url('images/lc_deletenote.svg') no-repeat left center /24px;
+	background: url('https://collab-images.kyzon.com/lc_deletenote.svg') no-repeat left center /24px;
 }
 .context-menu-list .context-menu-item:nth-child(4) span {
-	background: url('images/lc_ok.svg') no-repeat left center /24px;
+	background: url('https://collab-images.kyzon.com/lc_ok.svg') no-repeat left center /24px;
 }
 .context-menu-list .context-menu-item:nth-child(5) span {
-	background: url('images/lc_swresredline_deleted.svg') no-repeat left center /24px;
+	background: url('https://collab-images.kyzon.com/lc_swresredline_deleted.svg') no-repeat left center /24px;
 }
 .context-menu-list .context-menu-item:nth-child(6) span {
-	background: url('images/lc_resolvethread.svg') no-repeat left center /24px;
+	background: url('https://collab-images.kyzon.com/lc_resolvethread.svg') no-repeat left center /24px;
 }
 
 /* Related to jsdialogs.css */
@@ -476,7 +476,7 @@ textarea.cool-annotation-textarea {
 }
 #mobile-wizard-content #MacroWarnMedium p:first-child::after {
 	content: ' ';
-	background: url('images/lc_runmacro.svg') no-repeat left -2px / 24px;
+	background: url('https://collab-images.kyzon.com/lc_runmacro.svg') no-repeat left -2px / 24px;
 	width: var(--btn-size);
 	height: var(--btn-size);
 	float: left;
@@ -626,7 +626,7 @@ textarea.cool-annotation-textarea {
 	content: '';
 	width: 18px;
 	height: 18px;
-	background: url('images/lc_lock.svg') no-repeat center -15px /16px white;
+	background: url('https://collab-images.kyzon.com/lc_lock.svg') no-repeat center -15px /16px white;
 	box-shadow: 0 0 1px 0 #0b87e7,0 0 3px 0 #00000075;
 	border-radius: 18px;
 	position: relative;
