@@ -3143,11 +3143,11 @@ msgstr "Seleccione el texto con el formato deseado"
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li.p:756-11
 msgid ""
 "Click on the clone formatting icon <img class=\"icon-size\" alt=\"\" src="
-"\"https://collab-images.kyzon.com/img.svg/lc_formatpaintbrush.svg\" />. The mouse pointer turns to a paint "
+"\"https://collab-images.kyzon.com/lc_formatpaintbrush.svg\" />. The mouse pointer turns to a paint "
 "bucket."
 msgstr ""
 "Haz clic en el icono de formato de clonación <img class=\"icon-size\" alt=\""
-"\" src=\"https://collab-images.kyzon.com/img.svg/lc_formatpaintbrush.svg\" />. El puntero del ratón se "
+"\" src=\"https://collab-images.kyzon.com/lc_formatpaintbrush.svg\" />. El puntero del ratón se "
 "convierte en un bote de pintura."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li.p:757-11
@@ -3278,7 +3278,7 @@ msgid ""
 "/lc_formatpaintbrush.svg\" />. The mouse pointer turns to a paint bucket."
 msgstr ""
 "Haz clic en el icono de formato de clonación <img class=\"icon-size\" src="
-"\"https://collab-images.kyzon.com/img.svg/lc_formatpaintbrush.svg\" />. El puntero del ratón se convierte en "
+"\"https://collab-images.kyzon.com/lc_formatpaintbrush.svg\" />. El puntero del ratón se convierte en "
 "un bote de pintura."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li.p:800-11
@@ -3392,21 +3392,21 @@ msgstr "Ajuste las propiedades del elemento del objeto."
 
 #~ msgid ""
 #~ "Click on the submenu (<img style=\"height:0.6cm;width:0.6cm;\" alt=\"\" src="
-#~ "\"https://collab-images.kyzon.com/img.svg/submenu.svg\">) icon to reply, move and delete comments."
+#~ "\"https://collab-images.kyzon.com/submenu.svg\">) icon to reply, move and delete comments."
 #~ msgstr ""
 #~ "Pulse en el icono de menú (<img style=\"height:0.6cm;width:0.6cm;\" alt=\"\" "
-#~ "src=\"https://collab-images.kyzon.com/img.svg/submenu.svg\">) para responder a, mover o eliminar comentarios."
+#~ "src=\"https://collab-images.kyzon.com/submenu.svg\">) para responder a, mover o eliminar comentarios."
 
 #~ msgid ""
 #~ "Either choose <span class=\"ui\">Slide Show</span> → <span class=\"ui\">Full "
 #~ "Screen Presentation</span> or click on the left-most icon in the bottom of "
 #~ "the slide panel: <img style=\"height:0.6cm;width:0.6cm;\" alt=\"\" src=\""
-#~ "https://collab-images.kyzon.com/img.svg/lc_dia.svg\">"
+#~ "https://collab-images.kyzon.com/lc_dia.svg\">"
 #~ msgstr ""
 #~ "Vaya a <span class=\"ui\">Diapositiva</span> ▸ <span class=\"ui\">"
 #~ "Presentación de pantalla completa</span> o pulse en el icono de la izquierda "
 #~ "debajo del panel de diapositivas: <img style=\"height:0.6cm;width:0.6cm;\" "
-#~ "alt=\"\" src=\"https://collab-images.kyzon.com/img.svg/lc_dia.svg\">"
+#~ "alt=\"\" src=\"https://collab-images.kyzon.com/lc_dia.svg\">"
 
 #, fuzzy
 #~ msgid ""

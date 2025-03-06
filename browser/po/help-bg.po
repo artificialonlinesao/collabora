@@ -3190,11 +3190,11 @@ msgstr "Изберете текста със съществуващия форм
 #, fuzzy
 msgid ""
 "Click on the clone formatting icon <img class=\"icon-size\" alt=\"\" src="
-"\"https://collab-images.kyzon.com/img.svg/lc_formatpaintbrush.svg\" />. The mouse pointer turns to a paint "
+"\"https://collab-images.kyzon.com/lc_formatpaintbrush.svg\" />. The mouse pointer turns to a paint "
 "bucket."
 msgstr ""
 "Щракнете върху иконата за клониране на форматирането <img style=\"height:0."
-"6cm;width:0.6cm;\" alt=\"\" src=\"https://collab-images.kyzon.com/img.svg/lc_formatpaintbrush.svg\">. "
+"6cm;width:0.6cm;\" alt=\"\" src=\"https://collab-images.kyzon.com/lc_formatpaintbrush.svg\">. "
 "Показалецът на мишката ще се превърне в кофа с боя."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li.p:757-11
@@ -3323,7 +3323,7 @@ msgid ""
 "/lc_formatpaintbrush.svg\" />. The mouse pointer turns to a paint bucket."
 msgstr ""
 "Щракнете върху иконата за клониране на форматирането <img style=\"height:0."
-"6cm;width:0.6cm;\" alt=\"\" src=\"https://collab-images.kyzon.com/img.svg/lc_formatpaintbrush.svg\">. "
+"6cm;width:0.6cm;\" alt=\"\" src=\"https://collab-images.kyzon.com/lc_formatpaintbrush.svg\">. "
 "Показалецът на мишката ще се превърне в кофа с боя."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li.p:800-11
@@ -3420,9 +3420,9 @@ msgstr "Задайте свойствата на съответния елеме
 #~ "<span class=\"def\">Лентата с менюта:</span> намира се отгоре и съдържа "
 #~ "много настройки, команди за печатане, редактиране, разглеждане и други. "
 #~ "Можете да я скриете, като щракнете върху иконата <img style=\"height:0."
-#~ "6cm;width:0.6cm;\" src=\"https://collab-images.kyzon.com/img.svg/fold.svg\"> най-вдясно. За да я покажете "
+#~ "6cm;width:0.6cm;\" src=\"https://collab-images.kyzon.com/fold.svg\"> най-вдясно. За да я покажете "
 #~ "отново, щракнете върху иконата <img style=\"height:0.6cm;width:0.6cm;\" src="
-#~ "\"https://collab-images.kyzon.com/img.svg/unfold.svg\">."
+#~ "\"https://collab-images.kyzon.com/unfold.svg\">."
 
 #~ msgid "General"
 #~ msgstr "Общи"
@@ -3432,22 +3432,22 @@ msgstr "Задайте свойствата на съответния елеме
 
 #~ msgid ""
 #~ "Click on the submenu (<img style=\"height:0.6cm;width:0.6cm;\" alt=\"\" src="
-#~ "\"https://collab-images.kyzon.com/img.svg/submenu.svg\">) icon to reply, move and delete comments."
+#~ "\"https://collab-images.kyzon.com/submenu.svg\">) icon to reply, move and delete comments."
 #~ msgstr ""
 #~ "Щракнете върху иконата на подменюто (<img style=\"height:0.6cm;width:0.6cm;\""
-#~ " alt=\"\" src=\"https://collab-images.kyzon.com/img.svg/submenu.svg\">), за да отговаряте на коментари, да ги "
+#~ " alt=\"\" src=\"https://collab-images.kyzon.com/submenu.svg\">), за да отговаряте на коментари, да ги "
 #~ "местите или изтривате."
 
 #~ msgid ""
 #~ "Either choose <span class=\"ui\">Slide Show</span> → <span class=\"ui\">Full "
 #~ "Screen Presentation</span> or click on the left-most icon in the bottom of "
 #~ "the slide panel: <img style=\"height:0.6cm;width:0.6cm;\" alt=\"\" src=\""
-#~ "https://collab-images.kyzon.com/img.svg/lc_dia.svg\">"
+#~ "https://collab-images.kyzon.com/lc_dia.svg\">"
 #~ msgstr ""
 #~ "Изберете <span class=\"ui\">Прожекция</span> → <span class=\"ui\">"
 #~ "Презентация на цял екран</span> или щракнете върху най-лявата икона в долния "
 #~ "край на панела с кадри: <img style=\"height:0.6cm;width:0.6cm;\" alt=\"\" "
-#~ "src=\"https://collab-images.kyzon.com/img.svg/lc_dia.svg\">."
+#~ "src=\"https://collab-images.kyzon.com/lc_dia.svg\">."
 
 #, fuzzy
 #~ msgid ""
