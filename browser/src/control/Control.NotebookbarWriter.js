@@ -849,39 +849,45 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 				'vertical': 'true'
 			},
 			{
-				'id': 'stylesview',
-				'type': 'iconview',
-				'entries': [],
-				'vertical': 'false'
-			},
-			{
-				'id': 'stylesview-btn',
 				'type': 'container',
 				'children': [
 					{
-						'id': 'scroll-up',
-						'type': 'customtoolitem',
-						'text': _('Scroll up'),
-						'command': 'scrollpreviewup',
-						'icon': 'lc_searchprev.svg',
+						'id': 'stylesview',
+						'type': 'iconview',
+						'entries': [],
+						'vertical': 'false'
 					},
 					{
-						'id': 'scroll-down',
-						'type': 'customtoolitem',
-						'text': _('Scroll down'),
-						'command': 'scrollpreviewdown',
-						'icon': 'lc_searchnext.svg',
-					},
-					{
-						'id': 'format-style-list-dialog',
-						'type': 'toolitem',
-						'text': _('Style list'),
-						'command': '.uno:SidebarDeck.StyleListDeck',
-						'icon': 'lc_morebutton.svg',
-						'accessibility': { focusBack: true, combination: 'SD', de: null }
+						'id': 'stylesview-btn',
+						'type': 'container',
+						'children': [
+							{
+								'id': 'scroll-up',
+								'type': 'customtoolitem',
+								'text': _('Scroll up'),
+								'command': 'scrollpreviewup',
+								'icon': 'lc_searchprev.svg',
+							},
+							{
+								'id': 'scroll-down',
+								'type': 'customtoolitem',
+								'text': _('Scroll down'),
+								'command': 'scrollpreviewdown',
+								'icon': 'lc_searchnext.svg',
+							},
+							// // {
+							// // 	'id': 'format-style-list-dialog',
+							// // 	'type': 'toolitem',
+							// // 	'text': _('Style list'),
+							// // 	'command': '.uno:SidebarDeck.StyleListDeck',
+							// // 	'icon': 'lc_morebutton.svg',
+							// // 	'accessibility': { focusBack: true, combination: 'SD', de: null }
+							// // },
+						],
+						'vertical': 'true'
 					},
 				],
-				'vertical': 'true'
+				'vertical': 'false',
 			},
 			{ type: 'separator', id: 'home-stylesview-break', orientation: 'vertical' },
 			{
