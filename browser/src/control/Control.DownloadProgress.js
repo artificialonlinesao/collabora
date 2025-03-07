@@ -11,7 +11,9 @@
 /*
  * L.Control.DownloadProgress.
  */
+
 /* global _ $ JSDialog app */
+
 L.Control.DownloadProgress = L.Control.extend({
 	options: {
 		snackbarTimeout: 20000,
