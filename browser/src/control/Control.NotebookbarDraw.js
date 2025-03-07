@@ -13,12 +13,12 @@
  * L.Control.NotebookbarDraw - definition of notebookbar content in Draw
  */
 
-/* global _ _UNO */
+/* global _ _UNO app */
 L.Control.NotebookbarDraw = L.Control.NotebookbarImpress.extend({
 
 	getShortcutsBarData: function() {
 		return [
-			!this._map['wopi'].HideSaveOption ?
+			!this.map['wopi'].HideSaveOption ?
 				{
 					'id': 'shortcutstoolbox',
 					'type': 'toolbox',
@@ -28,7 +28,8 @@ L.Control.NotebookbarDraw = L.Control.NotebookbarImpress.extend({
 							'type': 'toolitem',
 							'text': _('Save'),
 							'command': '.uno:Save',
-							'accessKey': '1'
+							'accessKey': '1',
+							'isCustomTooltip': true
 						}
 					]
 				} : {}
@@ -41,13 +42,13 @@ L.Control.NotebookbarDraw = L.Control.NotebookbarImpress.extend({
 	// // 			'type': 'toolitem',
 	// // 			'text': _UNO('.uno:Sidebar'),
 	// // 			'command': '.uno:SidebarDeck.PropertyDeck',
-	// // 			'accessibility': { focusBack: true, combination: 'SB', de: null }
+	// // 			'accessibility': { focusBack: true, combination: 'ZB', de: null }
 	// // 		},
 	// // 		{
 	// // 			'type': 'toolitem',
 	// // 			'text': _UNO('.uno:Navigator'),
 	// // 			'command': '.uno:Navigator',
-	// // 			'accessibility': { focusBack: true, combination: 'N', de: null }
+	// // 			'accessibility': { focusBack: true, combination: 'ZN', de: null }
 	// // 		},
 	// // 		{
 	// // 			'type': 'toolitem',
@@ -123,26 +124,29 @@ L.Control.NotebookbarDraw = L.Control.NotebookbarImpress.extend({
 		];
 	},
 
+	getTabsJSON: function () {
+		return [
+			this.getFileTab(),
+			this.getHomeTab(),
+			this.getInsertTab(),
+			this.getLayoutTab(),
+			this.getReviewTab(),
+			this.getFormatTab(),
+			this.getTableTab(),
+			this.getDrawTab(),
+			this.getViewTab(),
+			this.getHelpTab()
+		];
+	},
+
 	getFullJSON: function(selectedId) {
-		return this.getNotebookbar(
-			[
-				this.getFileTab(),
-				this.getHomeTab(),
-				this.getInsertTab(),
-				this.getLayoutTab(),
-				this.getReviewTab(),
-				this.getFormatTab(),
-				this.getTableTab(),
-				this.getDrawTab(),
-				this.getViewTab(),
-				this.getHelpTab()
-			], selectedId);
+		return this.getNotebookbar(this.getTabsJSON(), selectedId);
 	},
 
 	getFileTab: function() {
 		var content = [];
 
-		if (!this._map['wopi'].HideSaveOption) {
+		if (!this.map['wopi'].HideSaveOption) {
 			content.push(
 				{
 					'type': 'toolbox',
@@ -158,7 +162,7 @@ L.Control.NotebookbarDraw = L.Control.NotebookbarImpress.extend({
 				});
 			}
 
-		if (!this._map['wopi'].UserCanNotWriteRelative) {
+		if (!this.map['wopi'].UserCanNotWriteRelative) {
 			content.push(
 				{
 					'id': 'file-saveas',
@@ -170,7 +174,7 @@ L.Control.NotebookbarDraw = L.Control.NotebookbarImpress.extend({
 			);
 		}
 
-		if (!this._map['wopi'].UserCanNotWriteRelative) {
+		if (!this.map['wopi'].UserCanNotWriteRelative) {
 			content.push(
 				{
 					'id': 'exportas:ExportAsMenu',
@@ -188,7 +192,7 @@ L.Control.NotebookbarDraw = L.Control.NotebookbarImpress.extend({
 				'id': 'file-shareas-rev-history',
 				'type': 'container',
 				'children': [
-					(this._map['wopi'].EnableShare) ?
+					(this.map['wopi'].EnableShare) ?
 						{
 							'id': 'ShareAs',
 							'class': 'unoShareAs',
@@ -214,7 +218,7 @@ L.Control.NotebookbarDraw = L.Control.NotebookbarImpress.extend({
 		);
 
 		// Hide button as this does not work in Chromium
-		// // if (!this._map['wopi'].HidePrintOption) {
+		// // if (!this.map['wopi'].HidePrintOption) {
 		// // 	content.push(
 		// // 		{
 		// // 			'id': 'print',
@@ -226,7 +230,7 @@ L.Control.NotebookbarDraw = L.Control.NotebookbarImpress.extend({
 		// // 	);
 		// // }
 
-		if (!this._map['wopi'].HideExportOption) {
+		if (!this.map['wopi'].HideExportOption) {
 			content.push({
 				'id': 'downloadas:DownloadAsMenu',
 				'command': 'downloadas',
@@ -265,7 +269,7 @@ L.Control.NotebookbarDraw = L.Control.NotebookbarImpress.extend({
 			}
 		);
 
-		if (!this._map['wopi'].HideRepairOption) {
+		if (!this.map['wopi'].HideRepairOption) {
 			content.push(
 				{
 				'type': 'container',
@@ -311,21 +315,24 @@ L.Control.NotebookbarDraw = L.Control.NotebookbarImpress.extend({
 			);
 		}
 
-		// Hide button as we have not implemented renaming files in our backend
+    // Hide button as we have not implemented renaming files in our backend
 		// so it will cause the document to bug if the user does this
-		// // content.push(
-		// // 	{
-		// // 		'type': 'container',
-		// // 		'children': [
-		// // 			{
-		// // 				'id': 'renamedocument',
-		// // 				'class': 'unoRenameDocument',
-		// // 				'type': 'bigcustomtoolitem',
-		// // 				'text': _('Rename'),
-		// // 			}
-		// // 		]
-		// // 	}
-		// // );
+		// // if (this.map['wopi']._supportsRename() && this.map['wopi'].UserCanRename) {
+		// // 	content.push(
+		// // 		{
+		// // 			'type': 'container',
+		// // 			'children': [
+		// // 				{
+		// // 					'id': 'renamedocument',
+		// // 					'class': 'unoRenameDocument',
+		// // 					'type': 'bigcustomtoolitem',
+		// // 					'text': _('Rename'),
+		// // 				}
+		// // 			]
+		// // 		}
+		// // 	);
+
+		// // }
 
 		return this.getTabPage('File', content);
 	},
@@ -653,7 +660,7 @@ L.Control.NotebookbarDraw = L.Control.NotebookbarImpress.extend({
 										'text': _UNO('.uno:FontworkGalleryFloater'),
 										'command': '.uno:FontworkGalleryFloater',
 										// Fontwork export/import not supported in other formats.
-										'visible': L.LOUtil.isFileODF(this._map) ? 'true' : 'false',
+										'visible': app.LOUtil.isFileODF(this.map) ? 'true' : 'false',
 										'accessibility': { focusBack: true, combination: 'FW', de: null }
 									},
 									{
@@ -1002,7 +1009,7 @@ L.Control.NotebookbarDraw = L.Control.NotebookbarImpress.extend({
 								{
 									'id': 'home-search-dialog',
 									'type': 'toolitem',
-									'text': _UNO('.uno:SearchDialog'),
+									'text': _('Replace'),
 									'command': '.uno:SearchDialog',
 									'accessibility': { focusBack: false, 	combination: 'FD',	de: null }
 								}
@@ -1246,7 +1253,7 @@ L.Control.NotebookbarDraw = L.Control.NotebookbarImpress.extend({
 								'id': 'insert-insert-table:InsertTableMenu',
 								'type': 'menubutton',
 								'noLabel': true,
-								'text': _UNO('.uno:InsertTable', 'presentation'),
+								'text': _('Table'),
 								'command': '.uno:InsertTable',
 								'accessibility': { focusBack: true, combination: 'IT', de: null }
 							}
@@ -1275,12 +1282,20 @@ L.Control.NotebookbarDraw = L.Control.NotebookbarImpress.extend({
 				'command': 'hyperlinkdialog',
 				'accessibility': { focusBack: true, combination: 'HD', de: null }
 			},
-			(this._map['wopi'].EnableRemoteLinkPicker) ? {
+			(this.map['wopi'].EnableRemoteLinkPicker) ? {
 				'id': 'insert-remote-link',
 				'class': 'unoremotelink',
 				'type': 'bigcustomtoolitem',
 				'text': _('Smart Picker'),
 				'command': 'remotelink',
+				'accessibility': { focusBack: true, combination: 'RL', de: null }
+			} : {},
+			(this.map['wopi'].EnableRemoteAIContent) ? {
+				'id': 'insert-insert-remote-ai-content',
+				'class': 'unoremoteaicontent',
+				'type': 'bigcustomtoolitem',
+				'text': _('Assistant'),
+				'command': 'remoteaicontent',
 				'accessibility': { focusBack: true, combination: 'RL', de: null }
 			} : {},
 			{
@@ -1410,7 +1425,7 @@ L.Control.NotebookbarDraw = L.Control.NotebookbarImpress.extend({
 								'text': _UNO('.uno:FontworkGalleryFloater'),
 								'command': '.uno:FontworkGalleryFloater',
 								// Fontwork export/import not supported in other formats.
-								'visible': L.LOUtil.isFileODF(this._map) ? 'true' : 'false',
+								'visible': app.LOUtil.isFileODF(this.map) ? 'true' : 'false',
 								'accessibility': { focusBack: true, combination: 'FG', de: null }
 							}
 						]

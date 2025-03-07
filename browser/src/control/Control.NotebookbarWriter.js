@@ -112,37 +112,38 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 		];
 	},
 
-	getFullJSON: function(selectedId) {
-		var t = this.getNotebookbar(
-			[
-				this.getFileTab(),
-				this.getHomeTab(),
-				this.getInsertTab(),
-				this.getLayoutTab(),
-				this.getReferencesTab(),
-				this.getReviewTab(),
-				this.getFormatTab(),
-				this.getFormTab(),
-				this.getViewTab(),
-				this.getHelpTab(),
-				this.getTableTab(),
-				this.getDrawTab(),
-			 ], selectedId);
+	getTabsJSON: function () {
+		return [
+			this.getFileTab(),
+      this.getHomeTab(),
+      this.getInsertTab(),
+      this.getLayoutTab(),
+      this.getReferencesTab(),
+      this.getReviewTab(),
+      this.getFormatTab(),
+      this.getFormTab(),
+      this.getViewTab(),
+      this.getHelpTab(),
+      this.getTableTab(),
+      this.getDrawTab(),
+		]
+	},
 
-		return t;
+	getFullJSON: function (selectedId) {
+		return this.getNotebookbar(this.getTabsJSON(), selectedId);
 	},
 
 	getFileTab: function() {
 		var hasRevisionHistory = L.Params.revHistoryEnabled;
 		// Hide print button as it does not work in Chromium
-		// // var hasPrint = !this._map['wopi'].HidePrintOption;
-		var hasRepair = !this._map['wopi'].HideRepairOption;
-		var hasSaveAs = !this._map['wopi'].UserCanNotWriteRelative;
-		var hasShare = this._map['wopi'].EnableShare;
-		var hideDownload = this._map['wopi'].HideExportOption;
+		// // var hasPrint = !this.map['wopi'].HidePrintOption;
+		var hasRepair = !this.map['wopi'].HideRepairOption;
+		var hasSaveAs = !this.map['wopi'].UserCanNotWriteRelative;
+		var hasShare = this.map['wopi'].EnableShare;
+		var hideDownload = this.map['wopi'].HideExportOption;
 		var hasGroupedSaveAs = window.prefs.get('saveAsMode') === 'group';
 		var hasRunMacro = window.enableMacrosExecution;
-		var hasSave = !this._map['wopi'].HideSaveOption;
+		var hasSave = !this.map['wopi'].HideSaveOption;
 		var content = [];
 
 
@@ -345,22 +346,24 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 			});
 		}
 
-		// Hide button as we have not implemented renaming files in our backend
+    // Hide button as we have not implemented renaming files in our backend
 		// so it will cause the document to bug if the user does this
-		// // repairGroup.children.push({
-		// // 	'type': 'container',
-		// // 	'children': [
-		// // 		{
-		// // 			'id': 'renamedocument',
-		// // 			'class': 'unoRenameDocument',
-		// // 			'type': 'bigcustomtoolitem',
-		// // 			'text': _('Rename'),
-		// // 			'accessibility': { focusBack: true,	combination: 'RN' }
-		// // 		}
-		// // 	]
-		// // });
+		// // if (this.map['wopi']._supportsRename() && this.map['wopi'].UserCanRename) {
+		// // 	content.push({
+		// // 		'type': 'container',
+		// // 		'children': [
+		// // 			{
+		// // 				'id': 'renamedocument',
+		// // 				'class': 'unoRenameDocument',
+		// // 				'type': 'bigcustomtoolitem',
+		// // 				'text': _('Rename'),
+		// // 				'accessibility': { focusBack: true,	combination: 'RN' }
+		// // 			}
+		// // 		]
+		// // 	});
+		// // }
 
-		content.push(repairGroup);
+    content.push(repairGroup);
 
 		if (window.wasmEnabled) {
 			content.push({
@@ -382,11 +385,11 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 
 	getHelpTab: function() {
 		// // var hasLatestUpdates = window.enableWelcomeMessage;
-		// // var hasFeedback = this._map.feedback;
+		// // var hasFeedback = this.map.feedback;
 		var hasAccessibilitySupport = window.enableAccessibility;
-		// // var hasAccessibilityCheck = this._map.getDocType() === 'text';
+		// // var hasAccessibilityCheck = this.map.getDocType() === 'text';
 		// // var hasAbout = L.DomUtil.get('about-dialog') !== null;
-		var hasServerAudit = !!this._map.serverAuditDialog;
+		var hasServerAudit = !!this.map.serverAuditDialog;
 
 		var content = [
 			{
@@ -531,6 +534,7 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 				],
 				'vertical': 'true'
 			},
+			{ type: 'separator', id: 'home-undoredo-break', orientation: 'vertical' },
 			{
 				type: 'container',
 				children: [
@@ -588,6 +592,7 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 				],
 				vertical: false,
 			},
+			{ type: 'separator', id: 'home-resertattributes-break', orientation: 'vertical' },
 			{
 				'type': 'container',
 				'children': [
@@ -848,29 +853,37 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 				'type': 'iconview',
 				'entries': [],
 				'vertical': 'false'
-				// // 'entries': [
-				// // 	{text: 'Default Paragraph Style', image: 'todo data:image/png...', selected: true, row: 0},
-				// // 	{text: 'Body Text', image: 'todo data:image/png...', row: 1},
-				// // 	{text: 'Heading 1', image: 'todo data:image/png...', row: 2},
-				// // 	{text: 'Heading 2', image: 'todo data:image/png...', row: 3},
-				// // 	{text: 'Heading 3', image: 'todo data:image/png...', row: 4},
-				// // 	{text: 'Heading 4', image: 'todo data:image/png...', row: 5},
-				// // 	{text: 'Title', image: 'todo data:image/png...', row: 6},
-				// // 	{text: 'Subtitle', image: 'todo data:image/png...', row: 7},
-				// // 	{text: 'Block Quotation', image: 'todo data:image/png...', row: 8},
-				// // 	{text: 'Preformatted Text', image: 'todo data:image/png...', row: 9}
-				// // ],
-				// // 'vertical': 'false',
-				// // children: [
-				// // 	{id: '', type: 'scrollbarbox', text: '', enabled: true, visible: false},
-				// // 	{id: '', type: 'scrollbar', text: '', enabled: true, visible: false},
-				// // 	{id: '', type: 'scrollbar', text: '', enabled: true}
-				// // ],
-				// // enabled: true,
-				// // singleclickactivate: false,
-				// // text: '',
-				// // textWithIconEnabled: true,
 			},
+			{
+				'id': 'stylesview-btn',
+				'type': 'container',
+				'children': [
+					{
+						'id': 'scroll-up',
+						'type': 'customtoolitem',
+						'text': _('Scroll up'),
+						'command': 'scrollpreviewup',
+						'icon': 'lc_searchprev.svg',
+					},
+					{
+						'id': 'scroll-down',
+						'type': 'customtoolitem',
+						'text': _('Scroll down'),
+						'command': 'scrollpreviewdown',
+						'icon': 'lc_searchnext.svg',
+					},
+					{
+						'id': 'format-style-list-dialog',
+						'type': 'toolitem',
+						'text': _('Style list'),
+						'command': '.uno:SidebarDeck.StyleListDeck',
+						'icon': 'lc_morebutton.svg',
+						'accessibility': { focusBack: true, combination: 'SD', de: null }
+					},
+				],
+				'vertical': 'true'
+			},
+			{ type: 'separator', id: 'home-stylesview-break', orientation: 'vertical' },
 			{
 				'type': 'container',
 				'children': [
@@ -918,6 +931,7 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 				],
 				'vertical': 'true'
 			},
+			{ type: 'separator', id: 'home-charmapcontrol-break', orientation: 'vertical' },
 			{
 				'type': 'container',
 				'children': [
@@ -939,7 +953,7 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 								{
 									'id': 'home-search-dialog',
 									'type': 'toolitem',
-									'text': _UNO('.uno:SearchDialog'),
+									'text': _('Replace'),
 									'command': '.uno:SearchDialog',
 									'accessibility': { focusBack: false, 	combination: 'FD',	de: 'US' }
 								}
@@ -979,13 +993,13 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 						'command': '.uno:ParagraphDialog',
 						'accessibility': { focusBack: false, combination: 'B', de: null }
 					},
-					// // app.isExperimentalMode() ? {
+					// // {
 					// // 	'id': 'format-style-dialog',
 					// // 	'type': 'bigtoolitem',
 					// // 	'text': _('Style list'),
 					// // 	'command': '.uno:SidebarDeck.StyleListDeck',
 					// // 	'accessibility': { focusBack: false, combination: 'SD', de: null }
-					// // } : {},
+					// // },
 					{
 						'id': 'format-FormatBulletsMenu',
 						'type': 'menubutton',
@@ -1106,7 +1120,7 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 	},
 
 	getInsertTab: function() {
-		var isODF = L.LOUtil.isFileODF(this._map);
+		var isODF = app.LOUtil.isFileODF(this.map);
 		var content = [
 			{
 				'id': 'insert-insert-page-break',
@@ -1153,7 +1167,7 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 						'command': '.uno:InsertGraphic',
 						'accessibility': { focusBack: true,	combination: 'P',	de:	'BI' }
 					},
-					(this._map['wopi'].EnableRemoteLinkPicker) ? {
+					(this.map['wopi'].EnableRemoteLinkPicker) ? {
 						'type': 'container',
 						'children': [
 							{
@@ -1192,6 +1206,14 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 						'command': 'hyperlinkdialog',
 						'accessibility': { focusBack: false,	combination: 'ZL',	de:	'8' }
 					},
+          (this.map['wopi'].EnableRemoteAIContent) ? {
+            'id': 'insert-insert-remote-ai-content',
+            'class': 'unoremoteaicontent',
+            'type': 'bigcustomtoolitem',
+            'text': _('Assistant'),
+            'command': 'remoteaicontent',
+            'accessibility': { focusBack: true, combination: 'RL', de: null }
+          } : {},
 					{
 						'id': 'insert-insert-char',
 						'class': 'unoCharmapControl',
@@ -1207,7 +1229,7 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 					// // {
 					// // 	'id': 'insert-insert-objects-star-math',
 					// // 	'type': 'bigtoolitem',
-					// // 	'text': _UNO('.uno:InsertObjectStarMath', 'text'),
+					// // 	'text': _('Formula'),
 					// // 	'command': '.uno:InsertObjectStarMath',
 					// // 	'accessibility': { focusBack: true,	combination: 'ET',	de:	null }
 					// // }
@@ -2050,7 +2072,7 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 			// // 	'vertical': 'true'
 			// // }
 		];
-		if (this._map.zotero) {
+		if (this.map.zotero) {
 			content.push(
 				{
 					type: 'container',
@@ -2060,7 +2082,7 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 							'class': 'unozoteroaddeditbibliography',
 							'type': 'bigcustomtoolitem',
 							'text': _('Add Bibliography'),
-							'command': 'zoteroeditbibliography'
+							'command': 'zoteroaddeditbibliography'
 						},
 						{
 							'type': 'container',
@@ -2772,7 +2794,7 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 	},
 
 	getDrawTab: function() {
-		var isODF = L.LOUtil.isFileODF(this._map);
+		var isODF = app.LOUtil.isFileODF(this.map);
 		var content = [
 			{
 				'type': 'bigtoolitem',
@@ -3070,6 +3092,12 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 			// // 	],
 			// // 	vertical: false,
 			// // },
+			{
+				'type': 'bigtoolitem',
+				'text': _UNO('.uno:Crop'),
+				'command': '.uno:Crop',
+				'context': 'Graphic'
+			},
 		];
 
 		return this.getTabPage(drawTabName, content);
@@ -3114,7 +3142,7 @@ L.Control.NotebookbarWriter = L.Control.Notebookbar.extend({
 				return null;
 			}
 
-			var uiManager = that._map.uiManager;
+			var uiManager = that.map.uiManager;
 			if (!uiManager.isButtonVisible(c.id)) {
 				return null;
 			}

@@ -182,14 +182,17 @@ function makeZoomItemsVisible() {
 	cy.log('>> makeZoomItemsVisible - start');
 
 	const scrollRight = () => {
-		cy.cGet('#toolbar-down .ui-scroll-right').then($scrollRightButton => {
+		cy.cGet('#toolbar-down .ui-scroll-right:visible').then($scrollRightButton => {
 			if ($scrollRightButton.is(':visible')) {
 				// Wrap .ui-scroll-right so we can continue executing commands
 				cy.wrap($scrollRightButton).click();
 				// Wait the same ms as in Util.ScrollableBar.ts timeout
 				cy.wait(350);
 				// Scroll again if $scrollRightButton is visible
-				scrollRight();
+				cy.cGet('#toolbar-down .ui-scroll-right').then($scrollRightButtonInner => {
+					if ($scrollRightButtonInner.is(':visible'))
+						scrollRight();
+				});
 			}
 		});
 	};
@@ -246,11 +249,12 @@ function zoomOut() {
 // Parameters:
 // zoomLevel - a number specifing the zoom level  (e.g. '100' means 100%).
 //             See also the status bar's zoom level list for possible values.
-function selectZoomLevel(zoomLevel) {
+function selectZoomLevel(zoomLevel, makeZoomVisible = true) {
 	cy.log('>> selectZoomLevel - start');
 
 	// Force because sometimes the icons are scrolled off the screen to the right
-	makeZoomItemsVisible();
+	if (makeZoomVisible)
+		makeZoomItemsVisible();
 	cy.cGet('#toolbar-down #zoom .arrowbackground').click({force: true});
 	cy.cGet('#zoom-dropdown').contains('.ui-combobox-entry', zoomLevel).click({force: true});
 	shouldHaveZoomLevel(zoomLevel);
@@ -272,7 +276,7 @@ function resetZoomLevel() {
 function insertImage(docType) {
 	cy.log('>> insertImage - start');
 
-	selectZoomLevel('50');
+	selectZoomLevel('50', false);
 
 	cy.cGet('#toolbar-up .ui-scroll-right').click();
 
@@ -298,7 +302,7 @@ function insertImage(docType) {
 function insertVideo() {
 	cy.log('>> insertVideo - start');
 
-	selectZoomLevel("50");
+	selectZoomLevel('50', false);
 
 	cy.cGet('#toolbar-up .ui-scroll-right').click();
 
@@ -324,22 +328,6 @@ function deleteImage() {
 	cy.cGet('#document-container svg g').should('not.exist');
 
 	cy.log('<< deleteImage - end');
-}
-
-function assertImageSize(expectedWidth, expectedHeight) {
-	cy.log('>> assertImageSize - start');
-
-	cy.cGet('#canvas-container > svg')
-		.then(function(element) {
-			expect(element).to.have.length(1);
-			const actualWidth = parseInt(element[0].style.width.replace('px', ''));
-			const actualHeight = parseInt(element[0].style.height.replace('px', ''));
-
-			expect(actualWidth).to.be.closeTo(expectedWidth, 10);
-			expect(actualHeight).to.be.closeTo(expectedHeight, 10);
-		});
-
-	cy.log('<< assertImageSize - end');
 }
 
 function insertComment(text = 'some text0', save = true) {
@@ -551,6 +539,15 @@ function scrollWriterDocumentToTop() {
 	assertScrollbarPosition('vertical', 0, 10);
 }
 
+function scrollViewDown() {
+	cy.getFrameWindow()
+		.its('L')
+		.then(function(L) {
+			L.Map.THIS.panBy({x: 0, y: 4000});
+			updateFollowingUsers();
+		});
+}
+
 function updateFollowingUsers() {
 	cy.getFrameWindow()
 		.its('app')
@@ -596,12 +593,12 @@ module.exports.insertComment = insertComment;
 module.exports.actionOnSelector = actionOnSelector;
 module.exports.assertScrollbarPosition = assertScrollbarPosition;
 module.exports.pressKey = pressKey;
-module.exports.assertImageSize = assertImageSize;
 module.exports.openReadOnlyFile = openReadOnlyFile;
 module.exports.switchUIToNotebookbar = switchUIToNotebookbar;
 module.exports.switchUIToCompact = switchUIToCompact;
 module.exports.checkAccessibilityEnabledToBe = checkAccessibilityEnabledToBe;
 module.exports.setAccessibilityState = setAccessibilityState;
 module.exports.scrollWriterDocumentToTop = scrollWriterDocumentToTop;
+module.exports.scrollViewDown = scrollViewDown;
 module.exports.updateFollowingUsers = updateFollowingUsers;
 module.exports.assertVisiblePage = assertVisiblePage;

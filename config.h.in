@@ -15,6 +15,12 @@
 /* Options passed to configure script */
 #undef COOLWSD_BUILDCONFIG
 
+/* Default location of coolwsd log file */
+#undef COOLWSD_LOGFILE
+
+/* Default location of coolwsd UI command log file */
+#undef COOLWSD_LOGFILE_UICMD
+
 /* Destination for Trace Event output */
 #undef COOLWSD_TRACEEVENTFILE
 
@@ -51,9 +57,6 @@
 
 /* User feedback URL. */
 #undef FEEDBACK_URL
-
-/* Whether OpenSSL has PKCS5_PBKDF2_HMAC() */
-#undef HAVE_PKCS5_PBKDF2_HMAC
 
 /* Define to 1 if you have the `ppoll' function. */
 #define HAVE_PPOLL 0

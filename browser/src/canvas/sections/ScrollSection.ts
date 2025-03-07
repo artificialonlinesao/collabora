@@ -191,7 +191,7 @@ export class ScrollSection extends CanvasSectionObject {
 				&& (<any>window).mode.isDesktop()
 				&& this.containerObject.isDraggingSomething()
 				&& L.Map.THIS._docLayer._docType === 'spreadsheet') {
-					var temp = this.containerObject.positionOnMouseDown;
+					var temp = [e.pos.x, e.pos.y];
 					var tempPos = [(this.isRTL() ? this.map._size.x - temp[0] : temp[0]) * app.dpiScale, temp[1] * app.dpiScale];
 					var docTopLeft = app.sectionContainer.getDocumentTopLeft();
 					tempPos = [tempPos[0] + docTopLeft[0], tempPos[1] + docTopLeft[1]];
@@ -221,7 +221,7 @@ export class ScrollSection extends CanvasSectionObject {
 			vx = -50;
 		}
 
-		this.onScrollVelocity({vx: vx, vy: vy});
+		this.onScrollVelocity({ vx: vx, vy: vy, pos: e.pos });
 	}
 
 	private getVerticalScrollLength (): number {
@@ -417,8 +417,14 @@ export class ScrollSection extends CanvasSectionObject {
 
 	private drawVerticalScrollBar (): void {
 		var scrollProps: any = this.getVerticalScrollProperties();
+		const isDarkBackground = this.map.uiManager.isBackgroundDark();
+		const docType = this.sectionProperties.docLayer._docType;
 
 		var startX = this.isRTL() ? this.sectionProperties.edgeOffset : this.size[0] - this.sectionProperties.scrollBarThickness - this.sectionProperties.edgeOffset;
+
+		if (isDarkBackground && (docType === 'text' || docType === 'drawing')) {
+			this.sectionProperties.scrollBarRailwayColor = 'transparent';
+		}
 
 		if (this.sectionProperties.drawScrollBarRailway) {
 			this.context.globalAlpha = this.sectionProperties.scrollBarRailwayAlpha;
@@ -1141,6 +1147,8 @@ export class ScrollSection extends CanvasSectionObject {
 
 	public onMouseWheel (point: Array<number>, delta: Array<number>, e: MouseEvent): void {
 		if (e.ctrlKey) return;
+
+		this.map.fire('closepopups'); // close all popups when scrolling
 
 		let hscroll = 0, vscroll = 0;
 		if (Math.abs(delta[1]) > Math.abs(delta[0])) {

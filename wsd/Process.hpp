@@ -198,22 +198,26 @@ public:
     /// @param socket is the underlying Socket to the child.
     template <typename T>
     ChildProcess(const pid_t pid, const std::string& jailId,
+                 const std::string& configId,
                  const std::shared_ptr<StreamSocket>& socket, const T& request)
         : WSProcess("ChildProcess", pid, socket,
                     std::make_shared<WebSocketHandler>(socket, request))
         , _jailId(jailId)
+        , _configId(configId)
         , _smapsFD(-1)
     {
-        int urpFromKitFD = socket->getIncomingFD(SharedFDType::URPFromKit);
-        int urpToKitFD = socket->getIncomingFD(SharedFDType::URPToKit);
+        const int urpFromKitFD = socket->getIncomingFD(SharedFDType::URPFromKit);
+        const int urpToKitFD = socket->getIncomingFD(SharedFDType::URPToKit);
         if (urpFromKitFD != -1 && urpToKitFD != -1)
         {
             std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
             _urpFromKit = StreamSocket::create<StreamSocket>(
-                std::string(), urpFromKitFD, Socket::Type::Unix, false, HostType::Other,
-                std::make_shared<UrpHandler>(this), StreamSocket::ReadType::NormalRead, now);
+                std::string(), urpFromKitFD, Socket::Type::Unix, /*isClient=*/false,
+                HostType::Other, std::make_shared<UrpHandler>(this),
+                StreamSocket::ReadType::NormalRead, now);
+
             _urpToKit = StreamSocket::create<StreamSocket>(
-                std::string(), urpToKitFD, Socket::Type::Unix, false, HostType::Other,
+                std::string(), urpToKitFD, Socket::Type::Unix, /*isClient=*/false, HostType::Other,
                 std::make_shared<UrpHandler>(this), StreamSocket::ReadType::NormalRead, now);
         }
     }
@@ -251,6 +255,7 @@ public:
     void setDocumentBroker(const std::shared_ptr<DocumentBroker>& docBroker);
     std::shared_ptr<DocumentBroker> getDocumentBroker() const { return _docBroker.lock(); }
     const std::string& getJailId() const { return _jailId; }
+    const std::string& getConfigId() const { return _configId; }
     void setSMapsFD(int smapsFD) { _smapsFD = smapsFD; }
     int getSMapsFD() { return _smapsFD; }
 
@@ -261,6 +266,7 @@ public:
 
 private:
     const std::string _jailId;
+    const std::string _configId;
     std::weak_ptr<DocumentBroker> _docBroker;
     std::shared_ptr<StreamSocket> _urpFromKit;
     std::shared_ptr<StreamSocket> _urpToKit;

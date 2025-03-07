@@ -79,8 +79,8 @@ struct ClipboardData
                 std::getline(inStream, newline, '\n');
                 if (mime.length() > 0)
                 {
-                    _mimeTypes.push_back(mime);
-                    _content.push_back(content);
+                    _mimeTypes.push_back(std::move(mime));
+                    _content.push_back(std::move(content));
                 }
             }
         }
@@ -162,8 +162,7 @@ public:
         ent._rawData = std::make_shared<std::string>(data, size);
         LOG_TRC("Insert cached clipboard: " << key[0] << " and " << key[1]);
         std::lock_guard<std::mutex> lock(_mutex);
-        _cache[key[0]] = ent;
-        _cache[key[1]] = ent;
+        _cache[key[0]] = _cache[key[1]] = std::move(ent);
     }
 
     std::shared_ptr<std::string> getClipboard(const std::string &key)

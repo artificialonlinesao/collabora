@@ -73,6 +73,11 @@ namespace cool {
 
 		availableCountryCodes: Array<string>;
 
+		showSignaturesOnNextUpdate = false;
+
+		// Tracks when the signature popup is open.
+		signInProgress = false;
+
 		// Provider ID to name map.
 		static providerNames: { [name: string]: string } = {
 			// The /api/client-config API would provide this, but having the data here
@@ -285,9 +290,17 @@ namespace cool {
 			// Providers can be in-context or redirect-based.  Most real-world providers
 			// are redirect-based, set the only tested non-in-context provider as
 			// preferred.
-			dialog.setDefaultProviderId('d-trust-sign-me-qes-signature');
+			const defaultProviderId = window.prefs.get(
+				'eSignatureDefaultProviderId',
+				'd-trust-sign-me-qes-signature',
+			);
+			dialog.setDefaultProviderId(defaultProviderId);
 			// Set the country for the default provider as preferred.
-			dialog.setDefaultCountryCode('DE');
+			const defaultCountryCode = window.prefs.get(
+				'eSignatureDefaultCountryCode',
+				'DE',
+			);
+			dialog.setDefaultCountryCode(defaultCountryCode);
 			dialog.open();
 		}
 
@@ -296,6 +309,8 @@ namespace cool {
 			app.console.log(
 				'attempting to esign using the "' + providerId + '" provider',
 			);
+			window.prefs.set('eSignatureDefaultCountryCode', countryCode);
+			window.prefs.set('eSignatureDefaultProviderId', providerId);
 
 			let url = this.url + '/single-method-signature';
 			url += '?client_id=' + this.clientId;
@@ -317,24 +332,47 @@ namespace cool {
 			features += ', height=' + window.screen.height / 2;
 
 			// Step 3: sign the hash.
+			this.signInProgress = true;
 			this.popup = window.open(url, '_blank', features);
+
+			const message = _(
+				'The document is being signed and will be availably shortly',
+			);
+			app.map.fire('showbusy', { label: message });
+
+			// If our window would be closed before the popup, then close the popup as
+			// well.
+			window.addEventListener('beforeunload', this.closePopup.bind(this));
 		}
 
-		// Handles the 'sign hash' response
-		handleSigned(response: SignedResponse): void {
-			if (response.type != 'SUCCESS') {
-				app.console.log('failed to sign: ' + response.error);
-				return;
-			}
-
+		closePopup(): boolean {
 			try {
+				window.removeEventListener('beforeunload', this.closePopup.bind(this));
+
 				if (this.popup) {
 					this.popup.close();
 				}
 			} catch (error) {
 				app.console.log('failed to close the signing popup: ' + error.message);
+				return false;
+			}
+
+			return true;
+		}
+
+		// Handles the 'sign hash' response
+		handleSigned(response: SignedResponse): void {
+			app.map.fire('hidebusy');
+
+			if (response.type != 'SUCCESS') {
+				app.console.log('failed to sign: ' + response.error);
 				return;
 			}
+
+			if (!this.closePopup()) {
+				return;
+			}
+			this.signInProgress = false;
 
 			// Step 4: fetch the signature.
 			const body = {
@@ -344,7 +382,7 @@ namespace cool {
 			const args = {
 				body: body,
 			};
-			app.map.sendUnoCommand('.uno:DownloadSignature', args);
+			app.map.sendUnoCommand('.uno:DownloadSignature', args, /*force=*/ true);
 		}
 
 		// Handles the 'receive signature' response JSON
@@ -357,6 +395,7 @@ namespace cool {
 			}
 
 			// Step 5: serialize the signature.
+			this.showSignaturesOnNextUpdate = true;
 			const args = {
 				SignatureTime: {
 					type: 'string',
@@ -367,7 +406,7 @@ namespace cool {
 					value: response.signed_file_contents,
 				},
 			};
-			app.map.sendUnoCommand('.uno:Signature', args);
+			app.map.sendUnoCommand('.uno:Signature', args, /*force=*/ true);
 		}
 
 		// Turns a list of provider IDs into a list of signature providers

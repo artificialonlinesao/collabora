@@ -13,13 +13,13 @@
  * L.Control.NotebookbarImpress - definition of notebookbar content in Impress
  */
 
-/* global _ _UNO */
+/* global _ _UNO app */
 
 L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 
 	getShortcutsBarData: function() {
 		return [
-			!this._map['wopi'].HideSaveOption ?
+			!this.map['wopi'].HideSaveOption ?
 				{
 					'id': 'shortcutstoolbox',
 					'type': 'toolbox',
@@ -29,7 +29,8 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 							'type': 'toolitem',
 							'text': _('Save'),
 							'command': '.uno:Save',
-							'accessKey': '1'
+							'accessKey': '1',
+							'isCustomTooltip': true
 						}
 					]
 				} : {}
@@ -37,38 +38,56 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 	},
 
 	// // getOptionsSectionData: function() {
-	// // 	return this.buildOptionsSectionData([
-			// // {
-			// // 	'id': 'options-modify-page',
-			// // 	'type': 'toolitem',
-			// // 	'text': _UNO('.uno:ModifyPage', 'presentation', true),
-			// // 	'command': '.uno:ModifyPage'
-			// // },
-			// // {
-			// // 	'id': 'options-slide-change-window',
-			// // 	'type': 'toolitem',
-			// // 	'text': _UNO('.uno:SlideChangeWindow', 'presentation', true),
-			// // 	'command': '.uno:SlideChangeWindow'
-			// // },
-			// // {
-			// // 	'id': 'options-custom-animation',
-			// // 	'type': 'toolitem',
-			// // 	'text': _UNO('.uno:CustomAnimation', 'presentation', true),
-			// // 	'command': '.uno:CustomAnimation'
-			// // },
-			// // {
-			// // 	'id': 'options-master-slides-panel',
-			// // 	'type': 'toolitem',
-			// // 	'text': _UNO('.uno:MasterSlidesPanel', 'presentation', true),
-			// // 	'command': '.uno:MasterSlidesPanel'
-			// // },
-			// // {
-			// // 	'id': 'options-navigator',
-			// // 	'type': 'toolitem',
-			// // 	'text': _UNO('.uno:Navigator'),
-			// // 	'command': '.uno:Navigator'
-			// // }
-	// // 	]);
+	// // 	return this.buildOptionsSectionData(this.getDefaultToolItems());
+	// // },
+
+	// // getDefaultToolItems: function() {
+	// // 	const optionsToolItems = [
+	// // 		{
+	// // 			'id': 'options-modify-page',
+	// // 			'type': 'toolitem',
+	// // 			'text': _UNO('.uno:ModifyPage', 'presentation', true),
+	// // 			'command': '.uno:ModifyPage',
+	// // 			'accessibility': { focusBack: true, combination: 'ZL', de: null }
+	// // 		},
+	// // 		{
+	// // 			'id': 'options-slide-change-window',
+	// // 			'type': 'toolitem',
+	// // 			'text': _UNO('.uno:SlideChangeWindow', 'presentation', true),
+	// // 			'command': '.uno:SlideChangeWindow',
+	// // 			'accessibility': { focusBack: true, combination: 'ZT', de: null }
+	// // 		},
+	// // 		{
+	// // 			'id': 'options-custom-animation',
+	// // 			'type': 'toolitem',
+	// // 			'text': _UNO('.uno:CustomAnimation', 'presentation', true),
+	// // 			'command': '.uno:CustomAnimation',
+	// // 			'accessibility': { focusBack: true, combination: 'ZA', de: null }
+	// // 		},
+	// // 		{
+	// // 			'id': 'options-master-slides-panel',
+	// // 			'type': 'toolitem',
+	// // 			'text': _UNO('.uno:MasterSlidesPanel', 'presentation', true),
+	// // 			'command': '.uno:MasterSlidesPanel',
+	// // 			'accessibility': { focusBack: true, combination: 'ZM', de: null }
+	// // 		},
+	// // 		{
+	// // 			'id': 'options-navigator',
+	// // 			'type': 'toolitem',
+	// // 			'text': _UNO('.uno:Navigator'),
+	// // 			'command': '.uno:Navigator',
+	// // 			'accessibility': { focusBack: false, combination: 'ZN', de: 'V' }
+	// // 		}
+	// // 	];
+	// // 	if (this.map && this.map['wopi'].EnableShare) {
+	// // 		optionsToolItems.push({
+	// // 			'type': 'customtoolitem',
+	// // 			'text': _('Share'),
+	// // 			'command': 'shareas',
+	// // 			'accessibility': { focusBack: false, combination: 'ZS', de: null }
+	// // 		});
+	// // 	}
+	// // 	return optionsToolItems;
 	// // },
 
 	getTabs: function() {
@@ -149,21 +168,24 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 		];
 	},
 
-	getFullJSON: function(selectedId) {
-		return this.getNotebookbar(
-			[
-				this.getFileTab(),
-				this.getHomeTab(),
-				this.getInsertTab(),
-				this.getLayoutTab(),
-				this.getReviewTab(),
-				this.getFormatTab(),
-				this.getViewTab(),
-				this.getHelpTab(),
-				this.getTableTab(),
-				this.getDrawTab(),
-				this.getMasterTab(),
-			], selectedId);
+	getTabsJSON: function () {
+		return [
+			this.getFileTab(),
+      this.getHomeTab(),
+      this.getInsertTab(),
+      this.getLayoutTab(),
+      this.getReviewTab(),
+      this.getFormatTab(),
+      this.getViewTab(),
+      this.getHelpTab(),
+      this.getTableTab(),
+      this.getDrawTab(),
+      this.getMasterTab(),
+		];
+	},
+
+	getFullJSON: function (selectedId) {
+		return this.getNotebookbar(this.getTabsJSON(), selectedId);
 	},
 
 	getFileTab: function() {
@@ -175,7 +197,7 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 			vertical: false,
 		};
 
-		if (!this._map['wopi'].HideSaveOption) {
+		if (!this.map['wopi'].HideSaveOption) {
 			saveExportGroup.children.push(
 			{
 				'type': 'toolbox',
@@ -191,7 +213,7 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 			});
 		}
 
-		if (!this._map['wopi'].UserCanNotWriteRelative) {
+		if (!this.map['wopi'].UserCanNotWriteRelative) {
 			saveExportGroup.children.push(
 				(window.prefs.get('saveAsMode') === 'group') ?
 				{
@@ -212,7 +234,7 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 			);
 		}
 
-		if (!this._map['wopi'].UserCanNotWriteRelative) {
+		if (!this.map['wopi'].UserCanNotWriteRelative) {
 			saveExportGroup.children.push(
 			{
 				'id': 'exportas:ExportAsMenu',
@@ -229,7 +251,7 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 				'id': 'file-shareas-rev-history',
 				'type': 'container',
 				'children': [
-					(this._map['wopi'].EnableShare) ?
+					(this.map['wopi'].EnableShare) ?
 						{
 							'id': 'ShareAs',
 							'class': 'unoShareAs',
@@ -255,7 +277,7 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 		);
 
 		// Hide button as this does not work in Chromium
-		// // if (!this._map['wopi'].HidePrintOption) {
+		// // if (!this.map['wopi'].HidePrintOption) {
 		// // 	saveExportGroup.children.push(
 		// // 	{
 		// // 		'id': 'file-print:PrintOptions',
@@ -266,7 +288,7 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 		// // 	});
 		// // }
 
-		if (!this._map['wopi'].HideExportOption) {
+		if (!this.map['wopi'].HideExportOption) {
 			saveExportGroup.children.push({
 				'id': 'downloadas:DownloadAsMenu',
 				'command': 'downloadas',
@@ -301,7 +323,7 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 			vertical: 'false',
 		};
 
-		if (!this._map['wopi'].HideRepairOption) {
+		if (!this.map['wopi'].HideRepairOption) {
 			repairGroup.children.push({
 				'type': 'container',
 				'children': [
@@ -344,23 +366,25 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 			});
 		}
 
-		// Hide button as we have not implemented renaming files in our backend
+    // Hide button as we have not implemented renaming files in our backend
 		// so it will cause the document to bug if the user does this
-		// // repairGroup.children.push(
-		// // 	{
-		// // 		'type': 'container',
-		// // 		'children': [
-		// // 			{
-		// // 				'id': 'renamedocument',
-		// // 				'class': 'unoRenameDocument',
-		// // 				'type': 'bigcustomtoolitem',
-		// // 				'text': _('Rename'),
-		// // 			}
-		// // 		]
-		// // 	}
-		// // );
+		// // if (this.map['wopi']._supportsRename() && this.map['wopi'].UserCanRename) {
+		// // 	content.push(
+		// // 		{
+		// // 			'type': 'container',
+		// // 			'children': [
+		// // 				{
+		// // 					'id': 'renamedocument',
+		// // 					'class': 'unoRenameDocument',
+		// // 					'type': 'bigcustomtoolitem',
+		// // 					'text': _('Rename'),
+		// // 				}
+		// // 			]
+		// // 		}
+		// // 	);
+		// // }
 
-		content.push(repairGroup);
+    content.push(repairGroup);
 
 		return this.getTabPage('File', content);
 	},
@@ -377,8 +401,8 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 			// Hide button as it causes bad UX in Space:
 			// 1. Presenting a ppt will cause the user's browser to fullscreen, taking
 			// 		them away from the call.
-			// 2. It would only show the presentation view for the user - the other 
-			// 		people in the call wont see it. So it is confusing UX to have the 
+			// 2. It would only show the presentation view for the user - the other
+			// 		people in the call wont see it. So it is confusing UX to have the
 			// 		button there.
 			// // {
 			// // 	type: 'container',
@@ -610,6 +634,7 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 				],
 				'vertical': 'true'
 			},
+			{ type: 'separator', id: 'home-undoredo-break', orientation: 'vertical' },
 			{
 				type: 'container',
 				children: [
@@ -668,6 +693,7 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 				],
 				vertical: false,
 			},
+			{ type: 'separator', id: 'home-resertattributes-break', orientation: 'vertical' },
 			{
 				'type': 'container',
 				'children': [
@@ -767,7 +793,7 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 										'text': _UNO('.uno:FontworkGalleryFloater'),
 										'command': '.uno:FontworkGalleryFloater',
 										// Fontwork export/import not supported in other formats.
-										'visible': (L.LOUtil.isFileODF(this._map)) ? 'true' : 'false',
+										'visible': (app.LOUtil.isFileODF(this.map)) ? 'true' : 'false',
 										'accessibility': { focusBack: true, combination: 'FL', de: null }
 									},
 									{
@@ -880,7 +906,7 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 										'text': _UNO('.uno:JustifyPara'),
 										'command': '.uno:JustifyPara',
 										'accessibility': { focusBack: true, combination: 'PJ', de: null }
-									}
+									},
 								]
 							},
 						],
@@ -889,6 +915,7 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 				],
 				'vertical': 'true'
 			},
+			{ type: 'separator', id: 'home-linespacingmenu-break', orientation: 'vertical' },
 			{
 				'type': 'container',
 				'children': [
@@ -1129,7 +1156,7 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 								{
 									'id': 'home-search-dialog',
 									'type': 'toolitem',
-									'text': _UNO('.uno:SearchDialog'),
+									'text': _('Replace'),
 									'command': '.uno:SearchDialog',
 									'accessibility': { focusBack: false, 	combination: 'FD',	de: null }
 								}
@@ -1324,7 +1351,7 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 						'command': '.uno:InsertObjectChart',
 						'accessibility': { focusBack: true, combination: 'IC', de: null }
 					},
-					(this._map['wopi'].EnableRemoteLinkPicker) ? {
+					(this.map['wopi'].EnableRemoteLinkPicker) ? {
 						'type': 'container',
 						'children': [
 							{
@@ -1363,6 +1390,14 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 						'command': 'hyperlinkdialog',
 						'accessibility': { focusBack: true, combination: 'IL', de: null }
 					},
+          (this.map['wopi'].EnableRemoteAIContent) ? {
+            'id': 'insert-insert-remote-ai-content',
+            'class': 'unoremoteaicontent',
+            'type': 'bigcustomtoolitem',
+            'text': _('Assistant'),
+            'command': 'remoteaicontent',
+            'accessibility': { focusBack: true, combination: 'RL', de: null }
+          } : {},
 					{
 						'id': 'CharmapControl',
 						'class': 'unoCharmapControl',
@@ -1455,7 +1490,7 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 										'text': _UNO('.uno:FontworkGalleryFloater'),
 										'command': '.uno:FontworkGalleryFloater',
 										// Fontwork export/import not supported in other formats.
-										'visible': L.LOUtil.isFileODF(this._map) ? 'true' : 'false',
+										'visible': app.LOUtil.isFileODF(this.map) ? 'true' : 'false',
 										'accessibility': { focusBack: true, combination: 'FW', de: null }
 									}
 								]
@@ -2648,7 +2683,7 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 										'text': _UNO('.uno:FontworkGalleryFloater'),
 										'command': '.uno:FontworkGalleryFloater',
 										// Fontwork export/import not supported in other formats.
-										'visible': (L.LOUtil.isFileODF(this._map)) ? 'true' : 'false',
+										'visible': (app.LOUtil.isFileODF(this.map)) ? 'true' : 'false',
 										'accessibility': { focusBack: true, combination: 'FW', de: null }
 									}
 								]
@@ -2658,6 +2693,12 @@ L.Control.NotebookbarImpress = L.Control.NotebookbarWriter.extend({
 					},
 				],
 				vertical: false,
+			},
+			{
+				'type': 'bigtoolitem',
+				'text': _UNO('.uno:Crop'),
+				'command': '.uno:Crop',
+				'context': 'Graphic'
 			},
 		];
 

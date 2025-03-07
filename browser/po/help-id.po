@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-14 13:17+0200\n"
+"POT-Creation-Date: 2025-03-05 09:51+0200\n"
 "PO-Revision-Date: 2024-09-27 17:15+0000\n"
 "Last-Translator: Andika Triwidada <andika@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/"
@@ -3234,10 +3234,10 @@ msgstr "Format sel sumber dengan font, latar belakang warna, dan lainnya."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li.p:799-11
 msgid ""
-"Click on the clone formatting icon <img class=\"icon-size\" src=\"images"
+"Click on the clone formatting icon <img class=\"icon-size\" src=\"https://collab-images.kyzon.com"
 "/lc_formatpaintbrush.svg\" />. The mouse pointer turns to a paint bucket."
 msgstr ""
-"Klik pada ikon pemformatan klon <img class=\"icon-size\" src=\"images"
+"Klik pada ikon pemformatan klon <img class=\"icon-size\" src=\"https://collab-images.kyzon.com"
 "/lc_formatpaintbrush.svg\" />. Penunjuk tetikus berubah menjadi ember cat."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li.p:800-11

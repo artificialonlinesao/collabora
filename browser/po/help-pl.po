@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-14 13:17+0200\n"
+"POT-Creation-Date: 2025-03-05 09:51+0200\n"
 "PO-Revision-Date: 2024-09-17 01:26+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/collabora-online/"
@@ -3232,10 +3232,10 @@ msgstr "Ustaw czcionkę, kolor tła i więcej w komórce źródłowej."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li.p:799-11
 msgid ""
-"Click on the clone formatting icon <img class=\"icon-size\" src=\"images"
+"Click on the clone formatting icon <img class=\"icon-size\" src=\"https://collab-images.kyzon.com"
 "/lc_formatpaintbrush.svg\" />. The mouse pointer turns to a paint bucket."
 msgstr ""
-"Kliknij ikonę klonowania formatowania <img class=\"icon-size\" src=\"images"
+"Kliknij ikonę klonowania formatowania <img class=\"icon-size\" src=\"https://collab-images.kyzon.com"
 "/lc_formatpaintbrush.svg\" />. Kursor myszy zmieni się w kubełek z farbą."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li.p:800-11

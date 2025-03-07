@@ -23,7 +23,9 @@
 
 #include <Poco/SharedPtr.h>
 #include <Poco/URI.h>
+#include <Poco/JSON/Object.h>
 
+#include "Authorization.hpp"
 #include "Log.hpp"
 #include "QuarantineUtil.hpp"
 #include "TileDesc.hpp"
@@ -48,6 +50,7 @@ class PrisonerRequestDispatcher;
 class CheckFileInfo;
 class DocumentBroker;
 class LockContext;
+class PresetsInstallTask;
 class TileCache;
 class Message;
 
@@ -232,15 +235,16 @@ public:
     };
 
     DocumentBroker(ChildType type, const std::string& uri, const Poco::URI& uriPublic,
-                   const std::string& docKey, unsigned mobileAppDocId,
+                   const std::string& docKey, const std::string& configId,
+                   unsigned mobileAppDocId,
                    std::unique_ptr<WopiStorage::WOPIFileInfo> wopiFileInfo);
 
 protected:
     /// Used by derived classes.
     DocumentBroker(ChildType type, const std::string& uri, const Poco::URI& uriPublic,
-                   const std::string& docKey)
-        : DocumentBroker(type, uri, uriPublic, docKey, /*mobileAppDocId=*/0,
-                         /*wopiFileInfo=*/nullptr)
+                   const std::string& docKey, const std::string& configId)
+        : DocumentBroker(type, uri, uriPublic, docKey, configId,
+                         /*mobileAppDocId=*/0, /*wopiFileInfo=*/nullptr)
     {
     }
 
@@ -345,6 +349,8 @@ public:
     Poco::URI getPublicUri() const { return _uriPublic; }
     const std::string& getJailId() const { return _jailId; }
     const std::string& getDocKey() const { return _docKey; }
+    // id of wopi shared config
+    const std::string& getConfigId() const { return _configId; }
     const std::string& getFilename() const { return _filename; };
     TileCache& tileCache() { return *_tileCache; }
     bool hasTileCache() { return _tileCache != nullptr; }
@@ -376,6 +382,15 @@ public:
 
     void alertAllUsers(const std::string& msg);
 
+#if !MOBILEAPP
+    void syncBrowserSettings(const std::string& userId, const std::string& key,
+                             const std::string& value);
+
+    void uploadBrowserSettingsToWopiHost(const std::shared_ptr<ClientSession>& session);
+
+    void uploadPresetsToWopiHost();
+#endif
+
     void alertAllUsers(const std::string& cmd, const std::string& kind)
     {
         alertAllUsers("error: cmd=" + cmd + " kind=" + kind);
@@ -393,15 +408,15 @@ public:
         _cursorHeight = h;
     }
 
-    void invalidateTiles(const std::string& tiles, int normalizedViewId)
+    void invalidateTiles(const std::string& tiles, CanonicalViewId canonicalViewId)
     {
         // Remove from cache.
-        _tileCache->invalidateTiles(tiles, normalizedViewId);
+        _tileCache->invalidateTiles(tiles, canonicalViewId);
     }
 
     void handleTileRequest(const StringVector &tokens, bool forceKeyframe,
                            const std::shared_ptr<ClientSession>& session);
-    void handleTileCombinedRequest(TileCombined& tileCombined, bool forceKeyframe,
+    void handleTileCombinedRequest(TileCombined& tileCombined, bool canForceKeyframe,
                                    const std::shared_ptr<ClientSession>& session);
     void sendRequestedTiles(const std::shared_ptr<ClientSession>& session);
     void sendTileCombine(const TileCombined& tileCombined);
@@ -418,19 +433,16 @@ public:
     static bool lookupSendClipboardTag(const std::shared_ptr<StreamSocket> &socket,
                                        const std::string &tag, bool sendError = false);
 
-    void handleMediaRequest(std::string range, const std::shared_ptr<Socket>& socket, const std::string& tag);
+    void handleMediaRequest(const std::string_view range, const std::shared_ptr<Socket>& socket,
+                            const std::string& tag);
 
-    /// True if any flag to unload or terminate is set.
-    bool isUnloading() const
-    {
-        return _docState.isMarkedToDestroy() || _stop || _docState.isUnloadRequested() ||
-               _docState.isCloseRequested() || SigUtil::getShutdownRequestFlag();
-    }
+    /// True if any flag to close, terminate, or to unload is set.
+    bool isUnloading() const { return isUnloadingUnrecoverably() || _docState.isUnloadRequested(); }
 
-    /// True if any flag to unload or terminate is set.
+    /// True if any flag to close or terminate is set.
     bool isUnloadingUnrecoverably() const
     {
-        return _docState.isMarkedToDestroy() || _stop || _docState.isCloseRequested() ||
+        return isMarkedToDestroy() || _docState.isCloseRequested() ||
                SigUtil::getShutdownRequestFlag();
     }
 
@@ -482,8 +494,9 @@ public:
     /// Returns the number of sessions sent the message to.
     std::size_t broadcastMessage(const std::string& message) const;
 
-    /// Sends a message to all sessions except for the session passed as the param
-    void broadcastMessageToOthers(const std::string& message, const std::shared_ptr<ClientSession>& _session) const;
+    /// Sends a message to all sessions except for the session passed as the param.
+    void broadcastMessageToOthers(const std::string& message,
+                                  const std::shared_ptr<ClientSession>& session) const;
 
     /// Broadcasts 'blockui' command to all users with an optional message.
     void blockUI(const std::string& msg)
@@ -539,7 +552,51 @@ public:
 
     StorageBase* getStorage() { return _storage.get(); }
 
+#if !MOBILEAPP
+    void asyncInstallPresets(const std::shared_ptr<ClientSession>& session,
+                             const std::string& configId,
+                             const std::string& userSettingsUri,
+                             const std::string& presetsPath);
+
+    static void getBrowserSettingSync(const std::shared_ptr<ClientSession>& session,
+                                      const std::string& userSettingsUri);
+
+    static void sendBrowserSetting(const std::shared_ptr<ClientSession>& session);
+
+    static void parseBrowserSettings(const std::shared_ptr<ClientSession>& session,
+                                     const std::string& responseBody);
+
+    /// Start an asynchronous Installation of the user presets, e.g. autotexts etc, as
+    /// described at userSettingsUri for installation into presetsPath
+    static std::shared_ptr<PresetsInstallTask> asyncInstallPresets(SocketPoll& poll,
+                                    const std::string& configId,
+                                    const std::string& userSettingsUri,
+                                    const std::string& presetsPath,
+                                    const std::shared_ptr<ClientSession>& session,
+                                    const std::function<void(bool)>& finishedCB);
+
+    /// Start an asynchronous Installation of a user preset resource, e.g. an autotext
+    /// file, to copy as presetFile
+    static void asyncInstallPreset(SocketPoll& poll, const std::string& configId,
+                                   const std::string& presetUri, const std::string& presetStamp,
+                                   const std::string& presetFile, const std::string& id,
+                                   const std::function<void(const std::string&, bool)>& finishedCB,
+                                   const std::shared_ptr<ClientSession>& session);
+
+    static Poco::URI getPresetUploadBaseUrl(Poco::URI uri);
+
+    static std::shared_ptr<const http::Response> sendHttpSyncRequest(const std::string& url,
+                                                                     const std::string& logContext);
+#endif // !MOBILEAPP
+
 private:
+    /// Checks if we really need to request tile rendering or it's in progress
+    /// returns true if all tiles are of the same part and size so can be grouped
+    inline bool requestTileRendering(TileDesc& tile, bool forceKeyFrame,
+                                     const std::chrono::steady_clock::time_point &now,
+                                     std::vector<TileDesc>& tilesNeedsRendering,
+                                     const std::shared_ptr<ClientSession>& session);
+
     /// Get the session that can write the document for save / locking / uploading.
     /// Note that if there is no loaded and writable session, the first will be returned.
     std::shared_ptr<ClientSession> getWriteableSession() const;
@@ -576,7 +633,6 @@ private:
 
     /// Start an asynchronous CheckFileInfo request.
     void checkFileInfo(const std::shared_ptr<ClientSession>& uri, int redirectLimit);
-
 #endif // !MOBILEAPP
 
     bool isLoaded() const { return _docState.hadLoaded(); }
@@ -647,7 +703,7 @@ private:
     /// (regardless of whether we need to or not).
     CanSave canSaveToDisk() const
     {
-        if (_docState.isDisconnected() || getPid() <= 0)
+        if (_docState.isKitDisconnected() || getPid() <= 0)
         {
             return CanSave::NoKit;
         }
@@ -1446,9 +1502,9 @@ private:
 #endif // !MOBILEAPP && !WASMAPP
         );
 
-        STATE_ENUM(Disconnected,
-                   No, ///< No, not disconnected
-                   Normal, ///< Yes, normal disconnection
+        STATE_ENUM(KitDisconnected,
+                   No, ///< No, kit is not disconnected
+                   Normal, ///< Yes, normal kit disconnection
                    Unexpected, ///< Yes, unexpected disconnection from Kit
         );
 
@@ -1458,7 +1514,7 @@ private:
             , _loaded(false)
             , _closeRequested(false)
             , _unloadRequested(false)
-            , _disconnected(Disconnected::No)
+            , _kitDisconnected(KitDisconnected::No)
             , _interactive(false)
         {
         }
@@ -1512,9 +1568,9 @@ private:
         bool isUnloadRequested() const { return _unloadRequested; }
 
         /// Flag that we are disconnected from the Kit. Irreversible.
-        void setDisconnected(Disconnected disconnected) { _disconnected = disconnected; }
-        DocumentState::Disconnected disconnected() const { return _disconnected; }
-        bool isDisconnected() const { return disconnected() != Disconnected::No; }
+        void setKitDisconnected(KitDisconnected disconnected) { _kitDisconnected = disconnected; }
+        DocumentState::KitDisconnected kitDisconnected() const { return _kitDisconnected; }
+        bool isKitDisconnected() const { return kitDisconnected() != KitDisconnected::No; }
 
         void dumpState(std::ostream& os, const std::string& indent = "\n  ") const
         {
@@ -1524,7 +1580,7 @@ private:
             os << indent << "interactive: " << _interactive;
             os << indent << "close requested: " << _closeRequested;
             os << indent << "unload requested: " << _unloadRequested;
-            os << indent << "disconnected from kit: " << name(_disconnected);
+            os << indent << "disconnected from kit: " << name(_kitDisconnected);
         }
 
     private:
@@ -1533,7 +1589,8 @@ private:
         std::atomic<bool> _loaded; ///< If the document ever loaded (check isLive to see if it still is).
         std::atomic<bool> _closeRequested; ///< Owner-Termination flag.
         std::atomic<bool> _unloadRequested; ///< Unload-Requested flag, which may be reset.
-        std::atomic<Disconnected> _disconnected; ///< Disconnected from the Kit. Implies unloading.
+        std::atomic<KitDisconnected>
+            _kitDisconnected; ///< Disconnected from the Kit. Implies unloading.
         bool _interactive; ///< If the document has interactive dialogs before load
     };
 
@@ -1596,7 +1653,8 @@ private:
 
 #if !MOBILEAPP
     /// The current CheckFileInfo request, if any.
-    std::unique_ptr<CheckFileInfo> _checkFileInfo;
+    std::shared_ptr<CheckFileInfo> _checkFileInfo;
+    std::shared_ptr<PresetsInstallTask> _asyncInstallTask;
 #endif
 
     /// Manage uploading to Storage.
@@ -1665,6 +1723,8 @@ private:
     /// Unique DocBroker ID for tracing and debugging.
     static std::atomic<unsigned> DocBrokerId;
 
+    std::string _configId;
+
     // Relevant only in the mobile apps
     const unsigned _mobileAppDocId;
 
@@ -1684,6 +1744,8 @@ private:
 
 #if !MOBILEAPP
     Admin& _admin;
+    /// stores timestamps of preset files when they get installed to compare later to check if they are modified
+    std::map<std::string, std::filesystem::file_time_type> _presetTimestamp;
 #endif
 
     // Last member.

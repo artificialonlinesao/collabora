@@ -6,7 +6,6 @@ m4_define([m4_foreachq],[m4_ifelse([$2],[],[],[m4_pushdef([$1])_$0([$1],[$3],[],
 m4_define([_m4_foreachq],[m4_ifelse([$#],[3],[],[m4_define([$1],[$4])$2[]$0([$1],[$2],m4_shift(m4_shift(m4_shift($@))))])])m4_dnl
 m4_define(_YEAR_,m4_esyscmd(date +%Y|tr -d '\n'))
 <!DOCTYPE html>
-<!-- saved from url=(0054)http://leafletjs.com/examples/quick-start-example.html -->
 m4_ifelse(IOSAPP,[true],
 <!-- Related to issue #5841: the iOS app sets the base text direction via the "dir" parameter -->
 <html dir=""><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" data-theme="%UI_THEME%">
@@ -48,6 +47,9 @@ m4_ifelse(MOBILEAPP, [true],
   <input type="hidden" id="init-css-vars" value="<!--%CSS_VARIABLES%-->" />
 ]
 )
+
+<input type="hidden" id="init-product-branding-name" value="%PRODUCT_BRANDING_NAME%" />
+<input type="hidden" id="init-product-branding-url" value="%PRODUCT_BRANDING_URL%" />
 
 <input type="hidden" id="init-uri-prefix" value="m4_ifelse(MOBILEAPP, [], [%SERVICE_ROOT%/browser/%VERSION%/])" />
 <input type="hidden" id="init-branding-name" value="%BRANDING_THEME%" />
@@ -119,7 +121,7 @@ m4_ifelse(MOBILEAPP,[true],
         </div>
         <div id="closebuttonwrapperseparator"></div>
         <div id="closebuttonwrapper">
-          <div class="closebuttonimage" id="closebutton"></div>
+          <button class="closebuttonimage" id="closebutton" accesskey="ZC"></button>
         </div>
       </nav>
 
@@ -215,7 +217,7 @@ m4_ifelse(MOBILEAPP, [true],
       data-enable-accessibility = "%ENABLE_ACCESSIBILITY%"
       data-out-of-focus-timeout-secs = "%OUT_OF_FOCUS_TIMEOUT_SECS%"
       data-idle-timeout-secs = "%IDLE_TIMEOUT_SECS%"
-      data-min-saved-message-timeout-secs = %MIN_SAVED_MESSAGE_TIMEOUT_SECS%;
+      data-min-saved-message-timeout-secs = "%MIN_SAVED_MESSAGE_TIMEOUT_SECS%";
       data-protocol-debug = "%PROTOCOL_DEBUG%"
       data-enable-debug = "%ENABLE_DEBUG%"
       data-frame-ancestors = "%FRAME_ANCESTORS%"

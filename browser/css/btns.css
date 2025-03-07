@@ -157,6 +157,7 @@ button.jsdialog img {
 
 .ui-button-box .jsdialog.ui-pushbutton:not(.hidden) {
 	display: initial !important;
+	font-size: var(--default-font-size);
 }
 
 .ui-pushbutton[disabled] {
@@ -193,6 +194,11 @@ button.jsdialog img {
 /* Eg: Sidebar -> Animation -> Effects buttons shouldn't overflow the content */
 button.has-img {
 	min-width: auto !important;
+}
+
+/* Thesaurus <- button */
+button#left.has-img > img {
+	width: 16px;
 }
 
 /* Calc Auto-Filter buttons coming from core */

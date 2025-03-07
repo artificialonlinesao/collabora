@@ -35,7 +35,8 @@ public:
     /// StreamSocket inactivity timeout in us (3600s default). Zero disables instrument.
     std::chrono::microseconds inactivityTimeout;
 
-    /// Maximum number of concurrent external TCP connections. Zero disables instrument.
+    /// Maximum number of concurrent external TCP connections. Zero disables instrument,
+    /// limiting the maximum number of connections by the available sockets to the system.
     size_t maxExtConnections;
 };
 extern DefaultValues Defaults;
@@ -54,7 +55,7 @@ class HostEntry
     std::string makeIPAddress(const sockaddr* ai_addr);
 
 public:
-    HostEntry(const std::string& desc, const char* port);
+    HostEntry(const std::string& desc);
     ~HostEntry();
 
     bool good() const { return _saved_errno == 0 && _eaino == 0; }
@@ -96,6 +97,7 @@ enum class AsyncConnectResult{
     HostNameError,
     UnknownHostError,
     SSLHandShakeFailure,
+    MissingSSLError
 };
 
 typedef std::function<void(std::shared_ptr<StreamSocket>, AsyncConnectResult result)> asyncConnectCB;

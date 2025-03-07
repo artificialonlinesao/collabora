@@ -149,6 +149,29 @@ class GraphicSelection {
 			this.convertObjectRectangleTwipsToPixels();
 	}
 
+	/// Push down the graphic selection on non-first pages of scrolling PDF view.
+	static transformGraphicSelection(messageJSON: any) {
+		const docLayer = app.map._docLayer;
+		const verticalOffset = docLayer.getFiledBasedViewVerticalOffset();
+		if (!verticalOffset) {
+			return;
+		}
+
+		// y
+		messageJSON[1] += verticalOffset;
+
+		const extraInfo = messageJSON[5];
+		const rectangle = extraInfo?.handles?.kinds?.rectangle;
+		if (!rectangle) {
+			return;
+		}
+
+		for (const key of ['1', '2', '3', '4', '5', '6', '7', '8']) {
+			const y = parseInt(rectangle[key][0].point.y);
+			rectangle[key][0].point.y = y + verticalOffset;
+		}
+	}
+
 	public static updateGraphicSelection() {
 		if (this.hasActiveSelection()) {
 			// Hide the keyboard on graphic selection, unless cursor is visible.
@@ -156,7 +179,13 @@ class GraphicSelection {
 			if (!JSDialog.IsAnyInputFocused())
 				app.map.focus(app.file.textCursor.visible);
 
-			if (!app.map.isEditMode()) {
+			let editMode = app.map.isEditMode();
+			if (!editMode) {
+				// If the just added signature line shape is selected, show the
+				// graphic selection.
+				editMode = this.extraInfo && this.extraInfo.isSignature;
+			}
+			if (!editMode) {
 				return;
 			}
 
@@ -231,6 +260,9 @@ class GraphicSelection {
 		} else {
 			textMsg = '[' + textMsg.substr('graphicselection:'.length) + ']';
 			msgData = JSON.parse(textMsg);
+
+			this.transformGraphicSelection(msgData);
+
 			this.extractAndSetGraphicSelection(msgData);
 
 			// Update the dark overlay on zooming & scrolling

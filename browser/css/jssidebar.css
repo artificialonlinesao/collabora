@@ -72,10 +72,6 @@ img.sidebar.ui-drawing-area {
 	padding: 0;
 }
 
-.ui-expander.jsdialog.sidebar .ui-expander-icon-right img {
-	filter: brightness(2);
-}
-
 .ui-expander.jsdialog.sidebar .ui-expander-icon-right:hover img {
 	filter: none;
 }
@@ -344,7 +340,13 @@ button#button2.ui-pushbutton.jsdialog.sidebar {
 #NavigatorDeck .ui-treeview-cell-text {
 	/* good to move this into css var*/
 	font-size: 14px;
+	white-space: break-spaces;
 }
+
+#StyleListPanelPanelExpander .ui-treeview-cell-text {
+	white-space: break-spaces;
+}
+
 #NavigatorDeck .ui-treeview-cell {
 	/* Move this whole block away and fix in the main control */
 	display: flex;
@@ -368,6 +370,14 @@ span.jsdialog.sidebar.ui-treeview-notexpandable {
 #StyleListPanelPanelExpander [id='5'] button { background: transparent url('https://collab-images.kyzon.com/lc_liststyle.svg') no-repeat center; }
 #StyleListPanelPanelExpander [id='6'] button { background: transparent url('https://collab-images.kyzon.com/lc_tablestyle.svg') no-repeat center; }
 
+
+[data-theme='dark'] #StyleListPanelPanelExpander [id='1'] button { background: transparent url('https://collab-images.kyzon.com/dark/lc_charstyle.svg') no-repeat center; }
+[data-theme='dark'] #StyleListPanelPanelExpander [id='5'] button { background: transparent url('https://collab-images.kyzon.com/dark/lc_liststyle.svg') no-repeat center; }
+[data-theme='dark'] #StyleListPanelPanelExpander [id='2'] button { background: transparent url('https://collab-images.kyzon.com/dark/lc_parastyle.svg') no-repeat center; }
+[data-theme='dark'] #StyleListPanelPanelExpander [id='4'] button { background: transparent url('https://collab-images.kyzon.com/dark/lc_pagestyle.svg') no-repeat center; }
+[data-theme='dark'] #StyleListPanelPanelExpander [id='3'] button { background: transparent url('https://collab-images.kyzon.com/dark/lc_framestyle.svg') no-repeat center; }
+[data-theme='dark'] #StyleListPanelPanelExpander [id='6'] button { background: transparent url('https://collab-images.kyzon.com/dark/lc_tablestyle.svg') no-repeat center; }
+
 #StyleListPanelPanelExpander #left.toolbox button {
 	background-size: cover;
 }
@@ -376,7 +386,7 @@ span.jsdialog.sidebar.ui-treeview-notexpandable {
 	visibility: hidden;
 }
 
-#StyleListPanelPanelExpander #TemplatePanel #filter select {
+#TemplatePanel #filter select {
 	width: 100%;
 }
 
@@ -400,20 +410,37 @@ span.jsdialog.sidebar.ui-treeview-notexpandable {
 	height: calc(100% - 45px);
 }
 
+#TemplatePanel .sidebar .unotoolbutton {
+	padding: 4px;
+	border: 0 solid transparent !important;
+	border-bottom-width: 2px !important;
+	background-color: transparent !important;
+	border-radius: 0 !important;
+}
+
+#TemplatePanel .sidebar .unotoolbutton:hover,
+#TemplatePanel .sidebar .unotoolbutton.selected {
+	border-bottom-color: rgba(var(--doc-type)) !important;
+}
+
+#TemplatePanel .sidebar .ui-content.unobutton {
+	width: var(--btn-size-m);
+	height: var(--btn-size-m);
+}
+
 #TemplatePanel {
 	display: flex;
 	flex-direction: column;
 }
 
-#TemplatePanel > div {
-	flex-grow: 0;
+#TemplatePanel > div:nth-child(4),
+#TemplatePanel > div:nth-child(5) {
+	height: inherit;
 }
 
-#TemplatePanel > div:nth-child(3),
-#TemplatePanel > div:nth-child(4) {
-	flex-grow: 1;
+#TemplatePanel #highlightstyles input {
+	margin-left: 0px;
 }
-
 #A11yCheckIssuesPanel [id^='accessibilityCheckEntryBox'] {
 	align-items: center;
 }

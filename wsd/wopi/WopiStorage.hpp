@@ -53,6 +53,7 @@ public:
         const std::string& getUserExtraInfo() const { return _userExtraInfo; }
         const std::string& getUserPrivateInfo() const { return _userPrivateInfo; }
         const std::string& getServerPrivateInfo() const { return _serverPrivateInfo; }
+        const std::string& getUserSettingsUri() const { return _userSettingsUri; }
         const std::string& getWatermarkText() const { return _watermarkText; }
         const std::string& getTemplateSaveAs() const { return _templateSaveAs; }
         const std::string& getTemplateSource() const { return _templateSource; }
@@ -80,10 +81,12 @@ public:
         bool getEnableInsertRemoteFile() const { return _enableInsertRemoteFile; }
         bool getDisableInsertLocalImage() const { return _disableInsertLocalImage; }
         bool getEnableRemoteLinkPicker() const { return _enableRemoteLinkPicker; }
+        bool getEnableRemoteAIContent() const { return _enableRemoteAIContent; }
         bool getEnableShare() const { return _enableShare; }
         bool getSupportsRename() const { return _supportsRename; }
         bool getSupportsLocks() const { return _supportsLocks; }
         bool getUserCanRename() const { return _userCanRename; }
+        bool getUserCanOnlyComment() const { return _userCanOnlyComment; }
 
         const std::optional<bool> getIsAdminUser() const { return _isAdminUser; }
         const std::string& getIsAdminUserError() const { return _isAdminUserError; }
@@ -105,6 +108,8 @@ public:
         std::string _userPrivateInfo;
         /// Private info per server, for API keys and other non-public information.
         std::string _serverPrivateInfo;
+        /// Uri to get settings json for this user, for autotext location, etc.
+        std::string _userSettingsUri;
         /// In case a watermark has to be rendered on each tile.
         std::string _watermarkText;
         /// In case we want to use this file as a template, it should be first re-saved under this name (using PutRelativeFile).
@@ -161,6 +166,8 @@ public:
         bool _disableInsertLocalImage = false;
         /// If set to true, users can access the remote link picker functionality
         bool _enableRemoteLinkPicker = false;
+        /// If set to true, users can insert remote AI-generated content
+        bool _enableRemoteAIContent = false;
         /// If set to true, users can access the file share functionality
         bool _enableShare = false;
         /// If WOPI host supports locking
@@ -171,6 +178,8 @@ public:
         bool _userCanRename = false;
         /// If user is considered as admin on the integrator side
         std::optional<bool> _isAdminUser = std::nullopt;
+        /// If user is limited to only writing/modifiyng comments
+        bool _userCanOnlyComment = false;
 
         /// error code if integration does not use isAdminUser field properly
         std::string _isAdminUserError;

@@ -23,10 +23,11 @@ case "$1" in
 	# and installs in @LO_PATH@, and that /opt/cool is
 	# on the same file system
 
-	rm -rf /opt/cool
-	mkdir -p /opt/cool/child-roots
+	rm -rf /opt/cool || true
+	mkdir -p /opt/cool/child-roots /opt/cool/cache
 	chown cool: /opt/cool
 	chown cool: /opt/cool/child-roots
+	chown cool: /opt/cool/cache
 
 	fc-cache @LO_PATH@/share/fonts/truetype
 

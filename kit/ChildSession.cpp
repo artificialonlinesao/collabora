@@ -18,11 +18,6 @@
 #include <common/Unit.hpp>
 #include <common/Util.hpp>
 
-#include <climits>
-#include <fstream>
-#include <memory>
-#include <sstream>
-
 #define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
@@ -42,6 +37,7 @@
 #include <androidapp.hpp>
 #endif
 
+#include <wasm/base64.hpp>
 #include <common/ConfigUtil.hpp>
 #include <common/FileUtil.hpp>
 #include <common/JsonUtil.hpp>
@@ -52,12 +48,19 @@
 #include "KitHelper.hpp"
 #include <Png.hpp>
 #include <Clipboard.hpp>
-#include <string>
 #include <CommandControl.hpp>
 
 #ifdef IOS
 #include "DocumentViewController.h"
 #endif
+
+#include <climits>
+#include <fstream>
+#include <memory>
+#include <sstream>
+#include <string>
+#include <string_view>
+#include <utility>
 
 using Poco::JSON::Object;
 using Poco::JSON::Parser;
@@ -66,18 +69,6 @@ using Poco::URI;
 using namespace COOLProtocol;
 
 bool ChildSession::NoCapsForKit = false;
-
-namespace {
-
-std::vector<unsigned char> decodeBase64(const std::string & inputBase64)
-{
-    std::istringstream stream(inputBase64);
-    Poco::Base64Decoder base64Decoder(stream);
-    std::istreambuf_iterator<char> eos;
-    return std::vector<unsigned char>(std::istreambuf_iterator<char>(base64Decoder), eos);
-}
-
-}
 
 namespace {
 
@@ -112,7 +103,7 @@ ChildSession::ChildSession(const std::shared_ptr<ProtocolHandlerInterface>& prot
     , _currentPart(-1)
     , _isDocLoaded(false)
     , _copyToClipboard(false)
-    , _canonicalViewId(-1)
+    , _canonicalViewId(CanonicalViewId::Invalid)
     , _isDumpingTiles(false)
     , _clientVisibleArea(0, 0, 0, 0)
     , _URPContext(nullptr)
@@ -303,11 +294,16 @@ bool ChildSession::_handleInput(const char *buffer, int length)
             return false;
         }
 
+        std::chrono::steady_clock::time_point timeStart = std::chrono::steady_clock::now();
+
         // Disable processing of other messages while loading document
         InputProcessingManager processInput(getProtocol(), false);
         // disable watchdog while loading
         WatchdogGuard watchdogGuard;
         _isDocLoaded = loadDocument(tokens);
+
+        LogUiCommands uiLog(this);
+        uiLog.logSaveLoad("load", Poco::URI(getJailedFilePath()).getPath(), timeStart);
 
         LOG_TRC("isDocLoaded state after loadDocument: " << _isDocLoaded);
         return _isDocLoaded;
@@ -483,6 +479,11 @@ bool ChildSession::_handleInput(const char *buffer, int length)
 
         return success;
     }
+    else if (tokens.equals(0, "addconfig"))
+    {
+        Poco::Path presetsPath(JAILED_CONFIG_ROOT);
+        getLOKit()->setOption("addconfig", Poco::URI(presetsPath).toString().c_str());
+    }
     else if (!_isDocLoaded)
     {
         sendTextFrameAndLogError("error: cmd=" + tokens[0] + " kind=nodocloaded");
@@ -539,7 +540,8 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         // All other commands are such that they always require a LibreOfficeKitDocument session,
         // i.e. need to be handled in a child process.
 
-        assert(tokens.equals(0, "clientzoom") ||
+        assert(Util::isFuzzing() ||
+               tokens.equals(0, "clientzoom") ||
                tokens.equals(0, "clientvisiblearea") ||
                tokens.equals(0, "outlinestate") ||
                tokens.equals(0, "downloadas") ||
@@ -680,12 +682,12 @@ bool ChildSession::_handleInput(const char *buffer, int length)
                     }
                 }
             }
-            else if (tokens[1].find(".uno:Signature") != std::string::npos)
+            else if (tokens[1] == ".uno:Signature" || tokens[1] == ".uno:InsertSignatureLine")
             {
                 // See if the command has parameters: if not, annotate with sign cert/key.
-                if (tokens.size() == 2 && unoSignatureCommand())
+                if (tokens.size() == 2 && unoSignatureCommand(tokens[1]))
                 {
-                    // .uno:Signature has been sent with parameters from user private info, done.
+                    // The command has been sent with parameters from user private info, done.
                     return true;
                 }
             }
@@ -713,7 +715,14 @@ bool ChildSession::_handleInput(const char *buffer, int length)
                 // disable watchdog while saving
                 WatchdogGuard watchdogGuard;
 
-                return unoCommand(unoSave);
+                std::chrono::steady_clock::time_point timeStart = std::chrono::steady_clock::now();
+                bool result = unoCommand(unoSave);
+                if (result)
+                {
+                    LogUiCommands uiLog(this);
+                    uiLog.logSaveLoad("save", Poco::URI(getJailedFilePath()).getPath(), timeStart);
+                }
+                return result;
             }
             else
                 return true;
@@ -736,11 +745,25 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         }
         else if (tokens.equals(0, "saveas"))
         {
-            return saveAs(tokens);
+            std::chrono::steady_clock::time_point timeStart = std::chrono::steady_clock::now();
+            bool result = saveAs(tokens);
+            if (result)
+            {
+                LogUiCommands uiLog(this);
+                uiLog.logSaveLoad("saveas", Poco::URI(getJailedFilePath()).getPath(), timeStart);
+            }
+            return result;
         }
         else if (tokens.equals(0, "exportas"))
         {
-            return exportAs(tokens);
+            std::chrono::steady_clock::time_point timeStart = std::chrono::steady_clock::now();
+            bool result = exportAs(tokens);
+            if (result)
+            {
+                LogUiCommands uiLog(this);
+                uiLog.logSaveLoad("exportas", Poco::URI(getJailedFilePath()).getPath(), timeStart);
+            }
+            return result;
         }
         else if (tokens.equals(0, "useractive"))
         {
@@ -843,7 +866,7 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         }
         else
         {
-            assert(false && "Unknown command token.");
+            assert(Util::isFuzzing() && "Unknown command token.");
         }
     }
 
@@ -898,8 +921,8 @@ bool ChildSession::loadDocument(const StringVector& tokens)
         return false;
     }
 
-    std::string timestamp, doctemplate;
-    parseDocOptions(tokens, part, timestamp, doctemplate);
+    std::string timestamp;
+    parseDocOptions(tokens, part, timestamp);
 
     std::string renderOpts;
     if (!getDocOptions().empty())
@@ -939,9 +962,9 @@ bool ChildSession::loadDocument(const StringVector& tokens)
     assert(getLOKitDocument() && "Expected valid LOKitDocument instance");
     LOG_INF("Created new view with viewid: [" << _viewId << "] for username: ["
                                               << getUserNameAnonym() << "] in session: [" << getId()
-                                              << "], template: [" << doctemplate << ']');
+                                              << "], template: [" << getDocTemplate() << ']');
 
-    if (!doctemplate.empty())
+    if (!getDocTemplate().empty())
     {
         static constexpr auto Protocol = "file://";
 
@@ -1020,6 +1043,7 @@ bool ChildSession::saveDocumentBackground([[maybe_unused]] const StringVector& t
     return false;
 #else
     LOG_TRC("Attempting background save");
+    _logUiSaveBackGroundTimeStart = std::chrono::steady_clock::now();
 
     // Keep the session alive over the lifetime of an async save
     if (!_docManager->forkToSave([this, tokens]{
@@ -1251,39 +1275,34 @@ bool ChildSession::clientVisibleArea(const StringVector& tokens)
     return true;
 }
 
-float ChildSession::getTilePriority(const std::chrono::steady_clock::time_point &now, const TileDesc &tile) const
+TilePrioritizer::Priority ChildSession::getTilePriority(const TileDesc &tile) const
 {
-    float score = tile.intersects(_clientVisibleArea) ? 2.0 : 1.0;
+    // previews are least interesting
+    if (tile.isPreview())
+        return TilePrioritizer::Priority::LOWEST;
+
+    // different part less interesting than session's current part
+    if (tile.getPart() != _currentPart)
+        return TilePrioritizer::Priority::LOW;
 
     // most important to render things close to the cursor fast
-    if (tile.getPart() == _currentPart)
-    {
-        if (tile.intersects(_cursorPosition))
-            score *= 2.0;
+    if (tile.intersects(_cursorPosition))
+        return TilePrioritizer::Priority::ULTRAHIGH;
 
-        // interacted with the keyboard/mouse recently ?
-        if (getInactivityMS(now) < 200 /* ms */) // typing etc.
-            score *= 2.0;
+    // inside viewing area more important than outside it
+    if (tile.intersects(_clientVisibleArea))
+        return TilePrioritizer::Priority::VERYHIGH;
 
-        // pre-loading near the viewing area is also more important than far away
-        Util::Rectangle r = tile.toAABBox();
-        // grow in each direction
-        Util::Rectangle enlarged =
-            Util::Rectangle::create(r.getLeft() - r.getWidth(), r.getTop() - r.getHeight(),
-                                    r.getRight() + r.getWidth(), r.getBottom() + r.getHeight());
-        if (enlarged.intersects(_clientVisibleArea))
-            score *= 2.0;
-    }
+    // pre-loading near the viewing area is also more important than far away
+    Util::Rectangle r = tile.toAABBox();
+    // grow in each direction
+    Util::Rectangle enlarged =
+        Util::Rectangle::create(r.getLeft() - r.getWidth(), r.getTop() - r.getHeight(),
+                                r.getRight() + r.getWidth(), r.getBottom() + r.getHeight());
+    if (enlarged.intersects(_clientVisibleArea))
+        return TilePrioritizer::Priority::HIGH;
 
-    // previews are less interesting
-    if (tile.isPreview())
-        score /= 2.0;
-
-    // readonly viewers are also less high priority
-    else if (isReadOnly())
-        score /= 2;
-
-    return score;
+    return TilePrioritizer::Priority::NORMAL;
 }
 
 bool ChildSession::outlineState(const StringVector& tokens)
@@ -1749,11 +1768,12 @@ bool ChildSession::insertFile(const StringVector& tokens)
         else
         {
             assert(type == "graphic" || type == "multimedia");
-            auto binaryData = decodeBase64(data);
+            std::string binaryData;
+            macaron::Base64::Decode(data, binaryData);
             const std::string tempFile = FileUtil::createRandomTmpDir() + '/' + name;
             std::ofstream fileStream;
             fileStream.open(tempFile);
-            fileStream.write(reinterpret_cast<char*>(binaryData.data()), binaryData.size());
+            fileStream.write(binaryData.data(), binaryData.size());
             fileStream.close();
             url = "file://" + tempFile;
         }
@@ -2143,8 +2163,8 @@ bool ChildSession::renderSearchResult(const char* buffer, int length, const Stri
 
         if (Png::encodeBufferToPNG(bitmapBuffer, width, height, output, eTileMode))
         {
-            static const std::string header = "rendersearchresult:\n";
-            size_t responseSize = header.size() + output.size();
+            constexpr std::string_view header = "rendersearchresult:\n";
+            const size_t responseSize = header.size() + output.size();
             std::vector<char> response(responseSize);
             std::copy(header.begin(), header.end(), response.begin());
             std::copy(output.begin(), output.end(), response.begin() + header.size());
@@ -2184,7 +2204,7 @@ bool ChildSession::completeFunction(const StringVector& tokens)
     return true;
 }
 
-bool ChildSession::unoSignatureCommand()
+bool ChildSession::unoSignatureCommand(const std::string& commandName)
 {
     // See if user private info has a signing key/cert: if so, annotate the UNO command with those
     // parameters before sending.
@@ -2229,7 +2249,9 @@ bool ChildSession::unoSignatureCommand()
     argumentsObj->set("SignatureKey", JsonUtil::makePropertyValue("string", signatureKey));
 
     std::ostringstream oss;
-    oss << "uno .uno:Signature ";
+    oss << "uno ";
+    oss << commandName;
+    oss << " ";
     argumentsObj->stringify(oss);
     std::string str = oss.str();
     StringVector tokens = StringVector::tokenize(str.data(), str.size());
@@ -2687,20 +2709,18 @@ namespace
 
 std::string extractCertificate(const std::string & certificate)
 {
-    const std::string header("-----BEGIN CERTIFICATE-----");
-    const std::string footer("-----END CERTIFICATE-----");
-
-    std::string result;
+    constexpr std::string_view header("-----BEGIN CERTIFICATE-----");
+    constexpr std::string_view footer("-----END CERTIFICATE-----");
 
     size_t pos1 = certificate.find(header);
     if (pos1 == std::string::npos)
-        return result;
+        return std::string();
 
     size_t pos2 = certificate.find(footer, pos1 + 1);
     if (pos2 == std::string::npos)
-        return result;
+        return std::string();
 
-    pos1 = pos1 + std::string(header).length();
+    pos1 = pos1 + header.length();
     pos2 = pos2 - pos1;
 
     return certificate.substr(pos1, pos2);
@@ -2728,10 +2748,11 @@ bool ChildSession::askSignatureStatus(const char* buffer, int length, const Stri
                 return false;
 
             std::string chainCertificate = rChainPtr;
-            std::vector<unsigned char> binaryChainCertificate = decodeBase64(extractCertificate(chainCertificate));
+            std::string binaryChainCertificate;
+            macaron::Base64::Decode(extractCertificate(chainCertificate), binaryChainCertificate);
 
             bResult = getLOKitDocument()->addCertificate(
-                binaryChainCertificate.data(),
+                reinterpret_cast<const unsigned char*>(binaryChainCertificate.data()),
                 binaryChainCertificate.size());
 
             if (!bResult)
@@ -3111,8 +3132,8 @@ bool ChildSession::renderShapeSelection(const StringVector& tokens)
     const std::size_t outputSize = getLOKitDocument()->renderShapeSelection(&output);
     if (output != nullptr && outputSize > 0)
     {
-        static const std::string header = "shapeselectioncontent:\n";
-        size_t responseSize = header.size() + outputSize;
+        constexpr std::string_view header = "shapeselectioncontent:\n";
+        const size_t responseSize = header.size() + outputSize;
         std::unique_ptr<char[]> response(new char[responseSize]);
         std::memcpy(response.get(), header.data(), header.size());
         std::memcpy(response.get() + header.size(), output, outputSize);
@@ -3307,7 +3328,7 @@ std::string ChildSession::getBlockedCommandType(std::string command)
         CommandControl::LockManager::getLockedCommandList().end())
         return "locked";
 
-    return "";
+    return std::string();
 }
 #endif
 
@@ -3790,7 +3811,7 @@ void ChildSession::loKitCallback(const int type, const std::string& payload)
         });
 #else
         // Register download id -> URL mapping in the DocumentBroker
-        auto url = std::string("../../") + payload.substr(payload.find_last_of("/"));
+        auto url = std::string("../../") + payload.substr(payload.find_last_of('/'));
         auto downloadId = Util::rng::getFilename(64);
         std::string docBrokerMessage = "registerdownload: downloadid=" + downloadId + " url=" + url + " clientid=" + getId();
         _docManager->sendFrame(docBrokerMessage.c_str(), docBrokerMessage.length());
@@ -3847,10 +3868,23 @@ void ChildSession::loKitCallback(const int type, const std::string& payload)
     }
 }
 
+void ChildSession::saveLogUiBackground()
+{
+    LogUiCommands uiLog(this);
+    uiLog.logSaveLoad("savebg", Poco::URI(getJailedFilePath()).getPath(), _logUiSaveBackGroundTimeStart);
+}
+
 void LogUiCommands::logLine(LogUiCommandsLine &line, bool isUndoChange)
 {
     // log command
     double timeDiffStart = std::chrono::duration<double>(line._timeStart - _session->_docManager->getLogUiCmd().getKitStartTimeSec()).count();
+
+    // Load / Save event made by application will reach here.
+    // In that case save without real userID
+    int userID = _session->_viewId;
+    if (_session->_clientVisibleArea.getWidth() == 0)
+        userID = -1;
+
     std::stringstream strToLog;
     strToLog << "kit=" << _session->_docManager->getDocId();
     strToLog << " time=" << std::fixed << std::setprecision(3) << timeDiffStart;
@@ -3859,7 +3893,7 @@ void LogUiCommands::logLine(LogUiCommandsLine &line, bool isUndoChange)
         double timeDiffEnd = std::chrono::duration<double>(line._timeEnd - line._timeStart).count();
         strToLog << " dur=" << std::fixed << std::setprecision(3) << timeDiffEnd;
     }
-    strToLog << " user=" << _session->_viewId;
+    strToLog << " user=" << userID;
     if (!isUndoChange)
     {
         strToLog << " rep=" << line._repeat;
@@ -3883,7 +3917,7 @@ void LogUiCommands::logLine(LogUiCommandsLine &line, bool isUndoChange)
         }
     }
 
-    _session->_docManager->getLogUiCmd().logUiCmdLine(_session->_viewId, strToLog.str());
+    _session->_docManager->getLogUiCmd().logUiCmdLine(userID, strToLog.str());
 
     if (!isUndoChange && line._undoChange != 0)
     {
@@ -3891,9 +3925,38 @@ void LogUiCommands::logLine(LogUiCommandsLine &line, bool isUndoChange)
     }
 }
 
+void LogUiCommands::logSaveLoad(std::string cmd, const std::string & path, std::chrono::steady_clock::time_point timeStart)
+{
+    LogUiCommandsLine uiLogLine;
+    uiLogLine._timeStart = timeStart;
+    uiLogLine._timeEnd = std::chrono::steady_clock::now();
+    uiLogLine._repeat = 1;
+    uiLogLine._cmd = std::move(cmd);
+
+    std::size_t size = 0;
+    const auto st = FileUtil::Stat(path);
+    if (st.exists() && st.good())
+    {
+        size = st.size();
+    }
+
+    std::set<std::string> fileExtensions = { "sxw", "odt", "fodt", "sxc", "ods", "fods", "sxi", "odp", "fodp", "sxd", "odg", "fodg", "doc", "xls", "ppt", "docx", "xlsx", "pptx" };
+    std::string extension = Poco::Path(path).getExtension();
+    if (fileExtensions.find(extension) == fileExtensions.end())
+        extension = "unknown";
+
+    std::stringstream strToLog;
+    strToLog << "size=" << size;
+    strToLog << " ext=" << extension;
+
+    uiLogLine._subCmd = strToLog.str();
+
+    logLine(uiLogLine);
+}
+
 LogUiCommands::~LogUiCommands()
 {
-    if (_session->_isDocLoaded && Log::isLogUIEnabled() && _session->_clientVisibleArea.getWidth() != 0)
+    if (!_skipDestructor && _session->_isDocLoaded && Log::isLogUIEnabled() && _session->_clientVisibleArea.getWidth() != 0)
     {
         if (_tokens->size() > 0 && _cmdToLog.find((*_tokens)[0]) != _cmdToLog.end())
         {
@@ -3912,7 +3975,7 @@ LogUiCommands::~LogUiCommands()
                 if (_tokens->equals(2, "char=0"))
                 {
                     uint32_t keyCode=0;
-                    _tokens->getUInt32(3,"key",keyCode);
+                    (void)_tokens->getUInt32(3,"key",keyCode);
                     actSubCmd = "";
                     if (keyCode & 8192)
                         actSubCmd += "ctrl-";
@@ -3943,6 +4006,10 @@ LogUiCommands::~LogUiCommands()
                     return;
                 actCmd = (*_tokens)[0];
                 actSubCmd = (*_tokens)[1];
+                std::size_t pos = actSubCmd.find_first_of ('?');
+                if (pos != std::string::npos) {
+                    actSubCmd = actSubCmd.substr (0,pos);
+                }
             }
             else if (_tokens->equals(0, "mouse"))
             {
@@ -4042,8 +4109,8 @@ LogUiCommands::~LogUiCommands()
             }
             // Store new command
             LogUiCommandsLine& lineAct = _session->_lastUiCmdLinesLogged[lineCount];
-            lineAct._cmd = actCmd;
-            lineAct._subCmd = actSubCmd;
+            lineAct._cmd = std::move(actCmd);
+            lineAct._subCmd = std::move(actSubCmd);
             lineAct._repeat = 1;
             lineAct._undoChange = undoChg;
             lineAct._timeStart = actTime;

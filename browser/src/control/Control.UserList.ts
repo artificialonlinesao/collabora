@@ -11,6 +11,7 @@
 /*
  * L.Control.UserList
  */
+/* global app */
 
 interface UserExtraInfo {
 	avatar: string;
@@ -127,14 +128,14 @@ class UserList extends L.Control {
 	followUser(viewId: number, instantJump: boolean = true) {
 		const myViewId = this.map._docLayer._viewId;
 		const followingViewId = app.getFollowedViewId();
-		const followMyself = viewId === followingViewId;
+		const followMyself = viewId === myViewId;
+
+		if (followingViewId === viewId) return;
 
 		app.setFollowingUser(viewId);
 
 		if (followMyself) {
 			this.map._setFollowing(true, myViewId, instantJump);
-			this.renderAll();
-			return;
 		} else if (viewId !== -1) {
 			this.map._setFollowing(true, viewId, instantJump);
 		} else {
@@ -163,7 +164,7 @@ class UserList extends L.Control {
 			img = L.DomUtil.create('img', 'avatar-img') as HTMLImageElement;
 		}
 
-		L.LOUtil.setUserImage(img, this.map, viewId);
+		app.LOUtil.setUserImage(img, this.map, viewId);
 
 		img.alt = this.options.userAvatarAlt.replace('{user}', username);
 
@@ -387,7 +388,7 @@ class UserList extends L.Control {
 			you = true;
 		} else {
 			username = e.username;
-			color = L.LOUtil.rgbToHex(this.map.getViewColor(e.viewId));
+			color = app.LOUtil.rgbToHex(this.map.getViewColor(e.viewId));
 			you = false;
 		}
 

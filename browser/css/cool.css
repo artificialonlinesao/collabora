@@ -40,7 +40,7 @@
 	--tb-min-fs-u: 11;
 	/* tab max font-size */
 	--tb-max-fs: 12px;
-	/* tab max font-size wihtout units*/
+	/* tab max font-size without units*/
 	--tb-max-fs-u: 12;
 	/* tab font-size preferred value or scaler */
 	--tb-fs-s: 1vw;
@@ -378,6 +378,21 @@ body {
 	overflow: hidden;
 	z-index: 990;
 }
+
+#sidebar-dock-wrapper.visible {
+	display: block;
+	animation: 200ms ease-out appear-from-right;
+}
+
+@keyframes appear-from-right {
+	from {
+		transform: translateX(100%);
+	}
+	to {
+		transform: translateX(0);
+	}
+}
+
 #sidebar-panel {
 	padding: 0px;
 	margin: 0px;
@@ -653,20 +668,22 @@ body {
 }
 
 .cool-annotation-info-collapsed {
-	text-align: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	margin: 0;
 	padding: 0;
 	background-color: var(--color-primary);
 	color: var(--color-primary-text);
 	font-weight: bold;
 	font-family: var(--cool-font);
-	font-size: 20px;
+	font-size: var(--default-font-size);
 	border: 1px solid var(--color-primary);
 	border-radius: 50%;
 	z-index: 10;
 	position: relative;
-	width: var(--btn-size);
-	height: var(--btn-size);
+	width: var(--btn-size-s);
+	height: var(--btn-size-s);
 	left: -6px;
 	top: -15px;
 }
@@ -761,7 +778,15 @@ body {
 	width: 32px;
 	padding: 0;
 	line-height: 1.5;
+	opacity: 0.9;
 }
+
+.cool-annotation.collapsed-comment .cool-annotation-img:hover {
+	cursor: pointer;
+	opacity: 1;
+	box-shadow: 0px 4px 10px var(--color-box-shadow);
+}
+
 .cool-annotation-img .avatar-img{
 	border: none;
 }

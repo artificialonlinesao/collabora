@@ -43,14 +43,17 @@ public:
     ChildSession* _session;
     int _lastUndoCount = 0;
     const StringVector* _tokens;
+    bool _skipDestructor = false;
     LogUiCommands(ChildSession* session, const StringVector* tokens) : _session(session),_tokens(tokens) {}
+    LogUiCommands(ChildSession* session) : _session(session),_tokens(nullptr),_skipDestructor(true) {}
     ~LogUiCommands();
+    void logSaveLoad(std::string cmd, const std::string & path, std::chrono::steady_clock::time_point timeStart);
 private:
     // list the commands to log here.
     std::set<std::string> _cmdToLog = {
         "uno", "key", "mouse", "textinput", "removetextcontext",
         "paste", "insertfile", "dialogevent" };
-    // list the the uno commands here, that are not to log. It will serach these strings as a prefixes
+    // list the the uno commands here, that are not to log. It will search these strings as a prefixes
     std::set<std::string> _unoCmdToNotLog = {
         ".uno:SidebarShow", ".uno:ToolbarMode" };
     void logLine(LogUiCommandsLine &line, bool isUndoChange=false);
@@ -142,9 +145,9 @@ public:
     }
 
     // Only called by kit.
-    void setCanonicalViewId(int viewId) { _canonicalViewId = viewId; }
+    void setCanonicalViewId(CanonicalViewId viewId) { _canonicalViewId = viewId; }
 
-    int  getCanonicalViewId() const { return _canonicalViewId; }
+    CanonicalViewId getCanonicalViewId() const { return _canonicalViewId; }
 
     void setViewRenderState(const std::string& state) { _viewRenderState = state; }
 
@@ -154,7 +157,14 @@ public:
 
     std::string getViewRenderState() { return _viewRenderState; }
 
-    float getTilePriority(const std::chrono::steady_clock::time_point &now, const TileDesc &desc) const;
+    TilePrioritizer::Priority getTilePriority(const TileDesc &desc) const;
+
+    void saveLogUiBackground()
+#if defined(BUILDING_TESTS)
+    {}
+#else
+    ;
+#endif
 
 private:
     bool loadDocument(const StringVector& tokens);
@@ -181,7 +191,7 @@ private:
     bool dialogEvent(const StringVector& tokens);
     bool completeFunction(const StringVector& tokens);
     bool unoCommand(const StringVector& tokens);
-    bool unoSignatureCommand();
+    bool unoSignatureCommand(const std::string& commandName);
     bool selectText(const StringVector& tokens, const LokEventTargetEnum target);
     bool selectGraphic(const StringVector& tokens);
     bool renderNextSlideLayer(const unsigned width, const unsigned height, double dDevicePixelRatio, bool& done);
@@ -274,7 +284,7 @@ public:
             // FIXME: _pixmapCache
             << "\n\texportAsWopiUrl: " << _exportAsWopiUrl
             << "\n\tviewRenderedState: " << _viewRenderState
-            << "\n\tisDumpingTiles: " << _isDocLoaded
+            << "\n\tisDumpingTiles: " <<_isDumpingTiles
             << "\n\tclientVisibleArea: " << _clientVisibleArea.toString()
             << "\n\thasURP: " << _hasURP
             << "\n\tURPContext?: " << (_URPContext == nullptr)
@@ -324,7 +334,7 @@ private:
     std::string _viewRenderState;
 
     /// the canonical id unique to the set of rendering properties of this session
-    int _canonicalViewId;
+    CanonicalViewId _canonicalViewId;
 
     /// whether we are dumping tiles as they are being drawn
     bool _isDumpingTiles;
@@ -341,6 +351,7 @@ private:
     friend class LogUiCommands;
     int _lastUiCmdLinesLoggedCount = 0;
     LogUiCommandsLine _lastUiCmdLinesLogged[2];
+    std::chrono::steady_clock::time_point _logUiSaveBackGroundTimeStart;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

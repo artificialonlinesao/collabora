@@ -29,7 +29,7 @@
 #include <memory>
 #include <string>
 
-class CheckFileInfo
+class CheckFileInfo : public std::enable_shared_from_this<CheckFileInfo>
 {
 public:
     /// The CheckFileInfo State.
@@ -88,6 +88,9 @@ private:
             os << '#' << _httpSession->getFD() << ": ";
         }
     }
+
+    /// Parses the CheckFileInfo response and validates it.
+    bool parseResponseAndValidate(const std::string& response);
 
     std::shared_ptr<TerminatingPoll> _poll;
     Poco::URI _url; ///< Sanitized URL to the document. Can change through redirection.

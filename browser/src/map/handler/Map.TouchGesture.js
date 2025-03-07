@@ -1,4 +1,5 @@
 /* -*- js-indent-level: 8; fill-column: 100 -*- */
+/* global app */
 /*
  * L.Map.CalcTap is used to enable mobile taps.
  */
@@ -7,7 +8,7 @@ L.Map.mergeOptions({
 	touchGesture: true,
 });
 
-/* global Hammer app $ GraphicSelection */
+/* global Hammer app $ GraphicSelection TileManager */
 L.Map.TouchGesture = L.Handler.extend({
 	statics: {
 		MAP: 1,
@@ -319,14 +320,24 @@ L.Map.TouchGesture = L.Handler.extend({
 		// The validity and content control dropdown marker icon (exists in calc and writer) needs to be notified of tap events if it is the target.
 		var dropDownMarkers;
 		if (this._map._docLayer.isWriter()) {
-			dropDownMarkers = document.getElementsByClassName('leaflet-marker-icon writer-drop-down-marker');
+			dropDownMarkers = document.getElementsByClassName('html-object-section writer-drop-down-marker');
 		} else if (this._map._docLayer.isCalc()) {
 			dropDownMarkers = document.getElementsByClassName('leaflet-marker-icon spreadsheet-drop-down-marker');
 		}
-		if (dropDownMarkers && dropDownMarkers.length == 1 && dropDownMarkers[0] && e.target && e.target == dropDownMarkers[0]) {
-			this._map.fire('dropdownmarkertapped');
-			// don't send the mouse-event to core
-			return;
+		if (dropDownMarkers && dropDownMarkers.length == 1 && dropDownMarkers[0] && e.target) {
+			if (e.target == dropDownMarkers[0])
+				return; // don't send the mouse-event to core
+			else {
+				let section = app.sectionContainer.getSectionWithName(L.CSections.ContentControl.name);
+
+				if (section) {
+					section = section.sectionProperties.dropdownSection;
+					if (section && section.containsPoint(posInTwips.pToArray())) {
+						section.onClick();
+						return; // don't send the mouse-event to core
+					}
+				}
+			}
 		}
 
 		this._map.fire('closepopups');
@@ -428,7 +439,7 @@ L.Map.TouchGesture = L.Handler.extend({
 		if (window.IgnorePanning)
 			return;
 
-		L.Util.cancelAnimFrame(this.autoscrollAnimReq);
+		app.util.cancelAnimFrame(this.autoscrollAnimReq);
 		var point = e.pointers[0],
 		    containerPoint = this._map.mouseEventToContainerPoint(point),
 		    layerPoint = this._map.containerPointToLayerPoint(containerPoint),
@@ -604,7 +615,7 @@ L.Map.TouchGesture = L.Handler.extend({
 		return fakeEvt;
 	},
 
-	// Code and maths for the ergonomic scrolling is inspired formul
+	// Code and maths for the ergonomic scrolling is inspired by formulas at
 	// https://ariya.io/2013/11/javascript-kinetic-scrolling-part-2
 	// Some constants are changed based on the testing/experimenting/trial-error
 
@@ -634,7 +645,7 @@ L.Map.TouchGesture = L.Handler.extend({
 		this._map.dragging._draggable._onDown(evt);
 		this._timeStamp = Date.now();
 		this._inSwipeAction = true;
-		this.autoscrollAnimReq = L.Util.requestAnimFrame(this._autoscroll, this, true);
+		this.autoscrollAnimReq = app.util.requestAnimFrame(this._autoscroll, this, true);
 	},
 
 	_cancelAutoscrollRAF: function () {
@@ -642,7 +653,7 @@ L.Map.TouchGesture = L.Handler.extend({
 		this._inSwipeAction = false;
 		if (app.file.fileBasedView)
 			this._map._docLayer._checkSelectedPart();
-		L.Util.cancelAnimFrame(this.autoscrollAnimReq);
+		app.util.cancelAnimFrame(this.autoscrollAnimReq);
 		return;
 	},
 
@@ -690,11 +701,11 @@ L.Map.TouchGesture = L.Handler.extend({
 			this._map.dragging._draggable._onMove(e);
 
 			// Prefetch border tiles for the current visible area after cancelling any scheduled calls to the prefetcher.
-			this._map._docLayer._clearPreFetch();
-			this._map._docLayer._preFetchTiles(true /* forceBorderCalc */);
+			TileManager.clearPreFetch();
+			TileManager.preFetchTiles(true /* forceBorderCalc */);
 
 			if (!horizontalEnd || !verticalEnd) {
-				this.autoscrollAnimReq = L.Util.requestAnimFrame(this._autoscroll, this, true);
+				this.autoscrollAnimReq = app.util.requestAnimFrame(this._autoscroll, this, true);
 			} else {
 				this._inSwipeAction = false;
 				if (app.file.fileBasedView)

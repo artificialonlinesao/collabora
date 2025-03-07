@@ -237,6 +237,9 @@ WopiStorage::WOPIFileInfo::WOPIFileInfo(const FileInfo& fileInfo, Poco::JSON::Ob
     JsonUtil::findJSONValue(object, "UserExtraInfo", _userExtraInfo);
     JsonUtil::findJSONValue(object, "UserPrivateInfo", _userPrivateInfo);
     JsonUtil::findJSONValue(object, "ServerPrivateInfo", _serverPrivateInfo);
+    if (auto settingsJSON = object->getObject("UserSettings"))
+        JsonUtil::findJSONValue(settingsJSON, "uri", _userSettingsUri);
+
     JsonUtil::findJSONValue(object, "WatermarkText", _watermarkText);
     JsonUtil::findJSONValue(object, "UserCanWrite", _userCanWrite);
     JsonUtil::findJSONValue(object, "PostMessageOrigin", _postMessageOrigin);
@@ -255,6 +258,7 @@ WopiStorage::WOPIFileInfo::WOPIFileInfo(const FileInfo& fileInfo, Poco::JSON::Ob
     JsonUtil::findJSONValue(object, "EnableInsertRemoteFile", _enableInsertRemoteFile);
     JsonUtil::findJSONValue(object, "DisableInsertLocalImage", _disableInsertLocalImage);
     JsonUtil::findJSONValue(object, "EnableRemoteLinkPicker", _enableRemoteLinkPicker);
+    JsonUtil::findJSONValue(object, "EnableRemoteAIContent", _enableRemoteAIContent);
     JsonUtil::findJSONValue(object, "EnableShare", _enableShare);
     JsonUtil::findJSONValue(object, "HideUserList", _hideUserList);
     JsonUtil::findJSONValue(object, "SupportsLocks", _supportsLocks);
@@ -262,6 +266,7 @@ WopiStorage::WOPIFileInfo::WOPIFileInfo(const FileInfo& fileInfo, Poco::JSON::Ob
     JsonUtil::findJSONValue(object, "UserCanRename", _userCanRename);
     JsonUtil::findJSONValue(object, "BreadcrumbDocName", _breadcrumbDocName);
     JsonUtil::findJSONValue(object, "FileUrl", _fileUrl);
+    JsonUtil::findJSONValue(object, "UserCanOnlyComment", _userCanOnlyComment);
 
     // check if user is admin on the integrator side
     bool isAdminUser = false;
@@ -516,7 +521,7 @@ void WopiStorage::updateLockStateAsync(const Authorization& auth, LockContext& l
                                 LockUpdateResult(LockUpdateResult::Status::OK, lock)));
         }
 
-        const std::string failureReason = httpResponse->get("X-WOPI-LockFailureReason", "");
+        std::string failureReason = httpResponse->get("X-WOPI-LockFailureReason", "");
 
         const bool unauthorized =
             (httpResponse->statusLine().statusCode() == http::StatusCode::Unauthorized ||
@@ -530,7 +535,7 @@ void WopiStorage::updateLockStateAsync(const Authorization& auth, LockContext& l
 
         return asyncLockStateCallback(AsyncLockUpdate(
             AsyncLockUpdate::State::Error,
-            LockUpdateResult(LockUpdateResult::Status::UNAUTHORIZED, lock, failureReason)));
+            LockUpdateResult(LockUpdateResult::Status::UNAUTHORIZED, lock, std::move(failureReason))));
     };
 
     _lockHttpSession->setFinishedHandler(std::move(finishedCallback));

@@ -36,8 +36,11 @@ describe(['tagdesktop'], 'Electronic sign operations.', function() {
 			});
 
 		// When signing that document:
+		// Start signing:
 		cy.cGet('#menu-insert').click();
-		cy.cGet('#menu-insert-esignature').click();
+		cy.cGet('#menu-insert-signatureline').click();
+		// Finish electronic signing:
+		cy.cGet('#snackbar-container #button').click();
 		cy.get('@sendHash').should('be.called');
 		cy.cGet('#ESignatureDialog button#ok').click();
 		cy.get('@windowOpen').should('be.called');
@@ -50,6 +53,8 @@ describe(['tagdesktop'], 'Electronic sign operations.', function() {
 			eSignature.handleSigned(response);
 		});
 		cy.get('@getSignature').should('be.called');
+		// Close the dialog showing the just created signature:
+		cy.cGet('#DigitalSignaturesDialog button#close').click();
 
 		// Then make sure the document now has a (test / "not OK") signature:
 		cy.cGet('#signstatus-button div').should('have.class', 'sign_not_ok');

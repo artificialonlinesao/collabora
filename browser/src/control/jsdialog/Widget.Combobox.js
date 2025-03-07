@@ -24,7 +24,7 @@
  * customEntryRenderer - specifies if entries have custom content which is rendered by the core
  */
 
-/* global JSDialog $ */
+/* global JSDialog app $ */
 
 JSDialog.comboboxEntry = function (parentContainer, data, builder) {
 	var entry = L.DomUtil.create('div', 'ui-combobox-entry ' + builder.options.cssClass, parentContainer);
@@ -40,7 +40,7 @@ JSDialog.comboboxEntry = function (parentContainer, data, builder) {
 
 	if (data.icon) {
 		var icon = L.DomUtil.create('img', 'ui-combobox-icon', entry);
-		builder._isStringCloseToURL(data.icon) ? icon.src = data.icon : L.LOUtil.setImage(icon,  builder._createIconURL(data.icon), builder.map);
+		builder._isStringCloseToURL(data.icon) ? icon.src = data.icon : app.LOUtil.setImage(icon,  app.LOUtil.getIconNameOfCommand(data.icon), builder.map);
 	}
 
 	if (data.hint) {
@@ -184,8 +184,10 @@ JSDialog.combobox = function (parentContainer, data, builder) {
 	container.id = data.id;
 
 	var content = L.DomUtil.create('input', 'ui-combobox-content ' + builder.options.cssClass, container);
+	content.id = data.id + '-input';
 	content.value = data.text;
 	content.role = 'combobox';
+	content.setAttribute('autocomplete', 'off');
 
 	if (data.aria) {
 		content.setAttribute('aria-label',data.aria.label);
@@ -228,11 +230,12 @@ JSDialog.combobox = function (parentContainer, data, builder) {
 	container.addEventListener('click', function () { content.focus(); });
 
 	content.addEventListener('keyup', function (event) {
-		if (data.changeOnEnterOnly) {
-				if (event.key === 'Enter')
-					builder.callback('combobox', 'change', data, this.value, builder);
-		} else {
+		const shouldTriggerChange = data.changeOnEnterOnly ? event.key === 'Enter' : true;
+		if (shouldTriggerChange) {
 			builder.callback('combobox', 'change', data, this.value, builder);
+			if (data.focusMapOnEnter && event.key === 'Enter') {
+				builder.map.focus();
+			}
 		}
 
 		resetSelection();

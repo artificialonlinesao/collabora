@@ -13,7 +13,7 @@
  * Toolbar handler
  */
 
-/* global app $ window brandProductName DocUtil _ */
+/* global app $ window brandProductName DocUtil GraphicSelection _ */
 
 L.Map.include({
 
@@ -378,7 +378,8 @@ L.Map.include({
 
 		var isAllowedInReadOnly = false;
 		var allowedCommands = ['.uno:Save', '.uno:WordCountDialog',
-			'.uno:Signature', '.uno:PrepareSignature', '.uno:DownloadSignature', '.uno:ShowResolvedAnnotations',
+			'.uno:Signature', '.uno:PrepareSignature', '.uno:DownloadSignature', '.uno:InsertSignatureLine',
+			'.uno:ShowResolvedAnnotations',
 			'.uno:ToolbarMode?Mode:string=notebookbar_online.ui', '.uno:ToolbarMode?Mode:string=Default',
 			'.uno:ExportToEPUB', '.uno:ExportToPDF', '.uno:ExportDirectToPDF', '.uno:MoveKeepInsertMode', '.uno:ShowRuler'];
 		if (app.isCommentEditingAllowed()) {
@@ -386,6 +387,14 @@ L.Map.include({
 				'.uno:DeleteComment', '.uno:ReplyComment', '.uno:ReplyToAnnotation', '.uno:PromoteComment', '.uno:ResolveComment',
 				'.uno:ResolveCommentThread', '.uno:ResolveComment', '.uno:EditAnnotation', '.uno:ExportToEPUB', '.uno:ExportToPDF',
 				'.uno:ExportDirectToPDF');
+
+			const graphicInfo = GraphicSelection.extraInfo;
+			if (graphicInfo && graphicInfo.isSignature)
+			{
+				// If the just added signature line shape is selected, allow
+				// moving/resizing it.
+				allowedCommands.push('.uno:TransformDialog', '.uno:MoveShapeHandle');
+			}
 		}
 
 		for (var i in allowedCommands) {
@@ -418,7 +427,7 @@ L.Map.include({
 			app.socket.sendMessage('uno ' + command + (json ? ' ' + JSON.stringify(json) : ''));
 			// user interaction turns off the following of other users
 			if (map.userList && map._docLayer && map._docLayer._viewId)
-				map.userList.followUser(map._docLayer._viewId);
+				map.userList.followUser(map._docLayer._viewId, /* do instant scroll */ false);
 		}
 	},
 
@@ -557,10 +566,10 @@ L.Map.include({
 			for (i = 0, max = productNameContent.length; i < max; i++) {
 				productNameContent[i].innerHTML = productNameContent[i].innerHTML.replace('{productname}', productName);
 			}
-			document.getElementById('online-help-content').innerHTML = L.Util.replaceCtrlAltInMac(document.getElementById('online-help-content').innerHTML);
+			document.getElementById('online-help-content').innerHTML = app.util.replaceCtrlAltInMac(document.getElementById('online-help-content').innerHTML);
 		}
 		if (id === 'keyboard-shortcuts-content') {
-			document.getElementById('keyboard-shortcuts-content').innerHTML = L.Util.replaceCtrlAltInMac(document.getElementById('keyboard-shortcuts-content').innerHTML);
+			document.getElementById('keyboard-shortcuts-content').innerHTML = app.util.replaceCtrlAltInMac(document.getElementById('keyboard-shortcuts-content').innerHTML);
 		}
 		var searchInput = document.getElementById('online-help-search-input');
 		searchInput.setAttribute('placeholder',_('Search'));
@@ -619,7 +628,7 @@ L.Map.include({
 		var docType = this.getDocType() === 'drawing' ? 'presentation' : this.getDocType();
 		mainSectionsQuery += ', div.' + docType + ' .section';
 
-		// Select nain sections elements within the mainDiv
+		// Select main sections elements within the mainDiv
 		var mainSections = mainDiv.querySelectorAll(mainSectionsQuery);
 		isAnyMatchingContent = false;
 
@@ -900,7 +909,7 @@ L.Map.include({
 	cancelSearch: function() {
 		var toolbar = window.mode.isMobile() ? app.map.mobileSearchBar: app.map.statusBar;
 		var searchInput = L.DomUtil.get('search-input');
-		this.resetSelection();
+		app.searchService.resetSelection();
 		if (toolbar) {
 			toolbar.showItem('cancelsearch', false);
 			toolbar.enableItem('searchprev', false);
@@ -914,23 +923,6 @@ L.Map.include({
 		}
 
 		this._onGotFocus();
-	},
-
-	preventKeyboardPopup: function (id) {
-		// In the iOS app we don't want clicking on the toolbar to pop up the keyboard.
-		if (!window.ThisIsTheiOSApp && id !== 'zoomin' && id !== 'zoomout' && id !== 'mobile_wizard' && id !== 'insertion_mobile_wizard') {
-			this.focus(this.canAcceptKeyboardInput()); // Maintain same keyboard state.
-		}
-	},
-
-	// used in onClick method of w2ui toolbar
-	executeUnoAction: function (item) {
-		if (item.unosheet && this.getDocType() === 'spreadsheet') {
-			this.toggleCommandState(item.unosheet);
-		}
-		else {
-			this.toggleCommandState(window.getUNOCommand(item.uno));
-		}
 	},
 
 	openRevisionHistory: function () {

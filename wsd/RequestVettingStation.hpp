@@ -21,6 +21,7 @@
 #include <string>
 
 class CheckFileInfo;
+class PresetsInstallTask;
 
 /// RequestVettingStation is used to vet the request in the background.
 /// Vetting for a WOPI request is performed through CheckFileInfo.
@@ -76,8 +77,8 @@ public:
     }
 
 private:
-    bool createDocBroker(const std::string& docKey, const std::string& url,
-                         const Poco::URI& uriPublic);
+    bool createDocBroker(const std::string& docKey, const std::string& configId,
+                         const std::string& url, const Poco::URI& uriPublic);
 
     void createClientSession(const std::string& docKey, const std::string& url,
                              const Poco::URI& uriPublic, const bool isReadOnly);
@@ -92,8 +93,11 @@ private:
                                      WebSocketHandler::StatusCodes statusCode);
 
 #if !MOBILEAPP
+    void launchInstallPresets();
+
     void checkFileInfo(const Poco::URI& uri, bool isReadOnly, int redirectionLimit);
-    std::unique_ptr<CheckFileInfo> _checkFileInfo;
+    std::shared_ptr<CheckFileInfo> _checkFileInfo;
+    std::shared_ptr<PresetsInstallTask> _asyncInstallTask;
 #endif // !MOBILEAPP
 
     Util::Stopwatch _birthday;

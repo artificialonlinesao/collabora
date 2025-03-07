@@ -38,7 +38,7 @@ struct TileDescCacheCompareEq final
                l.getTilePosY() == r.getTilePosY() &&
                l.getTileWidth() == r.getTileWidth() &&
                l.getTileHeight() == r.getTileHeight() &&
-               l.getNormalizedViewId() == r.getNormalizedViewId() &&
+               l.getCanonicalViewId() == r.getCanonicalViewId() &&
                l.getEditMode() == r.getEditMode();
     }
 };
@@ -57,7 +57,7 @@ struct TileDescCacheHasher final
         hash = (hash << 5) + hash + t.getTilePosY();
         hash = (hash << 5) + hash + t.getTileWidth();
         hash = (hash << 5) + hash + t.getTileHeight();
-        hash = (hash << 5) + hash + t.getNormalizedViewId();
+        hash = (hash << 5) + hash + to_underlying(t.getCanonicalViewId());
 
         return hash;
     }
@@ -268,8 +268,9 @@ public:
     /// Return the data if we have it, or nothing.
     Blob lookupCachedStream(StreamType type, const std::string& name);
 
-    // The tiles parameter is an invalidatetiles: message as sent by the child process
-    void invalidateTiles(const std::string& tiles, int normalizedViewId);
+    /// The tiles parameter is an invalidatetiles: message as sent by the child process
+    /// returns true if cache wasn't empty
+    bool invalidateTiles(const std::string& tiles, CanonicalViewId canonicalViewId);
 
     /// Parse invalidateTiles message to rectangle and associated attributes of the invalidated area
     static Util::Rectangle parseInvalidateMsg(const std::string& tiles, int &part, int &mode, TileWireId &wid);
@@ -299,7 +300,9 @@ private:
     void ensureCacheSize();
     static size_t itemCacheSize(const Tile &tile);
 
-    void invalidateTiles(int part, int mode, int x, int y, int width, int height, int normalizedViewId);
+    /// Removes the invalid tiles from the cache
+    /// returns true if cache wasn't empty
+    bool invalidateTiles(int part, int mode, int x, int y, int width, int height, CanonicalViewId canonicalViewId);
 
     /// Lookup tile in our cache.
     Tile findTile(const TileDesc &desc);
@@ -311,7 +314,7 @@ private:
 
     /// Extract location from fileName, and check if it intersects with [x, y, width, height].
     static bool intersectsTile(const TileDesc &tileDesc, int part, int mode, int x, int y,
-                               int width, int height, int normalizedViewId);
+                               int width, int height, CanonicalViewId canonicalViewId);
 
     Tile saveDataToCache(const TileDesc& desc, const char* data, size_t size);
     void saveDataToStreamCache(StreamType type, const std::string& fileName, const char* data,

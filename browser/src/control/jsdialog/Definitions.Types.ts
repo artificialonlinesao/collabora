@@ -40,7 +40,7 @@ interface DialogJSON extends WidgetJSON {
 // JSDialog message (full, update or action)
 interface JSDialogJSON extends DialogJSON {
 	id: string; // unique windowId
-	jsontype: string; // specifies target componenet, on root level only
+	jsontype: string; // specifies target component, on root level only
 	action?: string; // optional name of an action
 	control?: WidgetJSON;
 }
@@ -146,9 +146,10 @@ interface TreeEntryJSON {
 
 interface TreeHeaderJSON {
 	text: string;
+	sortable: boolean; // can be sorted by column
 }
 
-interface TreeWidget extends WidgetJSON {
+interface TreeWidgetJSON extends WidgetJSON {
 	text: string;
 	singleclickactivate: boolean; // activates element on single click instead of just selection
 	fireKeyEvents?: boolean; // do we sent key events to core
@@ -168,8 +169,17 @@ interface IconViewEntry {
 	tooltip: string; // tooltip of an entry
 	ondemand: boolean; // if true then we ignore image property and request it on demand (when shown)
 }
+
 interface IconViewJSON extends WidgetJSON {
 	entries: Array<IconViewEntry>;
 	singleclickactivate: boolean; // activates element on single click instead of just selection
 	textWithIconEnabled: boolean; // To identify if we should add text below the icon or not.
+}
+
+interface EditWidgetJSON extends WidgetJSON {
+	placeholder: string; // show when empty
+	text: string; // text value
+	password: boolean; // is password field
+	hidden: boolean; // is hidden, TODO: duplicate?
+	changedCallback: any; // callback  for 'change' event
 }

@@ -1,12 +1,15 @@
-/* global describe it cy beforeEach require*/
+/* global describe it cy beforeEach expect require*/
 
 var helper = require('../../common/helper');
+var desktopHelper = require('../../common/desktop_helper');
 var searchHelper = require('../../common/search_helper');
 
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Searching via search bar.', function() {
 
 	beforeEach(function() {
 		helper.setupAndLoadDocument('calc/search_bar.ods');
+		cy.wait(500);
+		cy.cGet(helper.addressInputSelector).should('have.value', 'A2');
 	});
 
 	it('Search existing word.', function() {
@@ -14,17 +17,58 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Searching via search bar.'
 		searchHelper.typeIntoSearchField('a');
 
 		searchHelper.searchNext();
-		cy.wait(1000);
 
 		// First cell should be selected
 		cy.cGet(helper.addressInputSelector).should('have.value', 'A1');
 		helper.copy();
 		cy.cGet('#copy-paste-container table td').should('have.text', 'a');
+
+		searchHelper.searchNext();
+		cy.cGet(helper.addressInputSelector).should('have.value', 'B1');
+
+		searchHelper.typeIntoSearchField('c');
+		searchHelper.searchNext();
+
+		helper.copy();
+		cy.cGet('#copy-paste-container table td').should('have.text', 'c');
+
+		searchHelper.searchNext();
+		cy.cGet(helper.addressInputSelector).should('have.value', 'A301');
+	});
+
+	it('Search existing word when not following own view', function() {
+		desktopHelper.assertScrollbarPosition('vertical', 10, 30);
+
+		cy.getFrameWindow().its('app').then((app) => {
+			expect(app.isFollowingOff()).to.be.false;
+		});
+
+		desktopHelper.scrollViewDown();
+
+		desktopHelper.assertScrollbarPosition('vertical', 175, 205);
+
+		cy.getFrameWindow().its('app').then((app) => {
+			expect(app.isFollowingOff()).to.be.true;
+		});
+
+		helper.setDummyClipboardForCopy();
+		searchHelper.typeIntoSearchField('a');
+
+		searchHelper.searchNext();
+
+		cy.cGet(helper.addressInputSelector).should('have.value', 'A1');
+		desktopHelper.assertScrollbarPosition('vertical', 10, 30);
+
+		desktopHelper.scrollViewDown();
+
+		searchHelper.typeIntoSearchField('c');
+		searchHelper.searchNext();
+
+		cy.cGet(helper.addressInputSelector).should('have.value', 'C1');
+		desktopHelper.assertScrollbarPosition('vertical', 10, 30);
 	});
 
 	it('Search not existing word.', function() {
-		cy.cGet(helper.addressInputSelector).should('have.value', 'A2');
-
 		searchHelper.typeIntoSearchField('q');
 
 		// Should be no new selection
@@ -33,28 +77,26 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Searching via search bar.'
 
 	it('Search next / prev instance.', function() {
 		helper.setDummyClipboardForCopy();
-		searchHelper.typeIntoSearchField('a');
+		searchHelper.typeIntoSearchField('d');
 		searchHelper.searchNext();
 
-		cy.cGet(helper.addressInputSelector).should('have.value', 'A1');
+		cy.cGet(helper.addressInputSelector).should('have.value', 'A472');
 		helper.copy();
-		cy.cGet('#copy-paste-container table td').should('have.text', 'a');
+		cy.cGet('#copy-paste-container table td').should('have.text', 'd');
 
 		// Search next instance
 		searchHelper.searchNext();
 
-		cy.cGet(helper.addressInputSelector).should('have.value', 'B1');
+		cy.cGet(helper.addressInputSelector).should('have.value', 'D1');
 		helper.copy();
-		cy.cGet('#copy-paste-container table td').should('have.text', 'a');
+		cy.cGet('#copy-paste-container table td').should('have.text', 'd');
 
 		// Search prev instance
-		cy.wait(2000);
 		searchHelper.searchPrev();
-		cy.wait(2000);
 
-		cy.cGet(helper.addressInputSelector).should('have.value', 'A1');
+		cy.cGet(helper.addressInputSelector).should('have.value', 'A472');
 		helper.copy();
-		cy.cGet('#copy-paste-container table td').should('have.text', 'a');
+		cy.cGet('#copy-paste-container table td').should('have.text', 'd');
 	});
 
 	it('Search wrap at document end', function() {
@@ -76,7 +118,6 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Searching via search bar.'
 
 		// Search next instance, which is in the beginning of the document.
 		searchHelper.searchNext();
-		cy.wait(500);
 
 		cy.cGet(helper.addressInputSelector).should('have.value', 'A1');
 		helper.copy();

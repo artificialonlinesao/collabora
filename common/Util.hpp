@@ -53,6 +53,14 @@ extern "C"
 }
 #endif
 
+#if defined(__COVERITY__)
+#define THREAD_UNSAFE_DUMP_BEGIN _Pragma("coverity compliance block deviate MISSING_LOCK \"Intentionally thread-unsafe dumping\"")
+#define THREAD_UNSAFE_DUMP_END _Pragma("coverity compliance end_block MISSING_LOCK")
+#else
+#define THREAD_UNSAFE_DUMP_BEGIN
+#define THREAD_UNSAFE_DUMP_END
+#endif
+
 /// Format seconds with the units suffix until we migrate to C++20.
 inline std::ostream& operator<<(std::ostream& os, const std::chrono::seconds& s)
 {
@@ -369,8 +377,28 @@ namespace Util
     /// Replace substring @a in string @s with string @b.
     std::string replace(std::string s, const std::string& a, const std::string& b);
 
+    /// Replace character @a in string @s, in place, with character @b.
+    inline std::string& replaceInPlace(std::string& s, char a, char b)
+    {
+        for (std::size_t i = 0; i < s.size(); ++i)
+        {
+            if (s[i] == a)
+                s[i] = b;
+        }
+
+        return s;
+    }
+
+    /// Replace character @a in string @s with character @b.
+    inline std::string replace(const std::string_view s, char a, char b)
+    {
+        std::string res(s);
+        replaceInPlace(res, a, b);
+        return res;
+    }
+
     /// Replace any characters in @a matching characters in @b with replacement chars in @c and return
-    std::string replaceAllOf(const std::string &str, const std::string& match, const std::string& repl);
+    std::string replaceAllOf(std::string_view str, std::string_view match, std::string_view repl);
 
     std::string formatLinesForLog(const std::string& s);
 
@@ -608,7 +636,7 @@ namespace Util
     size_t findInVector(const std::vector<char>& tokens, const char *cstring, std::size_t offset = 0);
 
     /// Trim trailing characters (on the right).
-    inline std::string_view trim(const std::string_view s, const char ch)
+    inline std::string_view rtrim(const std::string_view s, const char ch)
     {
         const size_t last = s.find_last_not_of(ch);
         if (last != std::string::npos)
@@ -1352,7 +1380,14 @@ int main(int argc, char**argv)
      * Avoid using the configuration layer and rely on defaults which is only useful for special
      * test tool targets (typically fuzzing) where start-up speed is critical.
      */
-    bool isFuzzing();
+    constexpr bool isFuzzing()
+    {
+#if LIBFUZZER
+        return true;
+#else
+        return false;
+#endif
+    }
 
     constexpr bool isMobileApp()
     {
@@ -1522,7 +1557,7 @@ int main(int argc, char**argv)
 
     /// Stringify elements from a container of pairs with a delimiter to a stream.
     template <typename S, typename T>
-    void joinPair(S& stream, const T& container, const char* delimiter = " / ")
+    void joinPair(S& stream, const T& container, const std::string_view delimiter = " / ")
     {
         unsigned i = 0;
         for (const auto& pair : container)
@@ -1532,7 +1567,8 @@ int main(int argc, char**argv)
     }
 
     /// Stringify elements from a container of pairs with a delimiter to string.
-    template <typename T> std::string joinPair(const T& container, const char* delimiter = " / ")
+    template <typename T>
+    std::string joinPair(const T& container, const std::string_view delimiter = " / ")
     {
         std::ostringstream oss;
         joinPair(oss, container, delimiter);
@@ -1583,5 +1619,11 @@ inline std::ostream& operator<<(std::ostream& os, const std::chrono::system_cloc
 }
 
 inline std::ostream& operator<<(std::ostream& os, const Util::Backtrace& bt) { return bt.send(os); }
+
+// std::to_underlying will be available in C++23
+template <typename Enum> constexpr std::underlying_type_t<Enum> to_underlying(Enum e)
+{
+   return static_cast<std::underlying_type_t<Enum>>(e);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

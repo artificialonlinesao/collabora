@@ -3,7 +3,7 @@
 
 AC_PREREQ([2.63])
 
-AC_INIT([coolwsd], [24.04.11.1], [https://github.com/CollaboraOnline/online/issues], [coolwsd], [https://collaboraonline.github.io/])
+AC_INIT([coolwsd], [24.04.13.1], [https://github.com/CollaboraOnline/online/issues], [coolwsd], [https://collaboraonline.github.io/])
 LT_INIT([shared, disable-static, dlopen])
 
 AM_INIT_AUTOMAKE([1.10 foreign subdir-objects tar-pax -Wno-portability])
@@ -108,8 +108,8 @@ AC_LINK_IFELSE([AC_LANG_SOURCE([
       return v;
     }
     ])],
-               [AC_MSG_RESULT([No])],
-               [AC_MSG_RESULT([Yes])
+               [AC_MSG_RESULT([no])],
+               [AC_MSG_RESULT([yes])
                 LIBS="$LIBS -latomic"])
 
 # Declare options
@@ -364,6 +364,11 @@ AC_ARG_WITH([compiler-plugins],
                 [Experimental! Unlikely to work for anyone except Noel! Enable compiler plugins that will perform additional checks during
                  building.]))
 
+AC_ARG_ENABLE(coplugin,
+    AS_HELP_STRING([--enable-coplugin],
+        [Enables building of a clang plugin that performs COOL-specific checks.])
+)
+
 AC_ARG_ENABLE([werror],
             AS_HELP_STRING([--disable-werror],
                           [Do not turn warnings into errors.]))
@@ -497,7 +502,9 @@ if test -n "$with_logfile" ; then
    COOLWSD_LOGFILE="$with_logfile"
 fi
 AC_SUBST(COOLWSD_LOGFILE)
+AC_DEFINE_UNQUOTED([COOLWSD_LOGFILE],["$COOLWSD_LOGFILE"],[Default location of coolwsd log file])
 AC_SUBST(COOLWSD_LOGFILE_UICMD)
+AC_DEFINE_UNQUOTED([COOLWSD_LOGFILE_UICMD],["$COOLWSD_LOGFILE_UICMD"],[Default location of coolwsd UI command log file])
 
 if test -n "$with_trace_event_file" ; then
    COOLWSD_TRACEEVENTFILE="$with_trace_event_file"
@@ -982,6 +989,7 @@ WELCOME_CONFIG_FRAGMENT=
 HOME_MODE_CONFIGURATION=
 ENABLE_WELCOME_MESSAGE=0
 WELCOME_URL=
+CONFIG_INTERFACE_FRAGMENT=
 if test -n "$with_welcome_url"; then
     WELCOME_URL=$with_welcome_url
     ENABLE_WELCOME_MESSAGE=1
@@ -992,12 +1000,16 @@ else
     WELCOME_CONFIG_FRAGMENT="<welcome>
       <enable type=\"bool\" desc=\"Controls whether the welcome screen should be shown to the users on new install and updates. When enabled, your custom welcome screen must be created at /usr/share/coolwsd/browser/dist/welcome/welcome.html.\" default=\"false\">false</enable>
     </welcome>"
+    CONFIG_INTERFACE_FRAGMENT="<brandProductName desc=\"Change the displayed name the application will have for the user.\" type=\"string\"></brandProductName>
+    <brandProductURL desc=\"Change the product URL, empty makes disable the link\" type=\"string\">https://www.collaboraonline.com</brandProductURL>"
 fi
 
 AC_SUBST([WELCOME_CONFIG_FRAGMENT])
 AM_SUBST_NOTMAKE(WELCOME_CONFIG_FRAGMENT)
 AC_SUBST([HOME_MODE_CONFIGURATION])
 AM_SUBST_NOTMAKE(HOME_MODE_CONFIGURATION)
+AC_SUBST([CONFIG_INTERFACE_FRAGMENT])
+AM_SUBST_NOTMAKE(CONFIG_INTERFACE_FRAGMENT)
 AC_DEFINE_UNQUOTED([ENABLE_WELCOME_MESSAGE],$ENABLE_WELCOME_MESSAGE,[Should the Release notes message be shown on upgrade])
 AM_CONDITIONAL([ENABLE_WELCOME_MESSAGE], [test "$ENABLE_WELCOME_MESSAGE" = "1"])
 AC_DEFINE_UNQUOTED([WELCOME_URL],["$WELCOME_URL"],[The welcome url of the build.])
@@ -1200,10 +1212,10 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([
     #endif
 ])],
                     [AC_MSG_RESULT([yes])
-                    AC_DEFINE([HAVE_CLANG],true,[whether the C++ compiler is clang])],
+                    AC_DEFINE([HAVE_CLANG],1,[whether the C++ compiler is clang]) HAVE_CLANG=true],
                     [AC_MSG_RESULT([no])
-                    AC_DEFINE([HAVE_CLANG],false,[whether the C++ compiler is clang])])
-AM_CONDITIONAL([HAVE_CLANG], [test "$HAVE_CLANG" = "true"])
+                    AC_DEFINE([HAVE_CLANG],0,[whether the C++ compiler is clang])])
+AM_CONDITIONAL([HAVE_CLANG], [$HAVE_CLANG])
 AC_SUBST(HAVE_CLANG)
 
 CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXXSTD"
@@ -1232,6 +1244,7 @@ AC_MSG_CHECKING([whether to run tests against a LibreOffice])
 version_file="$with_lo_path/program/versionrc"
 if test -f $version_file; then
     JAILS_PATH="\${abs_top_builddir}/jails"
+    CACHE_PATH="\${abs_top_builddir}/cache"
     SYSTEMPLATE_PATH="\${abs_top_builddir}/systemplate"
     have_lo_path=true
     lo_msg="test against $LO_PATH"
@@ -1244,6 +1257,7 @@ fi
 AC_SUBST(LO_PATH)
 AC_DEFINE_UNQUOTED([LO_PATH],["$LO_PATH"],[Path to LibreOffice installation])
 AC_SUBST(JAILS_PATH)
+AC_SUBST(CACHE_PATH)
 AC_SUBST(SYSTEMPLATE_PATH)
 AM_CONDITIONAL(HAVE_LO_PATH,[test "$have_lo_path" = "true"])
 
@@ -1313,14 +1327,14 @@ AM_CONDITIONAL([ENABLE_DEBUG], [test "$ENABLE_DEBUG" = "true"])
 mobile_app=
 ENABLE_MOBILEAPP=
 MOBILEAPP=0
-AC_MSG_CHECKING([Is this a mobile app])
+AC_MSG_CHECKING([if this is a mobile app])
 if test "$enable_gtkapp" = "yes" -o "$enable_iosapp" = "yes" -o "$enable_androidapp" = "yes" -o "$host_os" = "emscripten" ; then
-     AC_MSG_RESULT([Yes])
+     AC_MSG_RESULT([yes])
      mobile_app=true;
      MOBILEAPP=1
      ENABLE_MOBILEAPP=true
 else
-     AC_MSG_RESULT([No])
+     AC_MSG_RESULT([no])
 fi
 AC_DEFINE_UNQUOTED([MOBILEAPP],[$MOBILEAPP],[Define to 1 if this is a mobileapp (eg. Android) build.])
 AC_SUBST(ENABLE_MOBILEAPP)
@@ -1447,18 +1461,17 @@ AS_IF([test "$ENABLE_IOSAPP" != "true" -a "$ENABLE_ANDROIDAPP" != "true" -a "$ho
        fi
 
        PKG_CHECK_MODULES([OPENSSL], [openssl])
-       AC_MSG_CHECKING([Whether OpenSSL has PKCS5_PBKDF2_HMAC()])
+       AC_MSG_CHECKING([whether OpenSSL is recent enough])
        AC_COMPILE_IFELSE([AC_LANG_SOURCE([
        #include <openssl/opensslv.h>
-       #if OPENSSL_VERSION_NUMBER < 0x10001000L
-       #error PKCS5_PBKDF2_HMAC() is in OpenSSL 1.0.1 or newer
+
+       /* OpenSSL 3.0.0 is the current mainline. */
+       #if OPENSSL_VERSION_NUMBER < 0x30000000
+       #error OpenSSL 3.0.0 or newer is required, override at your own risk
        #endif
        ])],
-                         [AC_MSG_RESULT([yes])
-                          AC_DEFINE([HAVE_PKCS5_PBKDF2_HMAC],1,[whether OpenSSL has PKCS5_PBKDF2_HMAC()])],
-                         [AC_MSG_RESULT([no])
-                          AC_MSG_WARN([OpenSSL is too old. Secure password storage for Admin Console is not supported.])
-                          AC_DEFINE([HAVE_PKCS5_PBKDF2_HMAC],0,[Whether OpenSSL has PKCS5_PBKDF2_HMAC()])])
+                         AC_MSG_RESULT([yes]),
+                         [AC_MSG_ERROR([OpenSSL is too old. Please use a more recent version.])])
 
        AC_MSG_CHECKING([POCO version])
        AC_COMPILE_IFELSE([AC_LANG_SOURCE([
@@ -1471,7 +1484,7 @@ AS_IF([test "$ENABLE_IOSAPP" != "true" -a "$ENABLE_ANDROIDAPP" != "true" -a "$ho
                          [AC_MSG_ERROR([The POCO version is too old])])
 
        # If poco is built with --unbundled, it uses the system pcre library
-       AC_MSG_CHECKING([If we need to link with -lpcre])
+       AC_MSG_CHECKING([if we need to link with -lpcre])
        AC_LINK_IFELSE([AC_LANG_SOURCE([
        #include <Poco/RegularExpression.h>
        int main(int argc, char **argv)
@@ -1482,8 +1495,8 @@ AS_IF([test "$ENABLE_IOSAPP" != "true" -a "$ENABLE_ANDROIDAPP" != "true" -a "$ho
            return e.match(argv[[1]], m);
        }
        ])],
-                      [AC_MSG_RESULT([No])],
-                      [AC_MSG_RESULT([Yes])
+                      [AC_MSG_RESULT([no])],
+                      [AC_MSG_RESULT([yes])
                        LIBS="$LIBS -lpcre"])
 
        ])
@@ -1531,6 +1544,15 @@ AS_IF([test `uname -s` = "FreeBSD"],
 # need this after the other stuff that uses the compiler because we don't want to run configure-tests with the plugins enabled
 AS_IF([test -n "$with_compiler_plugins"],
       [CPPFLAGS="$CPPFLAGS -Xclang -load -Xclang ${with_compiler_plugins}/compilerplugins/obj/plugin.so -Xclang -add-plugin -Xclang loplugin -Xclang -plugin-arg-loplugin -Xclang --cool-base-path=\${abs_top_srcdir}"])
+
+# Clang plugin.
+AC_MSG_CHECKING([whether to build a clang plugin])
+if test "$enable_coplugin" = "yes"; then
+    AC_MSG_RESULT([yes])
+    CPPFLAGS="$CPPFLAGS -Xclang -load -Xclang \${abs_top_srcdir}/clang/plugin.so -Xclang -add-plugin -Xclang coplugin"
+else
+    AC_MSG_RESULT([no])
+fi
 
 if test "x${prefix}" = "xNONE"; then
     prefix=/usr/local

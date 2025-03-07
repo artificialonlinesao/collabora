@@ -26,6 +26,7 @@ window.app = {
 		cellAddress: null, // To be assigned SimplePoint.
 		cellCursorVisible: false,
 		cellCursorRectangle: null, // To be assigned SimpleRectangle.
+		decimalSeparator: null, // Current cell's decimal separator.
 		otherCellCursors: {},
 		splitCoordinate: null, // SimplePoint.
 		partHashes: null, // hashes used to distinguish parts (we use sheet name)
@@ -36,6 +37,8 @@ window.app = {
 		twipsCorrection: 0.567 // There is a constant ratio between tiletwips and impress page twips. For now, this seems safe to use.
 	},
 	map: null, // Make map object a part of this.
+	util: null, // Attach the Util class.
+	LOUtil: null, // Attach the LOUtil class.
 	dispatcher: null, // A Dispatcher class instance is assigned to this.
 	twipsToPixels: 0, // Twips to pixels multiplier.
 	pixelsToTwips: 0, // Pixels to twips multiplier.

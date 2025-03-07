@@ -14,11 +14,11 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test jumping on large cell
 	});
 
 	it('No jump on long merged cell', function() {
-		desktopHelper.assertScrollbarPosition('horizontal', 205, 315);
+		desktopHelper.assertScrollbarPosition('horizontal', 205, 330);
 		calcHelper.clickOnFirstCell(true, false, false);
 
 		cy.cGet(helper.addressInputSelector).should('have.value', 'A1:Z1');
-		desktopHelper.assertScrollbarPosition('horizontal', 205, 315);
+		desktopHelper.assertScrollbarPosition('horizontal', 205, 330);
 	});
 
 	it('Jump on address with not visible cursor', function() {
@@ -26,11 +26,14 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test jumping on large cell
 		cy.cGet(helper.addressInputSelector).should('have.value', 'Z11');
 
 		helper.typeIntoInputField(helper.addressInputSelector, 'A110');
-		desktopHelper.assertScrollbarPosition('vertical', 205, 315);
+		desktopHelper.assertScrollbarPosition('vertical', 205, 330);
 	});
 
 	it('Jump on search with not visible cursor', function() {
-		desktopHelper.assertScrollbarPosition('horizontal', 205, 315);
+		desktopHelper.assertScrollbarPosition('vertical', 0, 30);
+		cy.cGet(helper.addressInputSelector).should('have.value', 'Z11');
+
+		desktopHelper.assertScrollbarPosition('horizontal', 205, 330);
 		cy.cGet('input#search-input').clear().type('FIRST{enter}');
 
 		cy.cGet(helper.addressInputSelector).should('have.value', 'A10');
@@ -40,7 +43,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test jumping on large cell
 	it('Show cursor on sheet insertion', function() {
 		// scroll down
 		helper.typeIntoInputField(helper.addressInputSelector, 'A110');
-		desktopHelper.assertScrollbarPosition('vertical', 205, 315);
+		desktopHelper.assertScrollbarPosition('vertical', 205, 330);
 
 		// insert sheet before
 		calcHelper.selectOptionFromContextMenu('Insert sheet before this');
@@ -74,5 +77,32 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test jumping on large cell
 
 		cy.cGet(helper.addressInputSelector).should('have.value', 'B2:AA2');
 		desktopHelper.assertScrollbarPosition('horizontal', 270, 390);
+	});
+});
+
+describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test decimal separator of cells with different languages.', function() {
+	beforeEach(function() {
+		helper.setupAndLoadDocument('calc/decimal_separator.ods');
+		desktopHelper.switchUIToCompact();
+		cy.cGet('#toolbar-up .ui-scroll-right').click();
+		cy.cGet('#sidebar').click({force: true});
+	});
+
+	it('Check different decimal separators', function() {
+		helper.typeIntoInputField(helper.addressInputSelector, 'A1');
+		cy.wait(400);
+
+		cy.window().then(win => {
+			var app = win['0'].app;
+			cy.expect(app.calc.decimalSeparator).to.be.equal('.');
+		});
+
+		helper.typeIntoInputField(helper.addressInputSelector, 'B1');
+		cy.wait(400);
+
+		cy.window().then(win => {
+			var app = win['0'].app;
+			cy.expect(app.calc.decimalSeparator).to.be.equal(',');
+		});
 	});
 });

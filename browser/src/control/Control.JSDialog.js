@@ -229,14 +229,23 @@ L.Control.JSDialog = L.Control.extend({
 		instance.overlay = overlay;
 	},
 
+	isOnlyChild: function(instance) {
+		const isMenu = instance.children && instance.children.length
+			&& instance.children[0].id === '__MENU__';
+		const isOnlyChild = instance.children && instance.children.length &&
+			instance.children[0].children && instance.children[0].children.length === 1;
+		return isMenu || isOnlyChild;
+	},
+
 	createContainer: function(instance, parentContainer) {
 		// it has to be form to handle default button
 		instance.container = L.DomUtil.create('div', 'jsdialog-window', parentContainer);
-		instance.container.setAttribute('role', 'dialog');
 		instance.container.id = instance.id;
 
 		instance.form = L.DomUtil.create('form', 'jsdialog-container ui-dialog ui-widget-content lokdialog_container', instance.container);
-
+		instance.form.setAttribute('role', 'dialog');
+		instance.form.setAttribute('aria-labelledby', instance.title);
+		instance.form.setAttribute('autocomplete', 'off');
 		// Prevent overlay from getting the click, except if we want click to dismiss
 		// Like in the case of the inactivity message.
 		// https://github.com/CollaboraOnline/online/issues/7403
@@ -252,8 +261,7 @@ L.Control.JSDialog = L.Control.extend({
 
 		instance.defaultButtonId = this._getDefaultButtonId(instance.children);
 
-		if (instance.children && instance.children.length &&
-			instance.children[0].children && instance.children[0].children.length === 1)
+		if (this.isOnlyChild(instance))
 			instance.isOnlyChild = true;
 
 		// it has to be first button in the form
@@ -288,7 +296,7 @@ L.Control.JSDialog = L.Control.extend({
 			L.DomUtil.addClass(instance.form, 'snackbar');
 		}
 
-		instance.content = L.DomUtil.create('div', 'lokdialog ui-dialog-content ui-widget-content', instance.form);
+		instance.content = L.DomUtil.create('div', 'jsdialog lokdialog ui-dialog-content ui-widget-content' + (instance.isOnlyChild ? ' one-child-popup' : ''), instance.form);
 
 		this.dialogs[instance.id] = {};
 	},
@@ -368,7 +376,8 @@ L.Control.JSDialog = L.Control.extend({
 
 		this.addFocusHandler(instance); // Loop focus for all dialogues.
 
-		var clickToCloseId = instance.clickToClose;
+		var clickToCloseId = instance.clickToClose
+			? instance.clickToClose.replaceAll(' ', '') : null;
 		if (clickToCloseId && clickToCloseId.indexOf('.uno:') === 0)
 			clickToCloseId = clickToCloseId.substr('.uno:'.length);
 
@@ -394,25 +403,29 @@ L.Control.JSDialog = L.Control.extend({
 			initialFocusElement[0].focus();
 
 		// pass the current instance and get the tabcontrol object if it exist
-		// this will only search in current instance and not in whole docuemnt
+		// this will only search in current instance and not in whole document
 		const tabControlWidget = this.findTabControl(instance);
 
-		let focusWidget ;
+		let focusWidget, firstFocusableElement ;
 
 		if (tabControlWidget) {
 			// get DOM element of tabControl from current instance
 			focusWidget = instance.content.querySelector('[id="' + tabControlWidget.id + '"]');
+			firstFocusableElement = JSDialog.GetFocusableElements(focusWidget);
+
 		} else {
-			focusWidget = instance.init_focus_id ? instance.container.querySelector('[id=\'' + instance.init_focus_id + '\']') : null;
+			// will directly set element of focusable element based on init focus id
+			// If init_id is not defined, select the first focusable element from the container
+			firstFocusableElement = instance.init_focus_id ? instance.container.querySelector('[id=\'' + instance.init_focus_id + '\']') : JSDialog.GetFocusableElements(instance.container);
 		}
 
-		if (focusWidget && document.activeElement !== focusWidget && instance.canHaveFocus) {
-			var firstFocusable = JSDialog.GetFocusableElements(focusWidget);
-			if (firstFocusable && firstFocusable.length)
-				firstFocusable[0].focus();
-			else
-				console.error('cannot get focus for widget: "' + instance.init_focus_id + '"');
+		if (firstFocusableElement && document.activeElement !== firstFocusableElement && instance.canHaveFocus) {
+			// for tab control case we have more then 1 element that can be focusable so select the first tab for the list
+			firstFocusableElement = firstFocusableElement.length > 0 ? firstFocusableElement[0] : firstFocusableElement;
+			firstFocusableElement.focus();
 		}
+		else
+			console.error('cannot get focus for widget: "' + instance.init_focus_id + '"');
 
 		if (instance.isDropdown && instance.isSubmenu) {
 			instance.container.addEventListener('mouseleave', function () {
@@ -435,7 +448,7 @@ L.Control.JSDialog = L.Control.extend({
 		return null; // Return null if tabcontrol is not found
 	},
 
-	/// if you use updatePos - instance param is binded automatically
+	/// if you use updatePos - instance param is bound automatically
 	setPosition: function(instance, updatedPos) {
 		var calculated = false;
 		var isRTL = document.documentElement.dir === 'rtl';
@@ -528,7 +541,7 @@ L.Control.JSDialog = L.Control.extend({
 
 		var positionNotSet = !instance.container.style || !instance.container.style.marginInlineStart;
 		if (calculated || positionNotSet)
-			this.updatePosition(instance.container, instance.posx, instance.posy);
+			this.setNewPosition(instance.container, instance.posx, instance.posy);
 	},
 
 	centerDialogPosition: function (instance) {
@@ -591,11 +604,11 @@ L.Control.JSDialog = L.Control.extend({
 		// make margin from canvas top and not from window top
 		instance.posy = top + offsetY + canvasEl.top;
 
-		this.updatePosition(instance.container, instance.posx, instance.posy);
+		this.updateAutoPopPosition(instance.container, instance.posx, instance.posy);
 	},
 
 	isChildAutoFilter: function(instance) {
-		// JSON structure suggest that if children array's first element has id='menu' and widgetType = 'treelistbox' then it will definatly a child autofilter popup
+		// JSON structure suggests that if children array's first element has id='menu' and widgetType = 'treelistbox' then it will definitely be a child autofilter popup
 		var rootChild = instance.children[0];
 		if (rootChild) {
 			var firstWidget = rootChild.children[0];
@@ -609,7 +622,7 @@ L.Control.JSDialog = L.Control.extend({
 		instance.posx = parentAutofilter.right;
 		instance.posy = parentAutofilter.top;
 
-		// set marding start for child popup in rtl mode
+		// set margin start for child popup in rtl mode
 		var isSpreadsheetRTL = this.map._docLayer.isCalcRTL();
 		if (isSpreadsheetRTL) {
 			var rtlPosx = parentAutofilter.left - instance.form.getBoundingClientRect().width;
@@ -625,7 +638,7 @@ L.Control.JSDialog = L.Control.extend({
 		if (instance.posy + height > window.innerHeight)
 			instance.posy = window.innerHeight - height;
 
-		this.updatePosition(instance.container, instance.posx, instance.posy);
+		this.updateAutoPopPosition(instance.container, instance.posx, instance.posy);
 	},
 
 	closePopupsOnTabChange: function() {
@@ -645,7 +658,7 @@ L.Control.JSDialog = L.Control.extend({
 	},
 
 	getAutoPopupParentContainer(instance) {
-		// Parent container will 
+		// Parent container will
 		if (instance.isAutofilter || instance.isAutoCompletePopup || !instance.isDocumentAreaPopup)
 			return document.body
 		return document.getElementById('document-container');
@@ -739,7 +752,7 @@ L.Control.JSDialog = L.Control.extend({
 			this.createDialog(instance);
 			this.addHandlers(instance);
 
-			// FIXME: remove this auto-binded instance so it will be clear what is passed
+			// FIXME: remove this auto-bound instance so it will be clear what is passed
 			instance.updatePos = this.setPosition.bind(this, instance);
 
 			// Special case for nonModal dialogues. Core side doesn't send their initial coordinates. We need to center them.
@@ -749,11 +762,12 @@ L.Control.JSDialog = L.Control.extend({
 				instance.updatePos();
 			}
 
-			// AutoPopup  will calculate poup position for Autofilter Popup
+			// AutoPopup  will calculate popup position for Autofilter Popup
 			if (instance.isAutofilter && !instance.isAutoFillPreviewTooltip)
 				this.calculateAutoFilterPosition(instance);
-			else if (instance.isAutoFillPreviewTooltip || instance.isAutoCompletePopup)
-				this.updatePosition(instance.container, instance.posx, instance.posy);
+			else if (instance.isAutoFillPreviewTooltip || instance.isAutoCompletePopup){
+				this.updateAutoPopPosition(instance.container, instance.posx, instance.posy);
+			}
 
 			this.dialogs[instance.id] = instance;
 
@@ -797,6 +811,9 @@ L.Control.JSDialog = L.Control.extend({
 		var data = e.data;
 		var innerData = data.data;
 
+		if (data.jsontype === 'formulabar' && innerData && innerData.separator)
+			app.calc.decimalSeparator = innerData.separator;
+
 		if (data.jsontype !== 'dialog' && data.jsontype !== 'popup')
 			return;
 
@@ -815,9 +832,9 @@ L.Control.JSDialog = L.Control.extend({
 		// focus on element outside view will move viewarea leaving blank space on the bottom
 		if (innerData.action_type === 'grab_focus') {
 			var control = dialogContainer.querySelector('[id=\'' + innerData.control_id + '\']');
-			var controlPosition = control.getBoundingClientRect();
-			if (controlPosition.bottom > window.innerHeight ||
-				controlPosition.right > window.innerWidth) {
+			var controlPosition = control ? control.getBoundingClientRect() : null;
+			if (controlPosition && (controlPosition.bottom > window.innerHeight ||
+				controlPosition.right > window.innerWidth)) {
 				this.centerDialogPosition(dialog); // will center it
 			}
 		}
@@ -859,11 +876,11 @@ L.Control.JSDialog = L.Control.extend({
 			target.translateX = newX;
 			target.translateY = newY;
 
-			this.updatePosition(target.container, newX, newY);
+			this.setNewPosition(target.container, newX, newY);
 		}
 	},
 
-	updatePosition: function (target, newX, newY) {
+	updateAutoPopPosition: function (target, newX, newY) {
 		var width = target.getBoundingClientRect().width;
 		var dialogBottom = newY + target.getBoundingClientRect().height;
 		var windowBottom = window.innerHeight;
@@ -871,10 +888,14 @@ L.Control.JSDialog = L.Control.extend({
 			newX = window.innerWidth - width;
 
 		// at this point we have un updated potion of autofilter instance.
-		// so to handle overlapping case of autofiler and toolbar we need some complex calculation
+		// so to handle overlapping case of autofilter and toolbar we need some complex calculation
 		if (dialogBottom > windowBottom)
 			newY = newY - (dialogBottom - windowBottom + 10);
 
+		this.setNewPosition(target, newX, newY);
+	},
+
+	setNewPosition(target, newX, newY) {
 		target.style.marginInlineStart = newX + 'px';
 		target.style.marginTop = newY + 'px';
 	},

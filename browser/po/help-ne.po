@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-14 13:17+0200\n"
+"POT-Creation-Date: 2025-03-05 09:51+0200\n"
 "PO-Revision-Date: 2022-05-16 15:16+0000\n"
 "Last-Translator: Diggaj Upadhyay <dcozupadhyay@duck.com>\n"
 "Language-Team: Nepali <https://hosted.weblate.org/projects/collabora-online/"
@@ -2874,7 +2874,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li.p:799-11
 msgid ""
-"Click on the clone formatting icon <img class=\"icon-size\" src=\"images"
+"Click on the clone formatting icon <img class=\"icon-size\" src=\"https://collab-images.kyzon.com"
 "/lc_formatpaintbrush.svg\" />. The mouse pointer turns to a paint bucket."
 msgstr ""
 

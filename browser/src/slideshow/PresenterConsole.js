@@ -56,7 +56,7 @@ class PresenterConsole {
                                 </header>
                                 <main id="main-content">
 								  <div id="toolbar">
-									<button type="button" id="close-slides" data-cooltip="${this.labels.goBack}" disabled>
+									<button type="button" id="close-slides" data-cooltip="${this.labels.goBack}">
 										<img src="https://collab-images.kyzon.com/presenterscreen-ArrowBack.svg">
 									</button>
                                   </div>
@@ -65,10 +65,10 @@ class PresenterConsole {
 										<div id="timer-container">
 											<div id="timer"></div>
 											 <div id="timer-controls">
-												<button type="button" id="pause" data-cooltip="${this.labels.pause}" disabled>
+												<button type="button" id="pause" data-cooltip="${this.labels.pause}">
 													<img src="https://collab-images.kyzon.com/presenterscreen-ButtonPauseTimerNormal.svg">
 												</button>
-												<button type="button" id="restart" data-cooltip="${this.labels.restart}" disabled>
+												<button type="button" id="restart" data-cooltip="${this.labels.restart}">
 													<img src="https://collab-images.kyzon.com/presenterscreen-ButtonRestartTimerNormal.svg">
 												</button>
 											 </div>
@@ -78,19 +78,19 @@ class PresenterConsole {
                                             <canvas id="current-presentation"></canvas>
 											<div id="slideshow-control-container">
 											<div id="navigation-container">
-												<button type="button" id="prev" data-cooltip="${this.labels.previous}" disabled>
+												<button type="button" id="prev" data-cooltip="${this.labels.previous}">
 													<img src="https://collab-images.kyzon.com/presenterscreen-ButtonSlidePreviousSelected.svg">
 												</button>
 												<div id="title-current">${this.labels.currentSlide}</div>
-												<button type="button" id="next" data-cooltip="${this.labels.next}" disabled>
+												<button type="button" id="next" data-cooltip="${this.labels.next}">
 													<img src="https://collab-images.kyzon.com/presenterscreen-ButtonEffectNextSelected.svg">
 												</button>
 											</div>
 											<div id="action-buttons-container">
-												<button type="button" id="notes" data-cooltip="${this.labels.notes}" disabled>
+												<button type="button" id="notes" data-cooltip="${this.labels.notes}">
 													<img src="https://collab-images.kyzon.com/presenterscreen-ButtonNotesNormal.svg">
 												</button>
-												<button type="button" id="slides" data-cooltip="${this.labels.slides}" disabled>
+												<button type="button" id="slides" data-cooltip="${this.labels.slides}">
 													<img src="https://collab-images.kyzon.com/presenterscreen-ButtonSlideSorterNormal.svg">
 												</button>
 											</div>
@@ -159,12 +159,8 @@ class PresenterConsole {
 
 		this._visibleSlidesCount = this._presenter.getVisibleSlidesCount();
 		this._previews = new Array(this._getSlidesCount());
-		if (this._previews.length > 1) {
-			let list = this._proxyPresenter.document.querySelectorAll('button');
-			for (let index = 0; index < list.length; index++) {
-				list[index].disabled = false;
-			}
-		}
+
+		this._disableButton(this._prevButton); // On start by default we should disable the prev button
 
 		if (this._slides) {
 			let img;
@@ -264,6 +260,10 @@ class PresenterConsole {
 			L.bind(this._onKeyDown, this),
 		);
 
+		// Declare some basic elements that we will use often in next function calls
+		this._prevButton = this._proxyPresenter.document.querySelector('#prev');
+		this._nextButton = this._proxyPresenter.document.querySelector('#next');
+
 		this._proxyPresenter.document.body.style.margin = '0';
 		this._proxyPresenter.document.body.style.padding = '0';
 		this._proxyPresenter.document.body.style.overflowX = 'hidden';
@@ -334,6 +334,7 @@ class PresenterConsole {
 			button.style.backgroundColor = 'transparent';
 			button.style.color = this.slideShowColor;
 			button.style.border = 'none';
+			button.style.borderRadius = this.PresenterConsoleBtnRadius;
 		});
 
 		elem = this._proxyPresenter.document.querySelector('#title-current');
@@ -495,7 +496,7 @@ class PresenterConsole {
 			list[elem].style.border = 'none';
 		}
 
-		// By default we will hide the Back button to jum from Slides view to normal view
+		// By default we will hide the Back button to jump from Slides view to Normal view
 		let closeSlideButton =
 			this._proxyPresenter.document.querySelector('#close-slides');
 		closeSlideButton.style.display = 'none';
@@ -560,6 +561,11 @@ class PresenterConsole {
 		this.tooltip.style.display = 'none'; // Initially hidden
 
 		mainContentContainer.append(this.tooltip);
+
+		this._tooltip = L.control.tooltip({
+			window: this._proxyPresenter,
+			container: this.tooltip,
+		});
 
 		let allPresenterConsoleButtons =
 			this._proxyPresenter.document.querySelectorAll('button');
@@ -779,13 +785,21 @@ class PresenterConsole {
 			return;
 		}
 
+		const isLastSlide = this._currentIndex + 1 == this._visibleSlidesCount;
 		switch (target.id) {
-			case 'prev':
+			case 'prev': {
 				this._presenter.getNavigator().rewindEffect();
 				break;
-			case 'next':
+			}
+			case 'next': {
 				this._presenter.getNavigator().dispatchEffect();
+				// if repeat after sec is set then do not close on last slide
+				if (isLastSlide && !this._presenter._presentationInfo.isEndless) {
+					this._onWindowClose();
+					break;
+				}
 				break;
+			}
 			case 'pause':
 				this._pause = !this._pause;
 				this._pauseButton();
@@ -1201,13 +1215,15 @@ class PresenterConsole {
 		}
 
 		this._currentIndex = e.slide;
-
+		const isFirstSlide = this._currentIndex == 0;
 		let elem = this._proxyPresenter.document.querySelector('#title-current');
 		if (elem) {
 			elem.innerText = _('Slide {0} of {1}')
 				.replace('{0}', this._getVisibleIndex(e.slide) + 1)
 				.replace('{1}', this._visibleSlidesCount);
 		}
+		if (isFirstSlide) this._disableButton(this._prevButton);
+		else this._enableButton(this._prevButton);
 
 		elem = this._proxyPresenter.document.querySelector('#next-presentation');
 		if (elem) {
@@ -1335,7 +1351,7 @@ class PresenterConsole {
 		// In fact, in Firefox transferFromImageBitmap does not resize it
 		// automatically to the set canvas size as it occurs in Chrome.
 		// According to Firefox version we can have 2 different behavior:
-		// on older versions (like 115) the frame is cropped wrt the canvas size
+		// on older versions (like 115) the frame is cropped wrt. the canvas size
 		// on newer versions (like 121) the canvas is automatically resized to
 		// frame size, the latter case can lead to worse performance.
 		createImageBitmap(bitmap, {

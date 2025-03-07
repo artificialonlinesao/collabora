@@ -669,7 +669,7 @@ L.TextInput = L.Layer.extend({
 		return 	this._map && this._map.formulabar && this._map.formulabar.hasFocus();
 	},
 
-	// Fired when text has been inputed, *during* and after composing/spellchecking
+	// Fired when text has been entered, *during* and after composing/spellchecking
 	_onInput: function(ev) {
 		if (this._map.uiManager.isUIBlocked())
 			return;
@@ -1083,7 +1083,8 @@ L.TextInput = L.Layer.extend({
 			if (this._map['stateChangeHandler'].getItemValue('.uno:ContentControlProperties') === 'enabled') {
 				if (app.sectionContainer.doesSectionExist(L.CSections.ContentControl.name)) {
 					var section = app.sectionContainer.getSectionWithName(L.CSections.ContentControl.name);
-					section.onClickDropdown(ev);
+					if (section.sectionProperties.dropdownSection)
+						section.sectionProperties.dropdownSection.onClick(null, ev);
 				}
 			}
 		}
@@ -1189,7 +1190,14 @@ L.TextInput = L.Layer.extend({
 		if (!window.mode.isMobile() && !window.mode.isTablet() &&
 			this._autoCorrectChars[text])
 		{
-			var codes = this._autoCorrectChars[text];
+			let codes;
+
+			if (app.calc.decimalSeparator && this._map.numPadDecimalPressed) { // decimalSeparator is set only for Calc.
+				this._map.numPadDecimalPressed = false;
+				codes = this._autoCorrectChars[app.calc.decimalSeparator];
+			}
+			else codes = this._autoCorrectChars[text];
+
 			this._sendKeyEvent(codes[0], codes[1], 'input');
 			this._sendKeyEvent(codes[2], codes[3], 'up');
 		}
@@ -1331,7 +1339,7 @@ L.TextInput = L.Layer.extend({
 		return selection.isCollapsed && this._getSelectionEnd() === this.getPlainTextContent().length;
 	},
 
-	// When the cursor is on a text node return the position wrt the whole plain text content
+	// When the cursor is on a text node return the position wrt. the whole plain text content
 	// When the cursor is on a pre- / post-space node return -1 / -2
 	// Otherwise return undefined
 	_getSelection: function(isStart) {

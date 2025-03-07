@@ -13,12 +13,15 @@
 
 #include "ClientSession.hpp"
 
+#include <filesystem>
 #include <ios>
+#include <map>
 #include <sstream>
 #include <string>
 #include <string_view>
 #include <memory>
 #include <unordered_map>
+#include <cctype>
 
 #include <Poco/Base64Decoder.h>
 #include <Poco/Net/HTTPResponse.h>
@@ -40,6 +43,7 @@
 #include <common/CommandControl.hpp>
 #include <wsd/TileDesc.hpp>
 #include <net/HttpHelper.hpp>
+#include <wopi/StorageConnectionManager.hpp>
 
 using namespace COOLProtocol;
 
@@ -92,8 +96,9 @@ ClientSession::ClientSession(
     _serverURL(requestDetails),
     _isTextDocument(false),
     _thumbnailSession(false),
-    _canonicalViewId(0),
-    _sentAudit(false)
+    _canonicalViewId(CanonicalViewId::None),
+    _sentAudit(false),
+    _sentBrowserSetting(false)
 {
     const std::size_t curConnections = ++COOLWSD::NumConnections;
     LOG_INF("ClientSession ctor [" << getName() << "] for URI: [" << _uriPublic.toString()
@@ -113,6 +118,8 @@ ClientSession::ClientSession(
     TraceEvent::emitOneRecordingIfEnabled("{\"name\":\"thread_name\",\"ph\":\"M\",\"args\":{\"name\":\"JS\"},\"pid\":"
                                           + std::to_string(getpid() + SYNTHETIC_COOL_PID_OFFSET)
                                           + ",\"tid\":1},\n");
+
+    _browserSettingsJSON = new Poco::JSON::Object();
 }
 
 // Can't take a reference in the constructor.
@@ -294,12 +301,7 @@ void ClientSession::handleClipboardRequest(DocumentBroker::ClipboardRequest     
             LOG_ERR("Unsupported Clipboard Request from socket #" << socket->getFD()
                                                                   << ". Terminating connection.");
 
-            http::Response httpResponse(http::StatusCode::Forbidden);
-            httpResponse.set("Content-Length", "0");
-            httpResponse.set("Connection", "close");
-            socket->send(httpResponse);
-            socket->closeConnection(); // Shutdown socket.
-            socket->ignoreInput();
+            HttpHelper::sendErrorAndShutdown(http::StatusCode::Forbidden, socket);
             return;
         }
 
@@ -682,6 +684,7 @@ bool ClientSession::_handleInput(const char *buffer, int length)
         LOG_TRC("UNO remote protocol message (from client): " << firstLine);
         return forwardToChild(std::string(buffer, length), docBroker);
     }
+
     if (tokens.equals(0, "coolclient"))
     {
         if (tokens.size() < 2)
@@ -858,19 +861,21 @@ bool ClientSession::_handleInput(const char *buffer, int length)
     }
     else if (tokens.equals(0, "tile"))
     {
-        if (!(UnitWSD::isUnitTesting() ? true : getCanonicalViewId() != 0 && getCanonicalViewId() >= 1000))
+        int canonicalViewId = to_underlying(getCanonicalViewId());
+        if (!(UnitWSD::isUnitTesting() ? true : canonicalViewId != 0 && canonicalViewId >= 1000))
         {
             LOG_WRN("Got tile request for session [" << getId() << "] on document [" << docBroker->getDocKey()
-                                << "] with invalid view ID [" << getCanonicalViewId() << "].");
+                                << "] with invalid view ID [" << canonicalViewId << "].");
         }
         return sendTile(buffer, length, tokens, docBroker);
     }
     else if (tokens.equals(0, "tilecombine"))
     {
-        if (!(UnitWSD::isUnitTesting() ? true : getCanonicalViewId() != 0 && getCanonicalViewId() >= 1000))
+        int canonicalViewId = to_underlying(getCanonicalViewId());
+        if (!(UnitWSD::isUnitTesting() ? true : canonicalViewId != 0 && canonicalViewId >= 1000))
         {
             LOG_WRN("Got tilecombine request for session [" << getId() << "] on document [" << docBroker->getDocKey()
-                                << "] with invalid view ID [" << getCanonicalViewId() << "].");
+                                << "] with invalid view ID [" << canonicalViewId << "].");
         }
         return sendCombinedTiles(buffer, length, tokens, docBroker);
     }
@@ -1130,6 +1135,7 @@ bool ClientSession::_handleInput(const char *buffer, int length)
                 // Child will handle this case
             }
         }
+
         return forwardToChild(firstLine, docBroker);
     }
     else if (tokens.equals(0, "formfieldevent") ||
@@ -1310,7 +1316,17 @@ bool ClientSession::_handleInput(const char *buffer, int length)
 #endif
 
         if (tokens.equals(0, "key"))
+        {
             _keyEvents++;
+
+            // Suppress Ctrl+q, which exits Core immediately.
+            // key type=input char=0 key=8720
+            if (tokens.size() == 4 && tokens.equals(2, "char=0") && tokens.equals(3, "key=8720"))
+            {
+                LOG_DBG("Suppressing Ctrl+q");
+                return true;
+            }
+        }
 
         if (isEditable() && COOLProtocol::tokenIndicatesDocumentModification(tokens))
         {
@@ -1344,6 +1360,20 @@ bool ClientSession::_handleInput(const char *buffer, int length)
     {
         Admin::instance().routeTokenSanityCheck();
     }
+    else if (tokens.equals(0, "browsersetting") && tokens.size() >= 3)
+    {
+        std::string action;
+        std::string json;
+        getTokenString(tokens[1], "action", action);
+        if (action == "update")
+        {
+            std::string key;
+            std::string value;
+            getTokenString(tokens[2], "key", key);
+            getTokenString(tokens[3], "value", value);
+            COOLWSD::syncUsersBrowserSettings(getUserId(), key, value);
+        }
+    }
 #endif
     else
     {
@@ -1352,6 +1382,81 @@ bool ClientSession::_handleInput(const char *buffer, int length)
     }
 
     return false;
+}
+
+#if !MOBILEAPP
+void ClientSession::updateBrowserSettingsJSON(const std::string& key, const std::string& value)
+{
+    std::vector<std::string> vec = Util::splitStringToVector(key, '.');
+    if (vec.size() == 2)
+    {
+        const std::string& parentKey = vec[0];
+        const std::string& childKey = vec[1];
+        if (!childKey.empty() && !parentKey.empty())
+        {
+            Poco::JSON::Object::Ptr jsonObject;
+            if (_browserSettingsJSON->has(parentKey))
+                jsonObject = _browserSettingsJSON->getObject(parentKey);
+            else
+                jsonObject = new Poco::JSON::Object();
+
+            jsonObject->set(childKey, value);
+            _browserSettingsJSON->set(parentKey, jsonObject);
+        }
+    }
+    else
+    {
+        _browserSettingsJSON->set(key, value);
+    }
+}
+#endif
+
+void ClientSession::overrideDocOption()
+{
+    if (!_sentBrowserSetting)
+    {
+        LOG_DBG("Browser settings not fetched, skipping DocOption override.");
+        return;
+    }
+
+    std::string spellOnline, darkTheme, darkBackgroundForTheme, accessibilityState;
+    JsonUtil::findJSONValue(_browserSettingsJSON, "spellOnline", spellOnline);
+    JsonUtil::findJSONValue(_browserSettingsJSON, "darkTheme", darkTheme);
+    JsonUtil::findJSONValue(_browserSettingsJSON, "accessibilityState", accessibilityState);
+    Poco::JSON::Object::Ptr darkBackgroundObj =
+        _browserSettingsJSON->getObject("darkBackgroundForTheme");
+
+    // follow darkTheme preference if darkBackgroundForTheme is not set
+    if (darkBackgroundObj.isNull())
+        setDarkBackground(darkTheme);
+    else
+        JsonUtil::findJSONValue(darkBackgroundObj, darkTheme == "true" ? "dark" : "light",
+                                darkBackgroundForTheme);
+
+    if (!darkTheme.empty())
+    {
+        setDarkTheme(darkTheme);
+        LOG_DBG("Overriding parsed docOption darkTheme[" << darkTheme << ']');
+    }
+
+    if (!darkBackgroundForTheme.empty())
+    {
+        setDarkBackground(darkBackgroundForTheme);
+        LOG_DBG("Overriding parsed docOption darkBackgroundForTheme[" << darkBackgroundForTheme
+                                                                      << ']');
+    }
+
+    if (!spellOnline.empty())
+    {
+        setSpellOnline(spellOnline);
+        LOG_DBG("Overriding parsed docOption spellOnline[" << spellOnline << ']');
+    }
+
+    if (!accessibilityState.empty())
+    {
+        setAccessibilityState(accessibilityState == "true" ? true : false);
+        LOG_DBG("Overriding parsed docOption accessibilityState[" << accessibilityState << ']');
+    }
 }
 
 bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
@@ -1369,9 +1474,10 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
     LOG_INF("Requesting document load from child.");
     try
     {
-        std::string timestamp, doctemplate;
+        std::string timestamp;
         int loadPart = -1;
-        parseDocOptions(tokens, loadPart, timestamp, doctemplate);
+        parseDocOptions(tokens, loadPart, timestamp);
+        overrideDocOption();
 
         std::ostringstream oss;
         oss << "load url=" << docBroker->getPublicUri().toString();
@@ -1487,6 +1593,11 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
         {
             oss << " macroSecurityLevel="
                 << ConfigUtil::getConfigValue<int>("security.macro_security_level", 1);
+        }
+
+        if (!getInitialClientVisibleArea().empty())
+        {
+            oss << " clientvisiblearea=" << getInitialClientVisibleArea();
         }
 
         if (ConfigUtil::getConfigValue<bool>("accessibility.enable", false))
@@ -1641,7 +1752,7 @@ bool ClientSession::sendCombinedTiles(const char* /*buffer*/, int /*length*/, co
     try
     {
         TileCombined tileCombined = TileCombined::parse(tokens);
-        tileCombined.setNormalizedViewId(getCanonicalViewId());
+        tileCombined.setCanonicalViewId(getCanonicalViewId());
         if (tileCombined.hasDuplicates())
         {
             LOG_ERR("Dangerous, tilecombine with duplicates is not acceptable");
@@ -1962,7 +2073,7 @@ bool ClientSession::handleKitToClientMessage(const std::shared_ptr<Message>& pay
             }
             catch (const std::exception& exception)
             {
-                LOG_ERR("unocommandresult parsing failure: " << exception.what());
+                LOG_ERR("Failed to handle [" << firstLine << "]: " << exception.what());
             }
         }
         else
@@ -2243,6 +2354,7 @@ bool ClientSession::handleKitToClientMessage(const std::shared_ptr<Message>& pay
             httpResponse.add("Content-Type", "application/octet-stream");
             httpResponse.add("X-Content-Type-Options", "nosniff");
             httpResponse.add("X-COOL-Clipboard", "true");
+            httpResponse.add("Cache-Control", "no-cache");
             httpResponse.set("Connection", "close");
             socket->send(httpResponse);
 
@@ -2333,7 +2445,7 @@ bool ClientSession::handleKitToClientMessage(const std::shared_ptr<Message>& pay
         if (getTokenInteger(tokens[1], "viewid", viewId) &&
             getTokenInteger(tokens[2], "canonicalid", canonicalId))
         {
-            _canonicalViewId = canonicalId;
+            _canonicalViewId = CanonicalViewId(canonicalId);
         }
     }
 #if ENABLE_FEATURE_LOCK || ENABLE_FEATURE_RESTRICTION
@@ -2929,6 +3041,7 @@ void ClientSession::handleTileInvalidation(const std::string& message,
        _tileWidthTwips == 0 || _tileHeightTwips == 0 ||
        (_clientSelectedPart == -1 && !_isTextDocument))
     {
+        LOG_TRC("No visible area received yet - skip invalidation");
         return;
     }
 
@@ -2968,7 +3081,7 @@ void ClientSession::handleTileInvalidation(const std::string& message,
     if( part == -1 ) // If no part is specified we use the part used by the client
         part = _clientSelectedPart;
 
-    int normalizedViewId = getCanonicalViewId();
+    CanonicalViewId canonicalViewId = getCanonicalViewId();
 
     std::vector<TileDesc> invalidTiles;
     if((part == _clientSelectedPart && mode == _clientSelectedMode) || _isTextDocument)
@@ -2988,7 +3101,7 @@ void ClientSession::handleTileInvalidation(const std::string& message,
                     Util::Rectangle tileRect (j * _tileWidthTwips, i * _tileHeightTwips, _tileWidthTwips, _tileHeightTwips);
                     if(invalidateRect.intersects(tileRect))
                     {
-                        TileDesc desc(normalizedViewId, part, mode,
+                        TileDesc desc(canonicalViewId, part, mode,
                                       _tileWidthPixel, _tileHeightPixel,
                                       j * _tileWidthTwips, i * _tileHeightTwips,
                                       _tileWidthTwips, _tileHeightTwips, -1, 0, -1);
@@ -3027,7 +3140,7 @@ void ClientSession::handleTileInvalidation(const std::string& message,
     if(!invalidTiles.empty())
     {
         TileCombined tileCombined = TileCombined::create(invalidTiles);
-        tileCombined.setNormalizedViewId(normalizedViewId);
+        tileCombined.setCanonicalViewId(canonicalViewId);
         docBroker->handleTileCombinedRequest(tileCombined, false, client_from_this());
     }
 }
@@ -3151,7 +3264,7 @@ std::string ClientSession::processSVGContent(const std::string& svg)
     std::string::size_type pos = 0;
     for (;;)
     {
-        static const std::string prefix = "src=\"file:///tmp/";
+        constexpr std::string_view prefix = "src=\"file:///tmp/";
         const auto start = svg.find(prefix, pos);
         if (start == std::string::npos)
         {

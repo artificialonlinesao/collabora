@@ -8,18 +8,14 @@
 #include <config.h>
 
 #include <cstdlib>
-#include <iostream>
 
-#include "ConfigUtil.hpp"
 #include "Socket.hpp"
 #include <test/HttpTestServer.hpp>
 
 #include <Poco/URI.h>
 
 #include <chrono>
-#include <condition_variable>
 #include <memory>
-#include <mutex>
 #include <stdexcept>
 #include <string>
 #include <test/lokassert.hpp>
@@ -113,17 +109,6 @@ public:
         _poller.removeSockets(); // We don't need stale sockets from prevous tests.
     };
 };
-
-#define CHECK(X)                                                                                   \
-    do                                                                                             \
-    {                                                                                              \
-        if (!(X))                                                                                  \
-        {                                                                                          \
-            fprintf(stderr, "Assertion: %s\n", #X);                                                \
-            assert(!(X));                                                                          \
-            __builtin_trap();                                                                      \
-        }                                                                                          \
-    } while (0)
 
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size)
 {

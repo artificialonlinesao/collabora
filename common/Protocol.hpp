@@ -311,8 +311,8 @@ namespace COOLProtocol
         std::string ret(message, abbrevLen);
         for (size_t i = abbrevLen; i < messageLen; ++i)
         {
-            const uint8_t unit = message[i];
-            const bool continuation = (unit & 0xC0) == 0x80;
+            const char unit = message[i];
+            const bool continuation = (static_cast<uint8_t>(unit) & 0xC0) == 0x80;
             if (!continuation) // likely
                 break;
             ret.push_back(unit);
@@ -321,7 +321,7 @@ namespace COOLProtocol
     }
 
     /// Returns an abbreviation of the message (the first line, indicating truncation). We assume
-    /// that it adhers to the COOL protocol, i.e. that there is always a first (or only) line that
+    /// that it adheres to the COOL protocol, i.e. that there is always a first (or only) line that
     /// is in printable UTF-8. I.e. no encoding of binary bytes is done. The format of the result is
     /// not guaranteed to be stable. It is to be used for logging purposes only, not for decoding
     /// protocol frames.

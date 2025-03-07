@@ -16,7 +16,11 @@
 #include "SenderQueue.hpp"
 #include "ServerURL.hpp"
 #include "DocumentBroker.hpp"
+
+#include <Poco/JSON/Object.h>
+#include <Poco/SharedPtr.h>
 #include <Poco/URI.h>
+
 #include <Rectangle.hpp>
 #include <deque>
 #include <utility>
@@ -270,7 +274,32 @@ public:
     /// Process an SVG to replace embedded file:/// media URIs with public http URLs.
     std::string processSVGContent(const std::string& svg);
 
-    int  getCanonicalViewId() const { return _canonicalViewId; }
+    CanonicalViewId getCanonicalViewId() const { return _canonicalViewId; }
+
+    bool getSentBrowserSetting() const { return _sentBrowserSetting; }
+
+    void setSentBrowserSetting(const bool sentBrowserSetting)
+    {
+        _sentBrowserSetting = sentBrowserSetting;
+    }
+
+    void setBrowserSettingsJSON(Poco::SharedPtr<Poco::JSON::Object>& jsonObject)
+    {
+        _browserSettingsJSON = std::move(jsonObject);
+    }
+
+    Poco::SharedPtr<Poco::JSON::Object> getBrowserSettingJSON()
+    {
+        return _browserSettingsJSON;
+    }
+
+    /// Override parsedDocOption values we get from browser setting json
+    /// Because when client sends `load url` it doesn't have information about browser setting json
+    void overrideDocOption();
+
+#if !MOBILEAPP
+    void updateBrowserSettingsJSON(const std::string& key, const std::string& value);
+#endif
 
 private:
     std::shared_ptr<ClientSession> client_from_this()
@@ -425,10 +454,15 @@ private:
     bool _isZoteroUserInfoSet = false;
 
     /// the canonical id unique to the set of rendering properties of this session
-    int _canonicalViewId;
+    CanonicalViewId _canonicalViewId;
 
     /// If server audit was already sent
     bool _sentAudit;
+
+    /// If browser setting was already sent
+    bool _sentBrowserSetting;
+
+    Poco::SharedPtr<Poco::JSON::Object> _browserSettingsJSON;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

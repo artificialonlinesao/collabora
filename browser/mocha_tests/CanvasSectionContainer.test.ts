@@ -2,6 +2,7 @@
 /// <reference path="../src/core/geometry.ts" />
 /// <reference path="../src/geometry/Point.ts" />
 /// <reference path="../src/geometry/Bounds.ts" />
+/// <reference path="../src/app/TilesMiddleware.ts" />
 /// <reference path="./helper/canvasContainerSetup.ts" />
 /// <reference path="./helper/rectUtil.ts" />
 
@@ -10,6 +11,7 @@ var assert = require('assert').strict;
 
 var dom = new jsdom.JSDOM(canvasDomString());
 
+addMockCanvas(dom.window);
 global.window = dom.window;
 global.document = dom.window.document;
 

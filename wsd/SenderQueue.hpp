@@ -45,7 +45,7 @@ public:
         // This check is always thread-safe.
         if (SigUtil::getTerminationFlag())
         {
-            LOG_DBG("SenderQueue: TerminationFlag is set");
+            LOG_DBG("SenderQueue: TerminationFlag is set, will not dequeue");
             return false;
         }
 
@@ -69,7 +69,7 @@ public:
 
     void dumpState(std::ostream& os)
     {
-        os << "\n\t\tqueue size " << _queue.size() << '\n';
+        os << "\t\tqueue size: " << _queue.size() << '\n';
         std::lock_guard<std::mutex> lock(_mutex);
         for (const Item &item : _queue)
         {

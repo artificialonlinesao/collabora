@@ -21,15 +21,15 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', 
 		cy.wait(500);
 		desktopHelper.assertVisiblePage(2, 3, 6);
 
-		desktopHelper.assertScrollbarPosition('vertical', 140, 160);
+		desktopHelper.assertScrollbarPosition('vertical', 140, 240);
 	});
 
 	it('Scrolling to bottom/top', function() {
-		desktopHelper.selectZoomLevel('40');
+		desktopHelper.selectZoomLevel('40', false);
 		helper.typeIntoDocument('{ctrl}{home}');
 		//scroll to bottom
 		desktopHelper.assertVisiblePage(1, 1, 4);
-		desktopHelper.pressKey(2, 'pagedown');
+		desktopHelper.pressKey(1, 'pagedown');
 		desktopHelper.assertVisiblePage(2, 2, 4);
 		desktopHelper.pressKey(1, 'pagedown');
 		desktopHelper.assertVisiblePage(3, 3, 4);
@@ -46,7 +46,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', 
 
 	it('Scrolling to left/right', function() {
 		cy.cGet('#toolbar-down').click();
-		desktopHelper.selectZoomLevel('200');
+		desktopHelper.selectZoomLevel('200', false);
 		//show horizontal scrollbar
 		cy.cGet('.leaflet-layer').click('bottom');
 		cy.wait(1000);
@@ -55,5 +55,25 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', 
 		cy.cGet('#test-div-horizontal-scrollbar').should('have.text', '0');
 		helper.typeIntoDocument('{end}{home}{end}');
 		desktopHelper.assertScrollbarPosition('horizontal', 430, 653);
+	});
+
+	it('Check if we jump the view on change of formatting mark', function() {
+		desktopHelper.switchUIToNotebookbar();
+
+		desktopHelper.selectZoomLevel('40', false);
+		helper.typeIntoDocument('{ctrl}{home}');
+		desktopHelper.pressKey(2, 'pagedown');
+		desktopHelper.pressKey(1, 'pagedown');
+		desktopHelper.assertScrollbarPosition('vertical', 220, 240);
+
+		// cursor on the bottom, scroll to top
+		desktopHelper.scrollWriterDocumentToTop();
+		desktopHelper.assertScrollbarPosition('vertical', 0, 10);
+
+		cy.cGet('.notebookbar #View-tab-label').click();
+		cy.cGet('.notebookbar #View-container .unoControlCodes').click();
+
+		cy.cGet('.notebookbar #View-container .unoControlCodes').should('have.class', 'selected');
+		desktopHelper.assertScrollbarPosition('vertical', 0, 10);
 	});
 });

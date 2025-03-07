@@ -37,11 +37,14 @@ function _drawingAreaControl (parentContainer, data, builder) {
 	image.id = imageId;
 	image.src = data.image.replace(/\\/g, '');
 	image.alt = data.text;
-	image.title = data.text;
 	image.tabIndex = 0;
 	image.draggable = false;
 	image.ondragstart = function() { return false; };
-	builder.map.uiManager.enableTooltip(image);
+	image.setAttribute('data-cooltip', data.text);
+
+	if (builder.map) {
+		L.control.attachTooltipEventListener(image, builder.map);
+	}
 
 	// Line width dialog is affected from delay on image render.
 	// So If the image render is delayed, use width and height of the data
@@ -147,7 +150,7 @@ function _drawingAreaControl (parentContainer, data, builder) {
 
 	var modifier = 0;
 
-	container.addEventListener('keydown', function(event) {
+	image.addEventListener('keydown', function(event) {
 		if (event.key === 'Enter') {
 			builder.callback('drawingarea', 'keypress', container, UNOKey.RETURN | modifier, builder);
 			event.preventDefault();
@@ -194,7 +197,7 @@ function _drawingAreaControl (parentContainer, data, builder) {
 		}
 	});
 
-	container.addEventListener('keyup', function(event) {
+	image.addEventListener('keyup', function(event) {
 		if (event.key === 'Shift') {
 			modifier = modifier & (~UNOModifier.SHIFT);
 			event.preventDefault();
@@ -204,11 +207,11 @@ function _drawingAreaControl (parentContainer, data, builder) {
 		}
 	});
 
-	container.addEventListener('blur', function() {
+	image.addEventListener('blur', function() {
 		modifier = 0;
 	});
 
-	container.addEventListener('keypress', function(event) {
+	image.addEventListener('keypress', function(event) {
 		if (event.key === 'Enter' ||
 			event.key === 'Escape' ||
 			event.key === 'Esc' ||

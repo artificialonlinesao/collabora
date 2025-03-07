@@ -75,7 +75,17 @@
 #include <Poco/TemporaryFile.h>
 #include <Poco/Util/Application.h>
 #include <Poco/URI.h>
+
+// for version info
 #include <Poco/Version.h>
+#if ENABLE_SSL
+#include <openssl/opensslv.h>
+#endif
+#include <zstd.h>
+#define PNG_VERSION_INFO_ONLY
+#include <png.h>
+#undef PNG_VERSION_INFO_ONLY
+
 
 #include "Log.hpp"
 #include "Protocol.hpp"
@@ -131,19 +141,26 @@ namespace Util
         std::vector<char> getBytes(const std::size_t length)
         {
             std::vector<char> v(length);
+            char* p = v.data();
+            size_t nbytes = length;
 
-            size_t offset;
-            for (offset = 0; offset < length; )
+            while (nbytes)
             {
-                int b = read(getURandom(), v.data() + offset, length - offset);
+                ssize_t b = read(getURandom(), p, nbytes);
                 if (b <= 0)
                 {
                     if (errno == EINTR)
                         continue;
                     break;
                 }
-                offset += b;
+
+                assert(static_cast<size_t>(b) <= nbytes);
+
+                nbytes -= b;
+                p += b;
             }
+
+            size_t offset = p - v.data();
             if (offset < length)
             {
                 fprintf(stderr, "No adequate source of randomness, "
@@ -198,7 +215,7 @@ namespace Util
 
     bool kitInProcess = false;
     void setKitInProcess(bool value) { kitInProcess = value; }
-    bool isKitInProcess() { return kitInProcess || isFuzzing() || isMobileApp(); }
+    bool isKitInProcess() { return isFuzzing() || isMobileApp() || kitInProcess; }
 
     std::string replace(std::string result, const std::string& a, const std::string& b)
     {
@@ -217,7 +234,7 @@ namespace Util
         return result;
     }
 
-    std::string replaceAllOf(const std::string &str, const std::string& match, const std::string& repl)
+    std::string replaceAllOf(std::string_view str, std::string_view match, std::string_view repl)
     {
         std::ostringstream os;
 
@@ -240,8 +257,8 @@ namespace Util
 
     std::string cleanupFilename(const std::string &filename)
     {
-        static const std::string mtch(",/?:@&=+$#'\"");
-        static const std::string repl("------------");
+        constexpr std::string_view mtch(",/?:@&=+$#'\"");
+        constexpr std::string_view repl("------------");
         return replaceAllOf(filename, mtch, repl);
     }
 
@@ -381,6 +398,10 @@ namespace Util
         pocoVersion += std::to_string((POCO_VERSION & 0xff000000) >> 24) + ".";
         pocoVersion += std::to_string((POCO_VERSION & 0x00ff0000) >> 16) + ".";
         pocoVersion += std::to_string((POCO_VERSION & 0x0000ff00) >> 8);
+        std::string zstdVersion;
+        zstdVersion += std::to_string(ZSTD_VERSION_MAJOR) + ".";
+        zstdVersion += std::to_string(ZSTD_VERSION_MINOR) + ".";
+        zstdVersion += std::to_string(ZSTD_VERSION_RELEASE);
 
         std::string json = "{ \"Version\":     \"" + version +
                            "\", "
@@ -392,6 +413,17 @@ namespace Util
                            "\", "
                            "\"PocoVersion\": \"" +
                            pocoVersion +
+                           "\", "
+#if ENABLE_SSL
+                           "\"OpenSSLVersion\": \"" +
+                           std::string(OPENSSL_VERSION_STR) +
+                           "\", "
+#endif
+                           "\"ZstdVersion\": \"" +
+                           zstdVersion +
+                           "\", "
+                           "\"LibPngVersion\": \"" +
+                           std::string(PNG_LIBPNG_VER_STRING) +
                            "\", "
                            "\"Protocol\":    \"" +
                            COOLProtocol::GetProtocolVersion() +
@@ -597,15 +629,6 @@ namespace Util
         ss << buffer << '.' << std::setfill('0') << std::setw(3) << msFraction << ' '
            << tm.tm_year + 1900;
         return ss.str();
-    }
-
-    bool isFuzzing()
-    {
-#if LIBFUZZER
-        return true;
-#else
-        return false;
-#endif
     }
 
     std::map<std::string, std::string> stringVectorToMap(const std::vector<std::string>& strvector, const char delimiter)

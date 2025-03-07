@@ -33,8 +33,6 @@
 #  include <SslSocket.hpp>
 #endif
 
-SocketPoll DumpSocketPoll("websocket");
-
 // Dumps incoming websocket messages and doesn't respond.
 class DumpSocketHandler : public WebSocketHandler
 {
@@ -85,7 +83,7 @@ private:
         LOG_TRC('#' << socket->getFD() << " handling incoming " << in.size() << " bytes.");
 
         // Find the end of the header, if any.
-        static const std::string marker("\r\n\r\n");
+        constexpr std::string_view marker("\r\n\r\n");
         auto itBody = std::search(in.begin(), in.end(),
                                   marker.begin(), marker.end());
         if (itBody == in.end())
@@ -223,6 +221,8 @@ public:
 int main (int argc, char **argv)
 {
     (void) argc; (void) argv;
+
+    SocketPoll DumpSocketPoll("websocket");
 
     if (!UnitWSD::init(UnitWSD::UnitType::Wsd, ""))
     {

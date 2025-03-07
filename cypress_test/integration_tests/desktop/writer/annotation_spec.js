@@ -11,7 +11,7 @@ describe(['tagdesktop'], 'Annotation Tests', function() {
 		helper.setupAndLoadDocument('writer/annotation.odt');
 		desktopHelper.switchUIToNotebookbar();
 		cy.cGet('#optionscontainer div[id$="SidebarDeck.PropertyDeck"]').click(); // Hide sidebar.
-		selectZoomLevel('50');
+		selectZoomLevel('50', false);
 	});
 
 	it('Insert', function() {
@@ -28,10 +28,10 @@ describe(['tagdesktop'], 'Annotation Tests', function() {
 		cy.cGet('#annotation-content-area-1').should('contain','some text0');
 		cy.cGet('#comment-annotation-menu-1').click();
 		cy.cGet('body').contains('.context-menu-item', 'Modify').click();
-		cy.cGet('#annotation-modify-textarea-1').type('some other text, ');
+		cy.cGet('#annotation-modify-textarea-1').type(', some other text');
 		cy.cGet('#annotation-save-1').click();
 		cy.cGet('.cool-annotation-content-wrapper').should('exist');
-		cy.cGet('#annotation-content-area-1').should('contain','some other text, some text0');
+		cy.cGet('#annotation-content-area-1').should('contain','some text0, some other text');
 	});
 
 	it('Reply', function() {
@@ -54,6 +54,22 @@ describe(['tagdesktop'], 'Annotation Tests', function() {
 		cy.cGet('.cool-annotation-menu').click();
 		cy.cGet('body').contains('.context-menu-item', 'Remove').click();
 		cy.cGet('.cool-annotation-content-wrapper').should('not.exist');
+	});
+
+	it('Tab Nevigation', function() {
+		desktopHelper.insertComment(undefined, false);
+
+		cy.cGet('.cool-annotation-autosavelabel').should('be.not.visible');
+		cy.realPress('Tab');
+		cy.cGet('.cool-annotation-autosavelabel').should('be.not.visible');
+		cy.cGet('#annotation-cancel-new:focus-visible');
+
+		cy.realPress('Tab');
+		cy.cGet('#annotation-save-new:focus-visible');
+		cy.cGet('.cool-annotation-autosavelabel').should('be.not.visible');
+
+		cy.realPress('Tab');
+		cy.cGet('.cool-annotation-autosavelabel').should('be.visible');
 	});
 
 });
@@ -84,10 +100,10 @@ describe(['tagdesktop'], 'Collapsed Annotation Tests', function() {
 		cy.cGet('.cool-annotation-img').click();
 		cy.cGet('#comment-annotation-menu-1').click();
 		cy.cGet('body').contains('.context-menu-item','Modify').click();
-		cy.cGet('#annotation-modify-textarea-1').type('some other text, ');
+		cy.cGet('#annotation-modify-textarea-1').type(', some other text');
 		cy.cGet('#annotation-save-1').click();
 		cy.cGet('.cool-annotation-content-wrapper').should('exist');
-		cy.cGet('#annotation-content-area-1').should('contain','some other text, some text0');
+		cy.cGet('#annotation-content-area-1').should('contain','some text0, some other text');
 	});
 
 	it('Reply', function() {
@@ -151,7 +167,7 @@ describe(['tagdesktop'], 'Annotation Autosave Tests', function() {
 		desktopHelper.switchUIToNotebookbar();
 		// TODO: skip sidebar detection on reload
 		//cy.cGet('#optionscontainer div[id$="SidebarDeck.PropertyDeck"]').click(); // Hide sidebar.
-		selectZoomLevel('50');
+		selectZoomLevel('50', false);
 	});
 
 	it('Insert autosave', function() {
@@ -200,14 +216,14 @@ describe(['tagdesktop'], 'Annotation Autosave Tests', function() {
 		cy.cGet('#annotation-content-area-1').should('have.text','some text0');
 		cy.cGet('#comment-annotation-menu-1').click();
 		cy.cGet('body').contains('.context-menu-item', 'Modify').click();
-		cy.cGet('#annotation-modify-textarea-1').type('some other text, ');
+		cy.cGet('#annotation-modify-textarea-1').type(', some other text');
 		cy.cGet('#map').focus();
 		cy.cGet('.cool-annotation-autosavelabel').should('be.visible');
 		cy.cGet('.cool-annotation-edit.modify-annotation').should('be.visible');
 
 		helper.reloadDocument(newFilePath);
 		cy.cGet('.cool-annotation-content-wrapper').should('exist');
-		cy.cGet('#annotation-content-area-1').should('have.text','some other text, some text0');
+		cy.cGet('#annotation-content-area-1').should('have.text','some text0, some other text');
 	});
 
 	it('Modify autosave save', function() {
@@ -217,17 +233,17 @@ describe(['tagdesktop'], 'Annotation Autosave Tests', function() {
 		cy.cGet('#annotation-content-area-1').should('have.text','some text0');
 		cy.cGet('#comment-annotation-menu-1').click();
 		cy.cGet('body').contains('.context-menu-item', 'Modify').click();
-		cy.cGet('#annotation-modify-textarea-1').type('some other text, ');
+		cy.cGet('#annotation-modify-textarea-1').type(', some other text');
 		cy.cGet('#map').focus();
 		cy.cGet('.cool-annotation-autosavelabel').should('be.visible');
 		cy.cGet('.cool-annotation-edit.modify-annotation').should('be.visible');
 		cy.cGet('#annotation-save-1').click();
-		cy.cGet('#annotation-content-area-1').should('have.text','some other text, some text0');
+		cy.cGet('#annotation-content-area-1').should('have.text','some text0, some other text');
 		cy.cGet('.cool-annotation-autosavelabel').should('be.not.visible');
 
 		helper.reloadDocument(newFilePath);
 		cy.cGet('.cool-annotation-content-wrapper').should('exist');
-		cy.cGet('#annotation-content-area-1').should('have.text','some other text, some text0');
+		cy.cGet('#annotation-content-area-1').should('have.text','some text0, some other text');
 	});
 
 	it('Modify autosave cancel', function() {
@@ -324,23 +340,23 @@ describe(['tagdesktop'], 'Annotation with @mention', function() {
 		helper.setupAndLoadDocument('writer/annotation.odt');
 		cy.cGet('#optionscontainer div[id$="SidebarDeck.PropertyDeck"]').click(); // Hide sidebar.
 		desktopHelper.switchUIToNotebookbar();
-		selectZoomLevel('50');
+		selectZoomLevel('50', false);
 	});
 
 	it('Insert comment with mention', function() {
 		desktopHelper.insertComment('some text0', false);
-		
+
 		cy.cGet('.cool-annotation').find('#annotation-modify-textarea-new').type(' @Ale');
 		cy.cGet('#mentionPopup').should('be.visible');
 		cy.cGet('#mentionPopupList .ui-treeview-entry:nth-child(1)').click();
-		
+
 		cy.cGet('#annotation-modify-textarea-new a').should('exist');
 		cy.cGet('#annotation-modify-textarea-new a').should('have.text', '@Alexandra');
 		cy.cGet('#annotation-modify-textarea-new a').should('have.attr', 'href', 'https://github.com/CollaboraOnline/online');
 		cy.cGet('#annotation-modify-textarea-new').should('have.text','some text0 @Alexandra\u00A0');
 
 		cy.cGet('#annotation-save-new').click();
-		
+
 		cy.cGet('.cool-annotation-content-wrapper').should('exist');
 		cy.cGet('#annotation-content-area-1 a').should('exist');
 		cy.cGet('#annotation-content-area-1 a').should('have.text', '@Alexandra');

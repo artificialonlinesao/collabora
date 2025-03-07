@@ -40,7 +40,7 @@
 	--color-btn-border: #b6b6b6;
 	--color-btn-border-dis: #c0bfbc;
 
-	--color-stylesview-border: var(--color-border);
+	--color-stylesview-border: var(--color-toolbar-border);
 	--color-toolbar-border: #e1dfdd;
 
 	--color-error: #e9322d;
@@ -56,6 +56,8 @@
 	--color-text-calc-header-selected: var(--color-text-darker);
 	--color-border-calc-header: #c0c0c0;
 	--color-calc-header-hover: #fff;
+	--color-calc-comment: #BF819E;
+	--column-row-highlight: #CCFFFF;
 
 	--color-grid-helper-line-solid: #e6e6e6;
 	--color-grid-helper-line-dashed: #191919;

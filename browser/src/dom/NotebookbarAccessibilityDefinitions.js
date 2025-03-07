@@ -108,15 +108,13 @@ var NotebookbarAccessibilityDefinitions = function() {
 
 	this.checkIntegratorButtons = function(selectedDefinitions) {
 		// The list of containers of the buttons which are added by integrations (via insertbutton post message etc).
-		var containerList = ['save', 'userListHeader', 'shortcutstoolbox'];
-
+		var containerList = ['save', 'userListHeader', 'shortcutstoolbox', 'closebuttonwrapper'];
 		for (var i = 0; i < containerList.length; i++) {
 			var container = document.getElementById(containerList[i]);
 
 			if (container) {
-				// All the buttons inside the container.
-				var buttonList = container.querySelectorAll('button');
-
+				// All the buttons inside the container which are visible on screen.
+				var buttonList = Array.from(container.querySelectorAll('button'));
 				if (buttonList.length) {
 					for (var j = 0; j < buttonList.length; j++) {
 						var button = buttonList[j];
@@ -135,9 +133,27 @@ var NotebookbarAccessibilityDefinitions = function() {
 		}
 	};
 
+	this.optionsToolButtons = function(selectedDefinitions) {
+				// add optionstoolbox accesskey information to selected definitions
+
+				const optionsToolSectionData = app.map.uiManager.notebookbar.getDefaultToolItems();
+				const language = this.getLanguage();
+		
+				for (let option = 0; option < optionsToolSectionData.length; option++) {
+					let toolOption = optionsToolSectionData[option];
+					toolOption.id = (toolOption.id == null ? toolOption.command.replace('.uno:', '') : toolOption.id) + '-button';
+					selectedDefinitions[toolOption.id] = {
+						focusBack : toolOption.accessibility.focusBack,
+						combination : language && toolOption.accessibility[language] ? toolOption.accessibility[language]: toolOption.accessibility.combination,
+						contentList: []
+					};
+				}
+	}
+
 	this.getDefinitions = function() {
 		var selectedDefinitions = this.getTabsAndContents();
 		this.checkIntegratorButtons(selectedDefinitions);
+		this.optionsToolButtons(selectedDefinitions);
 
 		return selectedDefinitions;
 	};

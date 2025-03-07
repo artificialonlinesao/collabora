@@ -123,7 +123,7 @@ public:
             shutdown();
             break;
         }
-        DELAY_LOG('#' << getFD() << " changed to state " << toStringShort(newState) << '\n');
+        DELAY_LOG('#' << getFD() << " changed to state " << nameShort(newState) << '\n');
         _state = newState;
     }
 
@@ -148,10 +148,8 @@ public:
                 DELAY_LOG('#' << getFD() << " read " << len
                           << " to queue: " << _chunks.size() << '\n');
                 chunk->getData().insert(chunk->getData().end(), &buf[0], &buf[len]);
-                if (_dest)
-                    _dest->_chunks.push_back(chunk);
-                else
-                    assert("no destination for data" && false);
+                assert(_dest && "no destination for data");
+                _dest->_chunks.push_back(std::move(chunk));
             }
             else if (errno != EAGAIN && errno != EWOULDBLOCK)
             {

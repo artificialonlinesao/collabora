@@ -410,7 +410,7 @@ menuDefinitions.set('ColorPickerMenu', [
 menuDefinitions.set('LanguageStatusMenu', [
 	{ type: 'separator' },
 	{ type: 'separator' },
-	// dynamically updated in Constol.StatusBar
+	// dynamically updated in Control.StatusBar
 ] as Array<MenuDefinition>);
 
 menuDefinitions.set('Presentation', [

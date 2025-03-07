@@ -176,8 +176,18 @@ class ServerAuditDialog {
 		return hasErrors;
 	}
 
+	private countErrors(): number {
+		return (
+			(app.serverAudit?.filter((entry: AuditEntry) => entry.status !== 'ok')
+				.length ?? 0) +
+			(app.clientAudit?.filter((entry: AuditEntry) => entry.status !== 'ok')
+				.length ?? 0)
+		);
+	}
+
 	private getJSON(entries: Array<any>): JSDialogJSON {
 		const hasErrors = this.hasErrors();
+		const countErrors = this.countErrors();
 
 		return {
 			id: this.id,
@@ -198,20 +208,27 @@ class ServerAuditDialog {
 					type: 'container',
 					vertical: true,
 					children: [
+						{
+							id: 'auditlist',
+							type: 'treelistbox',
+							headers: [
+								/* icon */ { text: _('Status'), sortable: false },
+								{ text: _('Help'), sortable: false },
+							],
+							entries: entries,
+							enabled: entries.length > 0,
+						},
 						!hasErrors
 							? {
 									id: 'auditsuccess',
 									type: 'fixedtext',
 									text: _('No issues found'),
 								}
-							: {},
-						{
-							id: 'auditlist',
-							type: 'treelistbox',
-							headers: [/* icon */ { text: _('Status') }, { text: _('Help') }],
-							entries: entries,
-							enabled: entries.length > 0,
-						},
+							: {
+									id: 'auditerror',
+									type: 'fixedtext',
+									text: _('Alerts:') + ' ' + countErrors,
+								},
 						{
 							id: this.id + '-buttonbox',
 							type: 'buttonbox',

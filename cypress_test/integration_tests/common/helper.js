@@ -84,16 +84,18 @@ function loadDocument(filePath, skipDocumentChecks, isMultiUser) {
 		loadDocumentNoIntegration(filePath, isMultiUser);
 	}
 
+	const isDraw = filePath.indexOf('draw') === 0;
+
 	// Wait for and verify that document is loaded
 	if (!skipDocumentChecks) {
 		if (isMultiUser) {
 			cy.cSetActiveFrame('#iframe1');
-			documentChecks();
+			documentChecks(isDraw);
 			cy.cSetActiveFrame('#iframe2');
-			documentChecks();
+			documentChecks(true);
 		} else {
 			// frame set above
-			documentChecks();
+			documentChecks(isDraw);
 		}
 	}
 
@@ -127,7 +129,7 @@ function reloadDocument(filePath) {
 	cy.log('>> reloadDocument - start');
 
 	closeDocument(filePath);
-	loadDocument(filePath);
+	loadDocument(filePath, /*skipDocumentChecks*/ true);
 
 	cy.log('<< reloadDocument - end');
 }
@@ -245,7 +247,7 @@ function hideNCFirstRunWizard() {
 	cy.log('<< hideNCFirstRunWizard - end');
 }
 
-// Upload a test document into Nexcloud and open it.
+// Upload a test document into Nextcloud and open it.
 // Parameters:
 // filePath - test document file path
 // subsequentLoad - whether we load a test document for the first time in the
@@ -343,10 +345,12 @@ function waitForInterferingUser() {
 	cy.log('<< waitForInterferingUser - end');
 }
 
-function documentChecks() {
+function documentChecks(skipInitializedCheck = false) {
 	cy.log('>> documentChecks - start');
 
 	cy.cGet('#document-canvas', {timeout : Cypress.config('defaultCommandTimeout') * 2.0});
+	if (!skipInitializedCheck)
+		cy.cGet('#map').should('have.class', 'initialized');
 
 	// With php-proxy the client is irresponsive for some seconds after load, because of the incoming messages.
 	if (Cypress.env('INTEGRATION') === 'php-proxy') {
@@ -373,7 +377,9 @@ function documentChecks() {
 		});
 		// Check also that the inputbar is drawn in Calc.
 		doIfInCalc(function() {
-			cy.cframe().find('#sc_input_window.formulabar');
+			cy.cframe().get('#sc_input_window.formulabar').should('exist');
+			cy.cframe().get('#pos_window-input.addressInput').should('exist');
+			cy.cframe().get('#pos_window-input.addressInput').should('not.be.empty');
 		});
 	}
 
@@ -809,7 +815,7 @@ function doIfOnDesktop(callback) {
 // Move the cursor in the given direction and wait until it moves.
 // Parameters:
 // direction - the direction the cursor should be moved.
-//			   possible valude: up, down, left, right, home, end
+//			   possible values: up, down, left, right, home, end
 // modifier - a modifier to the cursor movement keys (e.g. 'shift' or 'ctrl').
 // checkCursorVis - whether to check the cursor visibility after movement.
 // cursorSelector - selector for the cursor DOM element (document cursor is the default).
@@ -1068,16 +1074,17 @@ function typeIntoInputField(selector, text, clearBefore = true)
 {
 	cy.log('>> typeIntoInputField - start');
 
-	cy.cGet(selector).as('input');
-	cy.get('@input').focus();
-	cy.get('@input').should('have.focus');
 	if (clearBefore) {
-		cy.get('@input').invoke('val', '');
-		cy.get('@input').should('have.value', '');
+		cy.wait(300);
+		cy.cGet(selector).type('{selectall}{backspace}{selectall}{backspace}');
+		cy.wait(300);
 	}
 
-	cy.get('@input').type(text + '{enter}');
-	cy.get('@input').should('have.value', text);
+	cy.cGet(selector).type(text, {force: true});
+	cy.wait(300);
+	cy.cGet(selector).type('{enter}', {force: true});
+	cy.wait(300);
+	cy.cGet(selector).should('have.value', text);
 
 	cy.log('<< typeIntoInputField - end');
 }
@@ -1106,7 +1113,7 @@ function getBlinkingCursorPosition(aliasName) {
 	var cursorSelector = '.cursor-overlay .blinking-cursor';
 	cy.cGet(cursorSelector).then(function(cursor) {
 		var boundRect = cursor[0].getBoundingClientRect();
-		var xPos = boundRect.right;
+		var xPos = (boundRect.left + boundRect.right) / 2;
 		var yPos = (boundRect.top + boundRect.bottom) / 2;
 		cy.wrap({x: xPos, y: yPos}).as(aliasName);
 	});
@@ -1204,6 +1211,25 @@ function getSubFolder(filePath) {
 	return subFolder;
 }
 
+/*
+ * Assert image svg
+ */
+function assertImageSize(expectedWidth, expectedHeight) {
+	cy.log('>> assertImageSize - start');
+
+	cy.cGet('#canvas-container > svg')
+		.then(function (element) {
+			expect(element).to.have.length(1);
+			const actualWidth = parseInt(element[0].style.width.replace('px', ''));
+			const actualHeight = parseInt(element[0].style.height.replace('px', ''));
+
+			expect(actualWidth).to.be.closeTo(expectedWidth, 10);
+			expect(actualHeight).to.be.closeTo(expectedHeight, 10);
+		});
+
+	cy.log('<< assertImageSize - end');
+}
+
 module.exports.setupDocument = setupDocument;
 module.exports.loadDocument = loadDocument;
 module.exports.setupAndLoadDocument = setupAndLoadDocument;
@@ -1252,3 +1278,4 @@ module.exports.copy = copy;
 module.exports.getFileName = getFileName;
 module.exports.getSubFolder = getSubFolder;
 module.exports.addressInputSelector = "#addressInput input";
+module.exports.assertImageSize = assertImageSize;

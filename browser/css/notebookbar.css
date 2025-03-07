@@ -180,7 +180,7 @@ html[data-theme='dark'] .savemodified.unotoolbutton .unobutton img {
 	z-index: 11;
 }
 
-#toolbar-row {
+.hasnotebookbar > #toolbar-row {
 	height: 74px;
 	position: relative;
 	padding: 3px var(--side-padding);
@@ -191,6 +191,14 @@ html[data-theme='dark'] .savemodified.unotoolbutton .unobutton img {
 	display: grid;
 	grid-auto-flow: row;
 	grid-gap: 4px;
+}
+
+.notebookbar.ui-separator.vertical {
+	width: 1px;
+	background-color: var(--color-toolbar-border);
+	height: 100%;
+	margin: 0 2px;
+	box-sizing: border-box;
 }
 
 .horizontal.notebookbar {
@@ -463,6 +471,36 @@ html[data-theme='dark'] .savemodified.unotoolbutton .unobutton img {
 	filter: brightness(var(--brightness-stylesview));
 	box-sizing: border-box;
 	align-content: unset;
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+#stylesview-btn {
+	border: 1px solid var(--color-stylesview-border);
+	border-top-right-radius: var(--border-radius);
+	border-bottom-right-radius: var(--border-radius);
+	height: 64px;
+	margin-inline-start: -5px;
+	box-sizing: border-box;
+}
+
+#stylesview-btn.vertical {
+	gap: 0;
+}
+
+#stylesview-btn div{
+	border: none;
+}
+
+#stylesview-btn button img {
+	width: var(--btn-img-size-s) !important;
+	height: var(--btn-img-size-s) !important;
+	box-sizing: border-box;
+}
+
+#stylesview-btn button {
+	width: var(--btn-size-s) !important;
+	height: var(--btn-size-s) !important;
 }
 
 #stylesview:hover {
@@ -537,8 +575,8 @@ html[data-theme='dark'] .savemodified.unotoolbutton .unobutton img {
 
 /* Home tab */
 
-#numbertype .ui-listbox {
-	width: 100%;
+#numbertype select {
+	flex: 1 0;
 }
 
 /* Review Tab */

@@ -41,12 +41,25 @@ QUIET_PRETTIER = $(QUIET_PRETTIER_$(V))
 QUIET_PRETTIER_ = $(QUIET_PRETTIER_$(AM_DEFAULT_VERBOSITY))
 QUIET_PRETTIER_0 = @echo "  PRETTIER" $@;
 
+QUIET_M4 = $(QUIET_M4_$(V))
+QUIET_M4_ = $(QUIET_M4_$(AM_DEFAULT_VERBOSITY))
+QUIET_M4_0 = @echo "  M4      " $@;
+
+QUIET_ECHO = $(QUIET_ECHO_$(V))
+QUIET_ECHO_ = $(QUIET_ECHO_$(AM_DEFAULT_VERBOSITY))
+QUIET_ECHO_0 = @echo "  ECHO    " $@;
+
+QUIET_CMP = $(QUIET_CMP_$(V))
+QUIET_CMP_ = $(QUIET_CMP_$(AM_DEFAULT_VERBOSITY))
+QUIET_CMP_0 = @echo "  CMP     " $@;
+
 MOCHA_DIR = $(srcdir)/mocha_tests
+MOCHA_JS_DIR = $(MOCHA_DIR)/workdir
 MOCHA_TS_FILES = $(wildcard $(MOCHA_DIR)/*.ts)
-MOCHA_TS_JS_FILES := $(MOCHA_TS_FILES:.ts=.js)
+MOCHA_TS_JS_FILES = $(patsubst $(MOCHA_DIR)/%.ts,$(MOCHA_JS_DIR)/%.js,$(MOCHA_TS_FILES))
 # tsc can report a failure, but still create a .js and a second make attempt will succeed,
 # so if this returns an error then delete the target
-$(MOCHA_TS_JS_FILES): %.js: %.ts
+$(MOCHA_JS_DIR)/%.js: $(MOCHA_DIR)/%.ts
 	$(QUIET_TSC) $(builddir)/node_modules/typescript/bin/tsc $< --outfile $@ --module none --lib dom,es2016 --target ES5 || (rm -f $@ && false)
 
 # JQUERY_LIGHTNESS_IMAGE_PATH = $(srcdir)/images/jquery-ui-lightness
@@ -106,8 +119,10 @@ define npm_source
 	done
 endef
 
-COOL_ADMIN_TS =\
-	admin/src/ModalDialogCreator.ts
+COOL_ADMIN_TS = \
+	admin/src/ModalDialogCreator.ts \
+	admin/src/integrator/WordBook.ts \
+	admin/src/integrator/AdminIntegratorSettings.ts
 
 COOL_ADMIN_TS_JS = $(patsubst %.ts,$(TYPESCRIPT_JS_DIR)/%.js,$(COOL_ADMIN_TS))
 
@@ -126,7 +141,7 @@ COOL_ADMIN_JS =\
 
 NODE_MODULES_SRC =\
 	autolinker@3.14.1 \
-	dompurify@3.1.7 \
+	dompurify@3.2.4 \
 	json-js@1.1.2 \
 	select2@4.0.13 \
 	l10n-for-node@0.0.1 \
@@ -180,8 +195,7 @@ $(DIST_FOLDER)/src/layer/tile/TileWorker.js: \
 	$(srcdir)/src/layer/tile/CanvasTileWorkerSrc.js \
 	$(WORKER_NODE_MODULES_JS)
 
-	@echo "Generating TileWorker.js..."
-	m4 -PE -DDEBUG=$(ENABLE_DEBUG) \
+	$(QUIET_M4) m4 -PE -DDEBUG=$(ENABLE_DEBUG) \
 		-DNODE_MODULES_JS=$(subst $(SPACE),$(COMMA),$(WORKER_NODE_MODULES_JS)) \
 		-DWORKER_JS=$(srcdir)/src/layer/tile/CanvasTileWorkerSrc.js \
 		$(srcdir)/src/layer/tile/CanvasTileWorker.js.m4 > $@
@@ -225,19 +239,21 @@ COOL_JS_LST =\
 	src/docdispatcher.ts \
 	src/app/DocEvents.ts \
 	src/app/GraphicSelectionMiddleware.ts \
+	src/app/TilesMiddleware.ts \
+	src/app/SearchService.ts \
+	src/app/Rectangle.ts \
+	src/app/Util.ts \
+	src/app/LOUtil.ts \
 	src/Leaflet.js \
 	src/errormessages.js \
 	src/unocommands.js \
 	src/UNO/Key.js \
 	src/core/Log.js \
 	src/core/Util.js \
-	src/core/LOUtil.js \
 	src/core/geometry.ts \
-	src/core/Rectangle.ts \
 	src/core/Class.js \
 	src/core/Events.js \
 	src/core/Socket.js \
-	src/core/Matrix.js \
 	src/core/Debug.js \
 	src/geometry/Point.ts \
 	src/geometry/Bounds.ts \
@@ -257,6 +273,8 @@ COOL_JS_LST =\
 	src/canvas/CanvasSectionProps.js \
 	src/canvas/CanvasSectionContainer.ts \
 	src/canvas/CanvasSectionObject.ts \
+	src/canvas/sections/HTMLObjectSection.ts \
+	src/canvas/sections/CommentMarkerSubSection.ts \
 	src/canvas/sections/CommentSection.ts \
 	src/canvas/sections/CommentListSection.ts \
 	src/canvas/sections/CalcGridSection.ts \
@@ -265,7 +283,6 @@ COOL_JS_LST =\
 	src/canvas/sections/PreloadMapSection.ts \
 	src/canvas/sections/TilesSection.ts \
 	src/canvas/sections/AutoFillMarkerSection.ts \
-	src/canvas/sections/HTMLObjectSection.ts \
 	src/canvas/sections/URLPopUpSection.ts \
 	src/canvas/sections/InvalidationRectangleSection.ts \
 	src/canvas/sections/ShapeHandlesSection.ts \
@@ -304,6 +321,7 @@ COOL_JS_LST =\
 	src/layer/tile/ImpressTileLayer.js \
 	src/layer/tile/CalcTileLayer.js \
 	src/canvas/sections/CursorHeaderSection.ts \
+	src/canvas/sections/ContentControlDropdownSubSection.ts \
 	src/canvas/sections/ContentControlSection.ts \
 	src/layer/marker/ProgressOverlay.js \
 	src/layer/marker/TextInput.js \
@@ -396,6 +414,7 @@ COOL_JS_LST =\
 	src/control/jsdialog/Widget.Containers.ts \
 	src/control/jsdialog/Widget.DropDown.ts \
 	src/control/jsdialog/Widget.DrawingArea.js \
+	src/control/jsdialog/Widget.Edit.ts \
 	src/control/jsdialog/Widget.FormulabarEdit.js \
 	src/control/jsdialog/Widget.Frame.js \
 	src/control/jsdialog/Widget.HTMLContent.ts \
@@ -406,6 +425,7 @@ COOL_JS_LST =\
 	src/control/jsdialog/Widget.MultilineEdit.js \
 	src/control/jsdialog/Widget.Progressbar.js \
 	src/control/jsdialog/Widget.ScrolledWindow.js \
+	src/control/jsdialog/Widget.SearchEdit.ts \
 	src/control/jsdialog/Widget.SidebarContainers.ts \
 	src/control/jsdialog/Widget.Timefield.js \
 	src/control/jsdialog/Widget.TreeView.ts \
@@ -444,21 +464,22 @@ COOL_JS_LST =\
 	src/control/Control.AutoFillPreviewTooltip.ts \
 	src/control/Control.AddressInputField.ts \
 	src/control/Control.Zotero.js \
-	src/control/Search.js \
 	src/control/Permission.js \
 	src/control/Toolbar.js \
 	src/control/Signing.js \
 	src/control/Parts.js \
 	src/control/Scroll.js \
 	src/control/Styles.js \
-	src/control/Ruler.js \
+	src/control/Ruler.ts \
 	src/control/VRuler.ts \
+	src/control/HRuler.ts \
 	src/slideshow/SlideCache.ts \
 	src/slideshow/SlideCompositor.ts \
 	src/slideshow/LayerRenderer.ts \
 	src/slideshow/LayerDrawing.ts \
 	src/slideshow/LayersCompositor.ts \
 	src/slideshow/RenderContext.ts \
+	src/slideshow/VideoRenderer.ts \
 	src/slideshow/SlideRenderer.ts \
 	src/slideshow/SlideShowPresenter.ts \
 	src/slideshow/PresenterConsole.js \
@@ -597,7 +618,7 @@ COOL_JS_BUNDLE = $(patsubst %.ts,%.js,$(COOL_JS_WEBORDER))
 define bundle_cool
 	$(if $(IS_SEPARATE),\
 		@touch $@,
-		@m4 -PE -DIOSAPP=$(ENABLE_IOSAPP) \
+		$(QUIET_M4) m4 -PE -DIOSAPP=$(ENABLE_IOSAPP) \
 			-DGTKAPP=$(ENABLE_GTKAPP) \
 			-DANDROIDAPP=$(ENABLE_ANDROIDAPP) \
 			-DMOBILEAPPNAME="$(APP_NAME)" \
@@ -625,12 +646,12 @@ endef
 define bundle_all
 	$(if $(IS_SEPARATE),\
 		@touch $@,\
-		@echo "Uglify cool js files..."
-		@m4 -PE -DL10N_IOS_ALL_JS=$(L10N_IOS_ALL_JS) \
+		$(QUIET_M4) m4 -PE -DL10N_IOS_ALL_JS=$(L10N_IOS_ALL_JS) \
 			-DNODE_MODULES_JS=$(subst $(SPACE),$(COMMA),$(NODE_MODULES_JS)) \
 			-DCOOL_LIBS_JS=$(subst $(SPACE),$(COMMA),$(COOL_LIBS_JS_SRC)) \
 			-DCOOL_JS=$(INTERMEDIATE_DIR)/cool-src.js \
 			$(srcdir)/bundle.js.m4 > $(INTERMEDIATE_DIR)/bundle.js
+		@echo "Uglify cool js files..."
 		@$(NODE) node_modules/uglify-js/bin/uglifyjs \
 			-O max_line_len=100 \
 			$(INTERMEDIATE_DIR)/bundle.js \
@@ -761,8 +782,8 @@ $(DIST_FOLDER)/global.js: $(srcdir)/js/global.js
 	$(call global_file)
 
 $(INTERMEDIATE_DIR)/COOL_JS.m4.jslist: $(COOL_JS_DST)
-	echo $(COOL_JS_DST) > $(INTERMEDIATE_DIR)/COOL_JS.m4.jslist.tmp
-	if cmp -s $(INTERMEDIATE_DIR)/COOL_JS.m4.jslist.tmp $(INTERMEDIATE_DIR)/COOL_JS.m4.jslist; then rm $(INTERMEDIATE_DIR)/COOL_JS.m4.jslist.tmp; else mv $(INTERMEDIATE_DIR)/COOL_JS.m4.jslist.tmp $(INTERMEDIATE_DIR)/COOL_JS.m4.jslist; fi
+	$(QUIET_ECHO) echo $(COOL_JS_DST) > $(INTERMEDIATE_DIR)/COOL_JS.m4.jslist.tmp
+	$(QUIET_CMP) if cmp -s $(INTERMEDIATE_DIR)/COOL_JS.m4.jslist.tmp $(INTERMEDIATE_DIR)/COOL_JS.m4.jslist; then rm $(INTERMEDIATE_DIR)/COOL_JS.m4.jslist.tmp; else mv $(INTERMEDIATE_DIR)/COOL_JS.m4.jslist.tmp $(INTERMEDIATE_DIR)/COOL_JS.m4.jslist; fi
 
 $(INTERMEDIATE_DIR)/COOL_JS.m4: $(INTERMEDIATE_DIR)/COOL_JS.m4.jslist
 	$(foreach file,$(NODE_MODULES_JS) $(COOL_LIBS_JS) $(patsubst %.ts,%.js,$(COOL_JS_WEBORDER)), $(shell echo -n $(file), >> $(INTERMEDIATE_DIR)/COOL_JS.m4.tmp))
@@ -777,8 +798,7 @@ $(DIST_FOLDER)/cool.html: $(srcdir)/html/cool.html.m4 \
 	$(INTERMEDIATE_DIR)/COOL_JS.m4 \
 	| $(DIST_FOLDER)/bundle.js
 
-	@echo "Generating cool.html..."
-	m4 -PE -I $(INTERMEDIATE_DIR) \
+	$(QUIET_M4) m4 -PE -I $(INTERMEDIATE_DIR) \
 	    -DBUNDLE=$(IS_BUNDLE) \
 		-DIOSAPP=$(ENABLE_IOSAPP) \
 		-DGTKAPP=$(ENABLE_GTKAPP) \
@@ -935,6 +955,7 @@ pot:
 		admin/src/Util.js \
 		js/global.js \
 		src/canvas/sections/CommentListSection.ts \
+		src/canvas/sections/CommentMarkerSubSection.ts \
 		src/canvas/sections/CommentSection.ts \
 		src/canvas/sections/ShapeHandlesSection.ts \
 		src/canvas/sections/URLPopUpSection.ts \
@@ -980,10 +1001,11 @@ pot:
 		src/control/Control.Zotero.js \
 		src/control/Parts.js \
 		src/control/Permission.js \
-		src/control/Ruler.js \
 		src/control/Signing.js \
 		src/control/Toolbar.js \
+		src/control/Ruler.ts \
 		src/control/VRuler.ts \
+		src/control/HRuler.ts \
 		src/control/jsdialog/Definitions.Menu.ts \
 		src/control/jsdialog/Util.SnackbarController.ts \
 		src/control/jsdialog/Widget.ColorPicker.ts \
@@ -1034,10 +1056,6 @@ clean-local:
 	@rm -f $(abs_srcdir)/admin/jsconfig.json
 
 CLEANFILES = tscompile.done $(INTERMEDIATE_DIR)/cool-src.js $(DIST_FOLDER)/bundle.css $(DIST_FOLDER)/bundle.js $(INTERMEDIATE_DIR)/cool-src.js
-
-ctags:
-	@$(CTAGS) --language-force=JavaScript $(COOL_JS_SRC) $(srcdir)/js/global.js
-	@$(CTAGS) --language-force=TypeScript --extra=+q --append=yes $(COOL_TS_SRC)
 
 $(abs_srcdir)/jsconfig.json:
 	@printf "{\n \

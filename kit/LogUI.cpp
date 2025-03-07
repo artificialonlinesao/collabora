@@ -17,7 +17,8 @@ void LogUiCmd::logUiCmdLine(int userId, const std::string& line)
 {
     _fileStreamUICommands.write(line.c_str(), line.length());
     _fileStreamUICommands.write("\n", 1);
-    _usersLogged.insert(userId);
+    if (userId>=0)
+        _usersLogged.insert(userId);
 }
 
 void LogUiCmd::saveLogFile()
@@ -38,7 +39,7 @@ void LogUiCmd::saveLogFile()
     Log::logUI(Log::WRN, timeLog);
 }
 
-void LogUiCmd::createTmpFile(std::string docId)
+void LogUiCmd::createTmpFile(const std::string& docId)
 {
     const std::string tempFile = "/tmp/kit-ui-cmd.log";
     _fileStreamUICommands.open(tempFile, std::fstream::in | std::fstream::out | std::fstream::trunc);

@@ -27,7 +27,7 @@ class DeltaTests {
 public:
     static void rleBitmap(Pixmap &pix)
     {
-        TileLocation loc = { 0, 0, 0, 0, 0, 0 };
+        TileLocation loc = { 0, 0, 0, 0, CanonicalViewId::None, 0 };
         DeltaGenerator::DeltaData rleData(
             1 /*wid*/, reinterpret_cast<unsigned char *>(pix.data()),
             0, 0, 256, 256, loc, 256, 256);
@@ -69,9 +69,8 @@ int main (int argc, char **argv)
     for (int i = 1; i < argc; i++)
     {
         uint32_t height, width, rowBytes;
-        Pixmap img = Png::loadPng(argv[i], height, width, rowBytes);
+        pixmaps.push_back(Png::loadPng(argv[i], height, width, rowBytes));
 //        std::cout << "Loaded: " << argv[i] << " " << width << "x" << height << "\n";
-        pixmaps.push_back(img);
     }
 
     DeltaTests::timeRLE("CPU");

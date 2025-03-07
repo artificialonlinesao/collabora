@@ -119,8 +119,8 @@ bool enterUserNS(uid_t uid, gid_t gid)
 
 bool coolmount(const std::string& arg, std::string source, std::string target, bool silent = false)
 {
-    source = Util::trim(source, '/');
-    target = Util::trim(target, '/');
+    source = Util::rtrim(source, '/');
+    target = Util::rtrim(target, '/');
 
     if (isMountNamespacesEnabled())
     {
@@ -428,7 +428,7 @@ void setupChildRoot(bool bindMount, const std::string& childRoot, const std::str
     cleanupJails(childRoot);
 
     createJailPath(childRoot + CHILDROOT_TMP_INCOMING_PATH + "/fonts");
-    createJailPath(childRoot + CHILDROOT_TMP_INCOMING_PATH + "/templates/presnt");
+    createJailPath(childRoot + CHILDROOT_TMP_SHARED_PRESETS_PATH);
 
     disableBindMounting(); // Clear to avoid surprises.
 

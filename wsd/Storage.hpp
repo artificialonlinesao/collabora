@@ -23,6 +23,7 @@
 
 #include <memory>
 #include <string>
+#include <string_view>
 #include <chrono>
 
 class LockContext;
@@ -322,13 +323,13 @@ public:
     };
 
     /// localStorePath the absolute root path of the chroot.
-    /// jailPath the path within the jail that the child uses.
+    /// jailPath the path within the jail that the child uses for documents.
     StorageBase(const Poco::URI& uri, const std::string& localStorePath,
                 const std::string& jailPath)
         : _localStorePath(localStorePath)
         , _jailPath(jailPath)
         , _fileInfo(/*size=*/0, /*filename=*/std::string(), /*ownerId=*/"cool",
-                    /*modifiledTime=*/std::string())
+                    /*modifiedTime=*/std::string())
         , _isDownloaded(false)
     {
         setUri(uri);
@@ -340,6 +341,9 @@ public:
     const Poco::URI& getUri() const { return _uri; }
 
     const std::string& getJailPath() const { return _jailPath; }
+
+    /// Returns the root path of the jail directory of user presets.
+    std::string getJailPresetsPath() const;
 
     /// Returns the root path to the jailed file.
     const std::string& getRootFilePath() const { return _jailedFilePath; }
@@ -454,7 +458,7 @@ protected:
     /// Sanitize a URI by removing authorization tokens.
     void sanitizeUri(Poco::URI& uri)
     {
-        static const std::string access_token("access_token");
+        constexpr std::string_view access_token("access_token");
 
         Poco::URI::QueryParameters queryParams = uri.getQueryParameters();
         for (auto& param : queryParams)

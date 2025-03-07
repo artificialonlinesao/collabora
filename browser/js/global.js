@@ -223,8 +223,11 @@ class InitializerBase {
 		if (initCSSVars) {
 			initCSSVars = atob(initCSSVars);
 			const sheet = new CSSStyleSheet();
-			sheet.replace(initCSSVars);
-			document.adoptedStyleSheets.push(sheet);
+			if (typeof sheet.replace === 'function')
+			{
+				sheet.replace(initCSSVars);
+				document.adoptedStyleSheets.push(sheet);
+			} // else jsdom
 		}
 
 		const element = document.getElementById("initial-variables");
@@ -280,6 +283,15 @@ class InitializerBase {
 
 			document.getElementById('content-keeper').remove();
 		}, false);
+
+		let productName = document.getElementById("init-product-branding-name").value;
+		if (typeof productName === 'string' && productName.length) {
+			window.brandProductName = productName;
+		}
+		let productURL = document.getElementById("init-product-branding-url").value;
+		if (typeof productURL === 'string' && productURL.length) {
+			window.brandProductURL = productURL;
+		}
 
 		this.initiateCoolParams();
 	}
@@ -378,6 +390,7 @@ class BrowserInitializer extends InitializerBase {
 		window.enableAccessibility = element.dataset.enableAccessibility.toLowerCase().trim() === "true";
 		window.outOfFocusTimeoutSecs = parseInt(element.dataset.outOfFocusTimeoutSecs);
 		window.idleTimeoutSecs = parseInt(element.dataset.idleTimeoutSecs);
+		window.minSavedMessageTimeoutSecs = parseInt(element.dataset.minSavedMessageTimeoutSecs);
 		window.protocolDebug = element.dataset.protocolDebug.toLowerCase().trim() === "true";
 		window.enableDebug = element.dataset.enableDebug.toLowerCase().trim() === "true";
 		window.frameAncestors = decodeURIComponent(element.dataset.frameAncestors);
@@ -608,6 +621,8 @@ function getInitializerClass() {
 
 	global.prefs = {
 		_localStorageCache: {}, // TODO: change this to new Map() when JS version allows
+		_userBrowserSetting: new Map(),
+		useBrowserSetting: false,
 		canPersist: (function() {
 			var str = 'localstorage_test';
 			try {
@@ -618,6 +633,37 @@ function getInitializerClass() {
 				return false;
 			}
 		})(),
+
+		_initializeBrowserSetting: function (msg) {
+			let settingJSON = JSON.parse(msg.substring('browsersetting:'.length + 1));;
+
+			if (typeof settingJSON === 'undefined')
+				return;
+
+			const processObject = (object, parentKey = '') => {
+				Object.keys(object).forEach((key) => {
+					const fullKey = parentKey ? `${parentKey}.${key}` : key;
+					const value = object[key];
+
+					if (typeof value === 'object' && !Array.isArray(value) && value !== null) {
+						processObject(value, fullKey);
+					} else if (Array.isArray(value)) {
+						global.prefs._userBrowserSetting[fullKey] = JSON.stringify(value);
+					} else {
+						global.prefs._userBrowserSetting[fullKey] =
+							typeof value === 'boolean' ? (value ? "true" : "false") : value;
+					}
+				});
+			};
+
+			processObject(settingJSON);
+
+			global.prefs._localStorageCache = {};
+			global.prefs.useBrowserSetting = true;
+
+			// make sure set accessibilityState for cypress
+			global.getAccessibilityState();
+		},
 
 		_renameLocalStoragePref: function(oldName, newName) {
 			if (!global.prefs.canPersist) {
@@ -631,7 +677,7 @@ function getInitializerClass() {
 				return;
 			}
 
-			// we do not remove the old value, both for downgrades and incase we split an old global preference to a per-app one
+			// we do not remove the old value, both for downgrades and in case we split an old global preference to a per-app one
 			global.localStorage.setItem(newName, oldValue);
 		},
 
@@ -673,6 +719,14 @@ function getInitializerClass() {
 				return uiDefault;
 			}
 
+			if (global.prefs.useBrowserSetting) {
+				let val = defaultValue;
+				if (Object.prototype.hasOwnProperty.call(global.prefs._userBrowserSetting, key))
+					val = global.prefs._userBrowserSetting[key];
+				global.prefs._localStorageCache[key] = val;
+				return val;
+			}
+
 			if (global.prefs.canPersist) {
 				const localStorageItem = global.localStorage.getItem(key);
 
@@ -693,6 +747,12 @@ function getInitializerClass() {
 
 		set: function(key, value) {
 			value = String(value); // NOT "new String(...)". We cannot use .toString here because value could be null/undefined
+			if (global.prefs.useBrowserSetting) {
+				const oldValue = global.prefs._userBrowserSetting[key];
+				global.prefs._userBrowserSetting[key] = value;
+				if (global.socket && (global.socket instanceof WebSocket) && global.socket.readyState === 1 && oldValue !== value)
+					global.socket.send('browsersetting action=update key=' + key + ' value=' + value);
+			}
 			if (global.prefs.canPersist) {
 				global.localStorage.setItem(key, value);
 			}
@@ -700,6 +760,9 @@ function getInitializerClass() {
 		},
 
 		remove: function(key) {
+			if (global.prefs.useBrowserSetting) {
+				global.prefs._userBrowserSetting.delete(key);
+			}
 			if (global.prefs.canPersist) {
 				global.localStorage.removeItem(key);
 			}
@@ -919,7 +982,7 @@ function getInitializerClass() {
 		/// may be useful to supplement hasAnyTouchscreen or hasPrimaryTouchscreen for, for example, determining UI or
 		///   hitboxes after a tap in a place where you can't sensibly figure out whether the direct trigger was a
 		///   touchscreen. Examples might be click events that are roundtripped through core
-		/// is null when no touch or click events have yet occured, true when the last touch or click event was from a
+		/// is null when no touch or click events have yet occurred, true when the last touch or click event was from a
 		///   touchscreen, and false when the last touch or click event was from a mouse
 		/// is updated with active listeners during the capture phase of the <html> element, so should be done before
 		///   most other event processing takes place
@@ -930,7 +993,7 @@ function getInitializerClass() {
 		/// touch event
 		lastEventTime: null,
 
-		/// detect if the last event was a touch event, or if no events have yet occured whether we have a touchscreen
+		/// detect if the last event was a touch event, or if no events have yet occurred whether we have a touchscreen
 		///   available to us. Should be able to replace uses of hasAnyTouchscreen for uses where we are OK with the
 		///   result being less stable
 		currentlyUsingTouchscreen: function() {
@@ -1637,6 +1700,14 @@ function getInitializerClass() {
 		return global.makeDocAndWopiSrcUrl(httpURI, docUrlParams, suffix, wopiSrcParam);
 	};
 
+	global.makeClientVisibleArea = function() {
+		// An approximation till we don't yet have CanvasTileLayer, which would properly use
+		// map.getPixelBounds() and pixelsToTwips().
+		const width = window.innerWidth * 15;
+		const height = window.innerHeight * 15;
+		return '0;0;' + width + ';' + height;
+	};
+
 	// Encode a string to hex.
 	global.hexEncode = function (string) {
 		var bytes = new TextEncoder().encode(string);
@@ -1755,6 +1826,7 @@ function getInitializerClass() {
 				msg += ' darkBackground=' + darkBackground;
 
 				msg += ' timezone=' + Intl.DateTimeFormat().resolvedOptions().timeZone;
+				msg += ' clientvisiblearea=' + window.makeClientVisibleArea();
 
 				global.socket.send(msg);
 			}
@@ -1769,6 +1841,13 @@ function getInitializerClass() {
 		};
 
 		global.socket.onmessage = function (event) {
+			if (event.data.startsWith('browsersetting:')) {
+				try {
+					global.prefs._initializeBrowserSetting(event.data);
+				} catch (e) {
+					global.app.console.error('Failed to initialize browser settings: ', e.message)
+				}
+			}
 			if (typeof global.socket._onMessage === 'function') {
 				global.socket._emptyQueue();
 				global.socket._onMessage(event);

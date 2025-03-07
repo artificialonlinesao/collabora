@@ -12,11 +12,13 @@
 #include <config.h>
 
 #include <ConfigUtil.hpp>
+
 #include <Util.hpp>
 
 #include <cassert>
 #include <string>
 #include <sstream>
+#include <unordered_map>
 
 #include <Poco/Util/AbstractConfiguration.h>
 #include <Poco/Util/XMLConfiguration.h>
@@ -39,8 +41,10 @@ RuntimeConstant<bool> SslTermination;
 // 3) the default parameter of getConfigValue() call. That is used when the
 //    setting is present in coolwsd.xml, but empty (i.e. use the default).
 // NOTE: Poco doesn't index the first entry in an array, so omit '[0]'.
-// NOTE: This is sorted, please keep it sorted as it's friendlier to readers.
-static const std::map<std::string, std::string> DefAppConfig = {
+// NOTE: This is sorted, please keep it sorted as it's friendlier to readers,
+//       except for properties, which are sorted before the value, e.g.
+//       "setting[@name]" before "setting", which is more readable.
+static const std::unordered_map<std::string, std::string> DefAppConfig = {
     { "accessibility.enable", "false" },
     { "admin_console.enable", "true" },
     { "admin_console.enable_pam", "false" },
@@ -51,7 +55,10 @@ static const std::map<std::string, std::string> DefAppConfig = {
     { "admin_console.password", "" },
     { "admin_console.username", "" },
     { "allowed_languages", "de_DE en_GB en_US es_ES fr_FR it nl pt_BR pt_PT ru" },
+    { "allow_update_popup", "true" },
     { "browser_logging", "false" },
+    { "cache_files.path", "cache" },
+    { "cache_files.expiry_min", "3000" },
     { "certificates.database_path", "" },
     { "child_root_path", "jails" },
     { "deepl.api_url", "" },
@@ -83,6 +90,7 @@ static const std::map<std::string, std::string> DefAppConfig = {
     { "feature_lock.unlock_title", UNLOCK_TITLE },
     { "feature_lock.writer_unlock_highlights", WRITER_UNLOCK_HIGHLIGHTS },
 #endif
+    { "fetch_update_check", "10" },
     { "fonts_missing.handling", "log" },
     { "file_server_root_path", "browser/.." },
 #if !MOBILEAPP
@@ -101,28 +109,29 @@ static const std::map<std::string, std::string> DefAppConfig = {
     { "languagetool.rest_protocol", "" },
     { "languagetool.ssl_verification", "true" },
     { "languagetool.user_name", "" },
+#if !MOBILEAPP
     // { "logging.anonymize.anonymize_user_data", "false" }, // Do not set to fallback on filename/username.
     { "logging.anonymize.anonymization_salt", "82589933" },
     { "logging.color", "true" },
     { "logging.disable_server_audit", "false" },
     { "logging.disabled_areas", "Socket,WebSocket,Admin,Pixel" },
     { "logging.docstats", "false" },
-    { "logging.file.property", "coolwsd.log" },
     { "logging.file.property[@name]", "path" },
-    { "logging.file.property[1]", "never" },
+    { "logging.file.property", COOLWSD_LOGFILE },
     { "logging.file.property[1][@name]", "rotation" },
-    { "logging.file.property[2]", "timestamp" },
+    { "logging.file.property[1]", "never" },
     { "logging.file.property[2][@name]", "archive" },
-    { "logging.file.property[3]", "true" },
+    { "logging.file.property[2]", "timestamp" },
     { "logging.file.property[3][@name]", "compress" },
-    { "logging.file.property[4]", "10 days" },
+    { "logging.file.property[3]", "true" },
     { "logging.file.property[4][@name]", "purgeAge" },
-    { "logging.file.property[5]", "10" },
+    { "logging.file.property[4]", "10 days" },
     { "logging.file.property[5][@name]", "purgeCount" },
-    { "logging.file.property[6]", "true" },
+    { "logging.file.property[5]", "10" },
     { "logging.file.property[6][@name]", "rotateOnOpen" },
-    { "logging.file.property[7]", "false" },
+    { "logging.file.property[6]", "true" },
     { "logging.file.property[7][@name]", "flush" },
+    { "logging.file.property[7]", "false" },
     { "logging.file[@enable]", "false" },
     { "logging.least_verbose_level_settable_from_client", "fatal" },
     { "logging.level", COOLWSD_LOGLEVEL },
@@ -131,17 +140,18 @@ static const std::map<std::string, std::string> DefAppConfig = {
     { "logging.most_verbose_level_settable_from_client", "notice" },
     { "logging.protocol", "false" },
     { "logging.userstats", "false" },
-    { "logging_ui_cmd.file.property", "coolwsd-ui-cmd.log" },
     { "logging_ui_cmd.file.property[@name]", "path" },
-    { "logging_ui_cmd.file.property[1]", "10" },
+    { "logging_ui_cmd.file.property", COOLWSD_LOGFILE_UICMD },
     { "logging_ui_cmd.file.property[1][@name]", "purgeCount" },
-    { "logging_ui_cmd.file.property[2]", "true" },
+    { "logging_ui_cmd.file.property[1]", "10" },
     { "logging_ui_cmd.file.property[2][@name]", "rotateOnOpen" },
-    { "logging_ui_cmd.file.property[3]", "false" },
+    { "logging_ui_cmd.file.property[2]", "true" },
     { "logging_ui_cmd.file.property[3][@name]", "flush" },
+    { "logging_ui_cmd.file.property[3]", "false" },
     { "logging_ui_cmd.file[@enable]", "false" },
     { "logging_ui_cmd.merge", "true" },
     { "logging_ui_cmd.merge_display_end_time", "false" },
+#endif
     { "mount_jail_tree", "true" },
     { "net.connection_timeout_secs", "30" },
     { "net.content_security_policy", "" },
@@ -185,7 +195,7 @@ static const std::map<std::string, std::string> DefAppConfig = {
     { "per_document.background_manualsave", "true" },
     { "per_document.batch_priority", "5" },
     { "per_document.bgsave_priority", "5" },
-    { "per_document.bgsave_timeout_secs", "60" },
+    { "per_document.bgsave_timeout_secs", "120" },
     { "per_document.cleanup.bad_behavior_period_secs", "60" },
     { "per_document.cleanup.cleanup_interval_ms", "10000" },
     { "per_document.cleanup.idle_time_secs", "300" },
@@ -215,7 +225,7 @@ static const std::map<std::string, std::string> DefAppConfig = {
     { "quarantine_files.expiry_min", "3000" },
     { "quarantine_files.limit_dir_size_mb", "250" },
     { "quarantine_files.max_versions_to_maintain", "5" },
-    { "quarantine_files.path", "quarantine" },
+    { "quarantine_files.path", "" },
     { "quarantine_files[@enable]", "false" },
     { "remote_asset_config.url", "" },
     { "remote_config.remote_url", "" },
@@ -233,6 +243,7 @@ static const std::map<std::string, std::string> DefAppConfig = {
     { "security.seccomp", "true" },
     { "security.server_signature", "false" },
     { "server_name", "" },
+    { "serverside_config.idle_timeout_secs", "3600" },
     { "ssl.ca_file_path", COOLWSD_CONFIGDIR "/ca-chain.cert.pem" },
     { "ssl.cert_file_path", COOLWSD_CONFIGDIR "/cert.pem" },
     { "ssl.cipher_list", "" },
@@ -267,19 +278,26 @@ static const std::map<std::string, std::string> DefAppConfig = {
     { "sys_template_path", "systemplate" },
     { "trace.filter.message", "" },
     { "trace.outgoing.record", "false" },
+    { "trace.path", "" },
     { "trace.path[@compress]", "true" },
     { "trace.path[@snapshot]", "false" },
     { "trace[@enable]", "false" },
+#if !MOBILEAPP
+    { "trace_event.path", COOLWSD_TRACEEVENTFILE },
     { "trace_event[@enable]", "false" },
+#endif
     { "user_interface.mode", "default" },
     { "user_interface.statusbar_save_indicator", "true" },
     { "user_interface.use_integration_theme", "true" },
+    { "user_interface.brandProductName", "" },
+    { "user_interface.brandProductURL", "" },
     { "wasm.enable", "false" },
     { "wasm.force", "false" },
     { "watermark.opacity", "0.2" },
     { "watermark.text", "" },
     { "welcome.enable", "false" },
     { "zotero.enable", "true" },
+    { "setting_iframe.enable", "true" },
 };
 
 void initialize(const Poco::Util::AbstractConfiguration* config)
@@ -306,7 +324,7 @@ void initialize(const std::string& xml)
 
 bool isInitialized() { return Config != nullptr; }
 
-const std::map<std::string, std::string>& getDefaultAppConfig() { return DefAppConfig; }
+const std::unordered_map<std::string, std::string>& getDefaultAppConfig() { return DefAppConfig; }
 
 /// Recursively extract the sub-keys of the given parent key.
 void extract(const std::string& parentKey, const Poco::Util::AbstractConfiguration& config,

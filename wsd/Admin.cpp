@@ -20,7 +20,6 @@
 #include <unistd.h>
 
 #include <Poco/Net/HTTPRequest.h>
-#include <Poco/Net/HTTPResponse.h>
 
 #include "Admin.hpp"
 #include "AdminModel.hpp"
@@ -46,7 +45,6 @@
 
 using namespace COOLProtocol;
 
-using Poco::Net::HTTPResponse;
 using Poco::Util::Application;
 
 const int Admin::MinStatsIntervalMs = 50;
@@ -676,18 +674,22 @@ void Admin::pollingThread()
             lastNet = now;
         }
 
-        int cleanupWait = _cleanupIntervalMs;
+        std::chrono::milliseconds cleanupWait(_cleanupIntervalMs);
         if (_defDocProcSettings.getCleanupSettings().getEnable())
         {
-            cleanupWait
-                -= std::chrono::duration_cast<std::chrono::milliseconds>(now - lastCleanup).count();
-            if (cleanupWait <= MinStatsIntervalMs / 2) // Close enough
+            if (now > lastCleanup)
+            {
+                cleanupWait -=
+                    std::chrono::duration_cast<std::chrono::milliseconds>(now - lastCleanup);
+            }
+
+            if (cleanupWait <= std::chrono::milliseconds(MinStatsIntervalMs / 2)) // Close enough
             {
                 cleanupResourceConsumingDocs();
                 if (_defDocProcSettings.getCleanupSettings().getLostKitGracePeriod())
                     cleanupLostKits();
 
-                cleanupWait += _cleanupIntervalMs;
+                cleanupWait += std::chrono::milliseconds(_cleanupIntervalMs);
                 lastCleanup = now;
             }
         }
@@ -716,7 +718,7 @@ void Admin::pollingThread()
 
         // Handle websockets & other work.
         const auto timeout = std::chrono::milliseconds(capAndRoundInterval(
-            std::min(std::min(std::min(cpuWait, memWait), netWait), cleanupWait)));
+            std::min<int>(std::min(std::min(cpuWait, memWait), netWait), cleanupWait.count())));
         LOGA_TRC(Admin, "Admin poll for " << timeout);
         poll(timeout); // continue with ms for admin, settings etc.
     }
@@ -1308,7 +1310,7 @@ void Admin::updateMonitors(std::vector<std::pair<std::string,int>>& oldMonitors)
         currentMonitorMap[monitor.first] = true;
     }
 
-    // shutdown monitors which doesnot not exist in currentMonitorMap
+    // shutdown monitors which does not not exist in currentMonitorMap
     for (const auto& monitor : oldMonitors)
     {
         if (!currentMonitorMap[monitor.first])

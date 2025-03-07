@@ -3,7 +3,7 @@
  * L.Map is the central class of the API - it is used to create a map.
  */
 
-/* global app _ Cursor JSDialog */
+/* global app _ Cursor JSDialog TileManager */
 
 L.Map = L.Evented.extend({
 
@@ -45,7 +45,7 @@ L.Map = L.Evented.extend({
 		tileHeightTwips: window.tileSize * 15,
 		urlPrefix: 'cool',
 		wopiSrc: '',
-		cursorURL: L.LOUtil.getURL('cursors'),
+		cursorURL: app.LOUtil.getURL('cursors'),
 		// cursorURL
 		// The path (local to the server) where custom cursor files are stored.
 	},
@@ -260,7 +260,7 @@ L.Map = L.Evented.extend({
 		}, this);
 
 		this.on('commandvalues', function(e) {
-			if (e.commandName === '.uno:LanguageStatus' && L.Util.isArray(e.commandValues)) {
+			if (e.commandName === '.uno:LanguageStatus' && app.util.isArray(e.commandValues)) {
 				app.languages = [];
 				e.commandValues.forEach(function(language) {
 					var split = language.split(';');
@@ -372,7 +372,7 @@ L.Map = L.Evented.extend({
 			if (this._docLayer.options.sheetGeometryDataEnabled)
 				this._docLayer.requestSheetGeometryData();
 			this._docLayer.refreshViewData();
-			this._docLayer._update();
+			TileManager.update();
 		}
 		// For calc parsing this will need SheetGeometry, so send after
 		// requesting that
@@ -396,7 +396,7 @@ L.Map = L.Evented.extend({
 		if (viewInfo.userextrainfo !== undefined && viewInfo.userextrainfo.avatar !== undefined) {
 			this._viewInfoByUserName[viewInfo.username] = viewInfo;
 		}
-		this.fire('postMessage', {msgId: 'View_Added', args: {Deprecated: true, ViewId: viewInfo.id, UserId: viewInfo.userid, UserName: viewInfo.username, UserExtraInfo: viewInfo.userextrainfo, Color: L.LOUtil.rgbToHex(viewInfo.color), ReadOnly: viewInfo.readonly}});
+		this.fire('postMessage', {msgId: 'View_Added', args: {Deprecated: true, ViewId: viewInfo.id, UserId: viewInfo.userid, UserName: viewInfo.username, UserExtraInfo: viewInfo.userextrainfo, Color: app.LOUtil.rgbToHex(viewInfo.color), ReadOnly: viewInfo.readonly}});
 
 		// Fire last, otherwise not all events are handled correctly.
 		this.fire('addview', {viewId: viewInfo.id, username: viewInfo.username, extraInfo: viewInfo.userextrainfo, readonly: this.isViewReadOnly(viewInfo.id)});
@@ -794,7 +794,9 @@ L.Map = L.Evented.extend({
 		return this.panTo(newCenter, options);
 	},
 
-	invalidateSize: function (options) {
+	// If map size has already been updated, invalidateSize needs the oldSize to work properly
+	// (e.g. if getSize() has already been called whith _sizeChanged === true)
+	invalidateSize: function (options, oldSize) {
 		if (!this._loaded) { return this; }
 
 		options = L.extend({
@@ -802,7 +804,9 @@ L.Map = L.Evented.extend({
 			pan: false
 		}, options === true ? {animate: true} : options);
 
-		var oldSize = this.getSize();
+		if (!oldSize) {
+			oldSize = this.getSize();
+		}
 		this._sizeChanged = true;
 
 		var newSize = this.getSize(),
@@ -837,7 +841,7 @@ L.Map = L.Evented.extend({
 	},
 
 	stop: function () {
-		L.Util.cancelAnimFrame(this._flyToFrame);
+		app.util.cancelAnimFrame(this._flyToFrame);
 		if (this._panAnim) {
 			this._panAnim.stop();
 		}
@@ -972,6 +976,7 @@ L.Map = L.Evented.extend({
 
 			this._sizeChanged = false;
 		}
+
 		return this._size.clone();
 	},
 
@@ -1046,7 +1051,7 @@ L.Map = L.Evented.extend({
 	project: function (latlng, zoom) { // (LatLng[, Number]) -> Point
 		zoom = zoom === undefined ? this.getZoom() : zoom;
 		var projectedPoint = this.options.crs.latLngToPoint(L.latLng(latlng), zoom);
-		return new L.Point(L.round(projectedPoint.x, 1e-6), L.round(projectedPoint.y, 1e-6));
+		return new L.Point(app.util.round(projectedPoint.x, 1e-6), app.util.round(projectedPoint.y, 1e-6));
 	},
 
 	unproject: function (point, zoom) { // (Point[, Number]) -> LatLng
@@ -1054,16 +1059,13 @@ L.Map = L.Evented.extend({
 		return this.options.crs.pointToLatLng(L.point(point), zoom);
 	},
 
-	/**
-	 * Get LatLng coordinates after negating the X cartesian-coordinate.
-	 * This is useful in Calc RTL mode as mouse events have regular document
-	 * coordinates(latlng) but draw-objects(shapes) have negative document
-	 * X coordinates.
-	 */
-	negateLatLng: function (latlng, zoom) { // (LatLng[, Number]) -> LatLng
-		var docPos = this.project(latlng, zoom);
-		docPos.x = -docPos.x;
-		return this.unproject(docPos, zoom);
+	// rescaling
+
+	rescale: function(point, oldZoom, newZoom) {
+		oldZoom = oldZoom === undefined ? this.getZoom() : oldZoom;
+		newZoom = newZoom === undefined ? this.getZoom() : newZoom;
+
+		return this.options.crs.rescale(point, oldZoom, newZoom);
 	},
 
 	layerPointToLatLng: function (point) { // (Point)
@@ -1176,7 +1178,7 @@ L.Map = L.Evented.extend({
 	},
 
 	// just set the keyboard state for mobile
-	// we dont want to change the focus, we know that keyboard is closed
+	// we don't want to change the focus, we know that keyboard is closed
 	// and we are just setting the state here
 	setAcceptInput: function (acceptInput) {
 		this._textInput._setAcceptInput(acceptInput);
@@ -1215,10 +1217,13 @@ L.Map = L.Evented.extend({
 		}
 		this.fire('statusindicator', {statusType: 'initializationcomplete'});
 		this.initComplete = true;
+
+		L.DomUtil.addClass(this._container, 'initialized');
 	},
 
 	_initContainer: function (id) {
 		var container = this._container = L.DomUtil.get(id);
+		L.DomUtil.removeClass(this._container, 'initialized');
 
 		if (!container) {
 			throw new Error('Map container not found.');
@@ -1367,8 +1372,8 @@ L.Map = L.Evented.extend({
 	},
 
 	_onResize: function () {
-		L.Util.cancelAnimFrame(this._resizeRequest);
-		this._resizeRequest = L.Util.requestAnimFrame(
+		app.util.cancelAnimFrame(this._resizeRequest);
+		this._resizeRequest = app.util.requestAnimFrame(
 			function () { this.invalidateSize({debounceMoveend: true}); }, this, false, this._container);
 
 		if (this.sidebar)
@@ -1429,6 +1434,13 @@ L.Map = L.Evented.extend({
 		}
 
 		app.idleHandler._activate();
+
+		if (app.definitions.CommentSection.needFocus)
+		{
+			app.definitions.CommentSection.needFocus.focus();
+			app.sectionContainer.getSectionWithName(L.CSections.CommentList.name).select(app.needFocus)
+			app.definitions.CommentSection.needFocus = null;
+		}
 	},
 
 	// Event to change the focus to dialog or editor.
@@ -1509,7 +1521,7 @@ L.Map = L.Evented.extend({
 		if (!this._docLayer || !this._loaded || !this._enabled || L.DomEvent._skipped(e)) { return; }
 
 		// find the layer the event is propagating from
-		var target = this._targets[L.stamp(e.target || e.srcElement)],
+		var target = this._targets[app.util.stamp(e.target || e.srcElement)],
 		    //type = e.type === 'keypress' && e.keyCode === 13 ? 'click' : e.type;
 		    type = e.type;
 

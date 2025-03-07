@@ -63,11 +63,11 @@ class Sidebar {
 	}
 
 	isVisible(): boolean {
-		return $('#sidebar-dock-wrapper').is(':visible');
+		return $('#sidebar-dock-wrapper').hasClass('visible');
 	}
 
 	closeSidebar() {
-		$('#sidebar-dock-wrapper').hide();
+		$('#sidebar-dock-wrapper').removeClass('visible');
 		this.map._onResize();
 
 		if (!this.map.editorHasFocus()) {
@@ -224,7 +224,7 @@ class Sidebar {
 						var isCurrent = stateHandler
 							? stateHandler.getItemValue(this.targetDeckCommand)
 							: false;
-						// just to be sure chack with other method
+						// just to be sure check with other method
 						if (isCurrent === 'false' || !isCurrent)
 							isCurrent =
 								this.targetDeckCommand === this.commandForDeck(currentDeck);
@@ -236,8 +236,7 @@ class Sidebar {
 				}
 
 				this.builder.build(this.container, [sidebarData]);
-				if (!this.isVisible())
-					$('#sidebar-dock-wrapper').show(this.options.animSpeed);
+				if (!this.isVisible()) $('#sidebar-dock-wrapper').addClass('visible');
 
 				this.map.uiManager.setDocTypePref('ShowSidebar', true);
 			} else {
@@ -250,7 +249,7 @@ class Sidebar {
 		if (!data) return false;
 
 		if (data.type === 'treelistbox') {
-			(data as TreeWidget).draggable = false;
+			(data as TreeWidgetJSON).draggable = false;
 			return true;
 		}
 

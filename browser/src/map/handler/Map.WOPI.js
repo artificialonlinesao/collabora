@@ -27,6 +27,7 @@ L.Map.WOPI = L.Handler.extend({
 	EnableInsertRemoteFile: false, /* Separate, because requires explicit integration support */
 	DisableInsertLocalImage: false,
 	EnableInsertRemoteLink: false,
+	EnableRemoteAIContent: false,
 	EnableShare: false,
 	HideUserList: null,
 	CallPythonScriptSource: null,
@@ -68,6 +69,12 @@ L.Map.WOPI = L.Handler.extend({
 			var that = this;
 			window.open = function (open) {
 				return function (url, name, features) {
+					const eSignature = that._map.eSignature;
+					const eSignInProgress = eSignature && eSignature.signInProgress;
+					if (eSignInProgress) {
+						return open.call(window, url, name, features);
+					}
+
 					that._map.fire('postMessage', {
 						msgId: 'UI_Hyperlink',
 						args: {
@@ -98,6 +105,12 @@ L.Map.WOPI = L.Handler.extend({
 		this._map.off('updateviewslist');
 	},
 
+	// Return whether there is the capability to rename, not the permission.
+	// Since we fall back on Save As for rename isn't supported.
+	_supportsRename: function() {
+		return !!this.SupportsRename || !this.UserCanNotWriteRelative;
+	},
+
 	_setWopiProps: function(wopiInfo) {
 		var overridenFileInfo = window.checkFileInfoOverride;
 		// Store postmessageorigin property, if it exists
@@ -125,6 +138,7 @@ L.Map.WOPI = L.Handler.extend({
 		this.EnableInsertRemoteFile = !!wopiInfo['EnableInsertRemoteFile'];
 		this.DisableInsertLocalImage = !!wopiInfo['DisableInsertLocalImage'];
 		this.EnableRemoteLinkPicker = !!wopiInfo['EnableRemoteLinkPicker'];
+		this.EnableRemoteAIContent = !!wopiInfo['EnableRemoteAIContent'];
 		this.SupportsRename = !!wopiInfo['SupportsRename'];
 		this.UserCanRename = !!wopiInfo['UserCanRename'];
 		this.EnableShare = !!wopiInfo['EnableShare'];
@@ -301,7 +315,7 @@ L.Map.WOPI = L.Handler.extend({
 			return;
 		}
 
-		// Exception: UI modification can be done before WOPIPostmessageReady was fullfiled
+		// Exception: UI modification can be done before WOPIPostmessageReady was fulfilled
 		if (msg.MessageId === 'Show_Button' || msg.MessageId === 'Hide_Button' || msg.MessageId === 'Remove_Button') {
 			if (!msg.Values) {
 				window.app.console.error('Property "Values" not set');
@@ -434,7 +448,7 @@ L.Map.WOPI = L.Handler.extend({
 			return;
 		}
 		else if (msg.MessageId === 'Insert_Button' &&
-			msg.Values && msg.Values.id && msg.Values.imgurl) {
+			msg.Values && msg.Values.id) {
 			this._map.uiManager.insertButton(msg.Values);
 			return;
 		} else if (msg.MessageId === 'Send_UNO_Command' && msg.Values && msg.Values.Command) {
@@ -537,7 +551,7 @@ L.Map.WOPI = L.Handler.extend({
 			this._map.remove();
 		}
 		else if (msg.MessageId === 'Action_Fullscreen') {
-			L.toggleFullScreen();
+			app.util.toggleFullScreen();
 		}
 		else if (msg.MessageId === 'Action_FullscreenPresentation' && this._map.getDocType() === 'presentation') {
 			if (msg.Values) {

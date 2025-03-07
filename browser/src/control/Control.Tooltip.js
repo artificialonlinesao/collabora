@@ -13,12 +13,15 @@
  * Class Tooltip - tooltip manager
  */
 
-/* global */
+/* global app */
 
 class Tooltip {
 	constructor(options) {
 		this._options = L.extend({ timeout: 150 }, options);
-		this._container = L.DomUtil.create('div', 'cooltip-text', document.body);
+		let win = this._options.window ? this._options.window : window;
+		this._container = this._options.container
+			? this._options.container
+			: L.DomUtil.create('div', 'cooltip-text', win.document.body);
 		this._container.id = 'cooltip';
 		this._container.addEventListener(
 			'mouseenter',
@@ -28,13 +31,19 @@ class Tooltip {
 			'mouseleave',
 			L.bind(this.mouseLeave, this),
 		);
+
+		win.addEventListener('keydown', L.bind(this.keyDown, this), {
+			capture: true,
+			passive: true,
+		});
 	}
 
 	beginShow(elem) {
 		if (this._cancel) return;
 
-		clearTimeout(this._showTimeout);
-		this._showTimeout = setTimeout(
+		let win = this._options.window ? this._options.window : window;
+		win.clearTimeout(this._showTimeout);
+		this._showTimeout = win.setTimeout(
 			L.bind(this.show, this, elem),
 			this._options.timeout,
 		);
@@ -43,10 +52,11 @@ class Tooltip {
 	beginHide(elem) {
 		if (this._cancel) return;
 
-		clearTimeout(this._showTimeout);
-		clearTimeout(this._hideTimeout);
+		let win = this._options.window ? this._options.window : window;
+		win.clearTimeout(this._showTimeout);
+		win.clearTimeout(this._hideTimeout);
 		if (this._current)
-			this._hideTimeout = setTimeout(
+			this._hideTimeout = win.setTimeout(
 				L.bind(this.hide, this, elem),
 				this._options.timeout,
 			);
@@ -125,7 +135,7 @@ class Tooltip {
 
 		do {
 			rectTooltip = this.position(rectElem, rectCont, index++);
-		} while (index < 8 && !L.LOUtil.containsDOMRect(rectView, rectTooltip));
+		} while (index < 8 && !app.LOUtil.containsDOMRect(rectView, rectTooltip));
 		// containsDOMRect() checks if the tooltip box(rectTooltip) is inside the boundaries of the window(rectView)
 
 		this._container.style.left = rectTooltip.left + 'px';
@@ -143,9 +153,10 @@ class Tooltip {
 
 	mouseEnter() {
 		if (this._current) {
+			let win = this._options.window ? this._options.window : window;
 			this._cancel = true;
-			clearTimeout(this._hideTimeout);
-			clearTimeout(this._showTimeout);
+			win.clearTimeout(this._hideTimeout);
+			win.clearTimeout(this._showTimeout);
 		}
 	}
 
@@ -153,8 +164,30 @@ class Tooltip {
 		this._cancel = false;
 		this.beginHide();
 	}
+
+	keyDown(e) {
+		let key = e.key.toUpperCase();
+		if (key === 'ESCAPE') {
+			this.mouseLeave();
+		}
+	}
+
+	static attachEventListener(elem, map) {
+		if (!map.tooltip) {
+			return;
+		}
+
+		elem.addEventListener('mouseenter', function () {
+			map.tooltip.beginShow(elem);
+		});
+		elem.addEventListener('mouseleave', function () {
+			map.tooltip.beginHide(elem);
+		});
+	}
 }
 
 L.control.tooltip = function (options) {
 	return new Tooltip(options);
 };
+
+L.control.attachTooltipEventListener = Tooltip.attachEventListener;

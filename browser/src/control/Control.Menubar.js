@@ -1,4 +1,5 @@
 /* -*- js-indent-level: 8 -*- */
+/* global app */
 /*
  * Copyright the Collabora Online contributors.
  *
@@ -53,7 +54,7 @@ L.Control.MenubarShortcuts = {
 			shortcut = shortcut.replace('Ctrl', 'Krmilka').replace('Alt', 'izmenjalka').replace('Shift', 'dvigalka');
 		}
 
-		var newText = _(text).replace('~', '') + ' (' + L.Util.replaceCtrlAltInMac(shortcut) + ')';
+		var newText = _(text).replace('~', '') + ' (' + app.util.replaceCtrlAltInMac(shortcut) + ')';
 
 		return newText;
 	}
@@ -129,8 +130,7 @@ L.Control.Menubar = L.Control.extend({
 					{name: _UNO('.uno:RejectAllTrackedChanges', 'text'), id: 'rejectalltrackedchanges', type: 'action'},
 					{uno: '.uno:PreviousTrackedChange'},
 					{uno: '.uno:NextTrackedChange'}
-				]},
-				{uno: '.uno:EditStyle'}
+				]}
 			]},
 			{name: _UNO('.uno:ViewMenu', 'text'), id: 'view', type: 'menu',
 			 menu: (window.mode.isTablet() ? [
@@ -151,6 +151,7 @@ L.Control.Menubar = L.Control.extend({
 					// // {name: _('Dark Mode'), id: 'toggledarktheme', type: 'action'},
 					// // {name: _('Invert Background'), id: 'invertbackground', type: 'action'},
 					// // {uno: '.uno:SidebarDeck.PropertyDeck', name: _UNO('.uno:Sidebar')},
+					// // {uno: '.uno:SidebarDeck.StyleListDeck', name: _('Style list')},
 					// // {uno: '.uno:Navigator', id: 'navigator'},
 					{type: 'separator'},
 					{name: _UNO('.uno:ShowAnnotations', 'text'), id: 'showannotations', type: 'action'},
@@ -201,6 +202,7 @@ L.Control.Menubar = L.Control.extend({
 				{type: 'separator'},
 				{name: _UNO('.uno:HyperlinkDialog'), id: 'inserthyperlink', type: 'action'},
 				{name: _('Smart Picker'), id: 'remotelink', type: 'action'},
+				{name: _('AI Assistant'), id: 'remoteaicontent', type: 'action'},
 				{type: 'separator'},
 				{uno: '.uno:InsertQrCode'},
 				{uno: '.uno:InsertSymbol'},
@@ -504,6 +506,7 @@ L.Control.Menubar = L.Control.extend({
 				{type: 'separator'},
 				{name: _UNO('.uno:HyperlinkDialog'), id: 'inserthyperlink', type: 'action'},
 				{name: _('Smart Picker'), id: 'remotelink', type: 'action'},
+				{name: _('AI Assistant'), id: 'remoteaicontent', type: 'action'},
 				{type: 'separator'},
 				{uno: '.uno:InsertSymbol'},
 				{type: 'separator'},
@@ -655,6 +658,7 @@ L.Control.Menubar = L.Control.extend({
 				{type: 'separator'},
 				{name: _UNO('.uno:HyperlinkDialog'), id: 'inserthyperlink', type: 'action'},
 				{name: _('Smart Picker'), id: 'remotelink', type: 'action'},
+				{name: _('AI Assistant'), id: 'remoteaicontent', type: 'action'},
 				{type: 'separator'},
 				{uno: '.uno:InsertSymbol'},
 				{type: 'separator'},
@@ -668,7 +672,7 @@ L.Control.Menubar = L.Control.extend({
 					{name: _UNO('.uno:InsertPageTitleField', 'presentation'), uno: '.uno:InsertPageTitleField'},
 					{name: _UNO('.uno:InsertPagesField', 'presentation'), uno: '.uno:InsertPagesField'},
 				]},
-				{name: _('Electronic signature...'), id: 'insert-esignature', type: 'action'},
+				{name: _UNO('.uno:InsertSignatureLine'), id: 'insert-signatureline', type: 'action'},
 			]},
 			{name: _UNO('.uno:FormatMenu', 'presentation'), id: 'format', type: 'menu', menu: [
 				{uno: '.uno:FontDialog'},
@@ -791,8 +795,10 @@ L.Control.Menubar = L.Control.extend({
 				  // //  {name: _('Invert Background'), id: 'invertbackground', type: 'action'},
 				  // //  {uno: '.uno:SidebarDeck.PropertyDeck', name: _UNO('.uno:Sidebar')},
 				  // //  {uno: '.uno:Navigator', id: 'navigator'},
+				  // //  {uno: '.uno:SidebarDeck.StyleListDeck', name: _('Style list')},
 				   {type: 'separator'},
 				   {name: _UNO('.uno:ToggleSheetGrid', 'spreadsheet', true), uno: '.uno:ToggleSheetGrid', id: 'sheetgrid'},
+				   {name: _('Focus Cell'), type:'action', id: 'columnrowhighlight'},
 				   {name: _UNO('.uno:FreezePanes', 'spreadsheet', true), id: 'FreezePanes', type: 'action', uno: '.uno:FreezePanes'},
 				   {name: _UNO('.uno:FreezeCellsMenu', 'spreadsheet', true), id: 'FreezeCellsMenu', type: 'menu', uno: '.uno:FreezeCellsMenu', menu: [
 					   {name: _UNO('.uno:FreezePanesColumn', 'spreadsheet', true), id: 'FreezePanesColumn', type: 'action', uno: '.uno:FreezePanesColumn'},
@@ -813,6 +819,7 @@ L.Control.Menubar = L.Control.extend({
 				{type: 'separator'},
 				{name: _UNO('.uno:HyperlinkDialog'), uno: '.uno:HyperlinkDialog'},
 				{name: _('Smart Picker'), id: 'remotelink', type: 'action'},
+				{name: _('AI Assistant'), id: 'remoteaicontent', type: 'action'},
 				{uno: '.uno:InsertSymbol'},
 				{type: 'separator'},
 				{name: _UNO('.uno:InsertField', 'text'), type: 'menu', menu: [
@@ -927,6 +934,7 @@ L.Control.Menubar = L.Control.extend({
 					{uno: '.uno:SetOptimalColumnWidth'}]},
 				{uno: '.uno:FontDialog'},
 				{uno: '.uno:ParagraphDialog'},
+				{uno: '.uno:SidebarDeck.StyleListDeck'},
 				{uno: '.uno:PageFormatDialog'},
 				{type: 'separator'},
 				{uno: '.uno:TransformDialog'},
@@ -1410,7 +1418,7 @@ L.Control.Menubar = L.Control.extend({
 		commandStates: {},
 
 		// Only these menu options will be visible in readonly mode
-		allowedReadonlyMenus: ['file', 'downloadas', 'view', 'insert', 'slide', 'help'],
+		allowedReadonlyMenus: ['file', 'downloadas', 'view', 'insert', 'slide', 'help', 'print'],
 
 		// Only these UNO commands will be enabled in readonly mode
 		allowedViewModeCommands: [
@@ -1419,13 +1427,14 @@ L.Control.Menubar = L.Control.extend({
 
 		allowedViewModeActions: [
 			() => app.sectionContainer.getSectionWithName(L.CSections.CommentList.name).hasAnyComments() ? 'savecomments' : undefined,
-			'shareas', /* 'print', */ // file menu
+			'shareas', //file menu
+			// // 'print','print-active-sheet', 'print-all-sheets', 'print-notespages', // file menu
 			'downloadas-odt', 'downloadas-doc', 'downloadas-docx', 'downloadas-rtf', // file menu
 			'downloadas-odp', 'downloadas-ppt', 'downloadas-pptx', 'downloadas-odg', 'exportpdf' , // file menu
 			!window.ThisIsAMobileApp ? 'exportdirectpdf' : 'downloadas-pdf', !window.ThisIsAMobileApp ? 'exportepub' : 'downloadas-epub', // file menu
 			'downloadas-ods', 'downloadas-xls', 'downloadas-xlsx', 'downloadas-csv', 'closedocument', // file menu
 			!(L.Browser.ie || L.Browser.edge) ? 'fullscreen' : undefined, 'zoomin', 'zoomout', 'zoomreset', 'showstatusbar', 'showresolved', 'showannotations', /* 'toggledarktheme', */ // view menu
-			() => app.map.eSignature ? 'insert-esignature' : undefined, // insert menu
+			'insert-signatureline', // insert menu
 			/* 'about', */ 'keyboard-shortcuts', /* 'latestupdates', 'feedback', */ 'serveraudit', 'online-help', /* 'report-an-issue', */ // help menu
 			'insertcomment'
 		]
@@ -1449,7 +1458,8 @@ L.Control.Menubar = L.Control.extend({
 		this._initializeMenu(this.options.initial);
 
 		map.on('doclayerinit', this._onDocLayerInit, this);
-		app.events.on('updatepermission', this._onRefresh.bind(this));
+		this._onRefresh = this._onRefresh.bind(this);
+		app.events.on('updatepermission', this._onRefresh);
 		map.on('addmenu', this._addMenu, this);
 		map.on('languagesupdated', this._onInitLanguagesMenu, this);
 		map.on('updatetoolbarcommandvalues', this._onStyleMenu, this);
@@ -1465,6 +1475,7 @@ L.Control.Menubar = L.Control.extend({
 		this._map.off('updatetoolbarcommandvalues', this._onStyleMenu, this);
 		this._map.off('initmodificationindicator', this._onInitModificationIndicator, this);
 		this._map.off('updatemodificationindicator', this._onUpdateModificationIndicator, this);
+		app.events.off('updatepermission', this._onRefresh);
 
 		this._menubarCont.remove();
 		this._menubarCont = null;
@@ -1587,7 +1598,8 @@ L.Control.Menubar = L.Control.extend({
 		}
 
 		// clear initial menu
-		L.DomUtil.removeChildNodes(this._menubarCont);
+		if (this._menubarCont)
+			L.DomUtil.removeChildNodes(this._menubarCont);
 
 		// Add document specific menu
 		var docType = this._map.getDocType();
@@ -1928,6 +1940,10 @@ L.Control.Menubar = L.Control.extend({
 						}
 					} else if (id === 'serveraudit' && (app.isAdminUser === false || !self._map.serverAuditDialog)) {
 						$(aItem).css('display', 'none');
+					} else if (id === 'columnrowhighlight') {
+						itemState = app.map.uiManager.getHighlightMode();
+						if (itemState) $(aItem).addClass(constChecked);
+						else $(aItem).removeClass(constChecked);
 					} else {
 						$(aItem).removeClass('disabled');
 					}
@@ -1970,6 +1986,13 @@ L.Control.Menubar = L.Control.extend({
 
 			if (id === 'remotelink') {
 				if (self._map['wopi'].EnableRemoteLinkPicker)
+					$(aItem).show();
+				else
+					$(aItem).hide();
+			}
+
+			if (id === 'remoteaicontent') {
+				if (self._map['wopi'].EnableRemoteAIContent)
 					$(aItem).show();
 				else
 					$(aItem).hide();
@@ -2032,10 +2055,11 @@ L.Control.Menubar = L.Control.extend({
 		} else if (id.startsWith('downloadas-')
 			|| id.startsWith('saveas-')
 			|| id.startsWith('export')
-			|| id === 'renamedocument'
+			// // || id === 'renamedocument'
 			|| id.startsWith('zotero')
 			|| id === 'deletepage'
 			|| id === 'remotelink'
+			|| id === 'remoteaicontent'
 			// // || id === 'toggledarktheme'
 			|| id === 'invertbackground'
 			|| id === 'home-search'
@@ -2045,10 +2069,26 @@ L.Control.Menubar = L.Control.extend({
 			app.dispatcher.dispatch(id);
 		} else if (id === 'insertcomment') {
 			this._map.insertComment();
-		} else if (id === 'insert-esignature') {
+		} else if (id === 'insert-signatureline') {
 			if (this._map.eSignature) {
-				this._map.eSignature.insert();
+				const args = {
+					External: {
+						type: 'boolean',
+						value: true,
+					},
+				};
+				app.map.sendUnoCommand('.uno:InsertSignatureLine', args);
+				let finishMessage = _('The signature line can now be moved or resized as needed.');
+				let finishFunc = () => app.map.eSignature.insert();
+				app.map.uiManager.showSnackbar(finishMessage, _('Finish electronic signing'), finishFunc, -1);
+			} else {
+				app.map.sendUnoCommand('.uno:InsertSignatureLine');
 			}
+
+			// The file based view is primarily to view multi-page PDF files, so
+			// it doesn't seem to have precise tracking of invalidations, just
+			// request new tiles for now.
+			app.map._docLayer.requestNewFiledBasedViewTiles();
 		} else if (id === 'insertgraphic') {
 			L.DomUtil.get('insertgraphic').click();
 		} else if (id === 'insertgraphicremote') {
@@ -2090,7 +2130,7 @@ L.Control.Menubar = L.Control.extend({
 		} else if (id === 'zoomreset') {
 			app.dispatcher.dispatch('zoomreset');
 		} else if (id === 'fullscreen') {
-			L.toggleFullScreen();
+			app.util.toggleFullScreen();
 		} else if (id === 'showruler') {
 			app.dispatcher.dispatch('showruler');
 		} else if (id === 'togglea11ystate') {
@@ -2165,6 +2205,8 @@ L.Control.Menubar = L.Control.extend({
 			app.dispatcher.dispatch('.uno:AcceptAllTrackedChanges');
 		} else if (id === 'rejectalltrackedchanges') {
 			app.dispatcher.dispatch('.uno:RejectAllTrackedChanges');
+		} else if (id === 'columnrowhighlight') {
+			app.dispatcher.dispatch('columnrowhighlight');
 		}
 		// Inform the host if asked
 		if (postmessage)
@@ -2313,6 +2355,13 @@ L.Control.Menubar = L.Control.extend({
 
 		if (menuItem.id === 'insertgraphicremote' && !this._map['wopi'].EnableInsertRemoteImage)
 			return false;
+
+    // Hide button as we have not implemented renaming files in our backend
+    // so it will cause the document to bug if the user does this
+		// // if (menuItem.id === 'renamedocument' && !(this._map['wopi']._supportsRename() && this._map['wopi'].UserCanRename))
+		// // 	return false;
+    if (menuItem.id === 'renamedocument')
+      return false;
 
 		if (menuItem.id === 'insertgraphic' && this._map['wopi'].DisableInsertLocalImage)
 			return false;
@@ -2538,7 +2587,7 @@ L.Control.Menubar = L.Control.extend({
 	},
 
 	_initializeMenu: function(menu) {
-		this._isFileODF = L.LOUtil.isFileODF(this._map);
+		this._isFileODF = app.LOUtil.isFileODF(this._map);
 		var menuHtml = this._createMenu(menu);
 		for (var i in menuHtml) {
 			this._menubarCont.appendChild(menuHtml[i]);

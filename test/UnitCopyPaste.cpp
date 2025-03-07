@@ -68,17 +68,21 @@ public:
                                                 http::StatusCode expected)
     {
         LOG_TST("getClipboard: connect to " << clipURIstr);
-        Poco::URI clipURI(clipURIstr);
+        const Poco::URI clipURI(clipURIstr);
+        const std::string clipPathAndQuery = clipURI.getPathAndQuery();
 
         auto httpSession = http::Session::create(clipURIstr);
         std::shared_ptr<const http::Response> httpResponse =
-            httpSession->syncRequest(http::Request(Poco::URI(clipURIstr).getPathAndQuery()));
+            httpSession->syncRequest(http::Request(clipPathAndQuery));
 
         // Note that this is expected for both living and closed documents.
         // This failed when either case didn't add the custom header.
         LOK_ASSERT_EQUAL(std::string("true"), httpResponse->get("X-COOL-Clipboard"));
 
-        LOG_TST("getClipboard: sent request: " << clipURI.getPathAndQuery());
+        // We should mark clipboard responses as non-cacheable.
+        LOK_ASSERT_EQUAL(std::string("no-cache"), httpResponse->get("Cache-Control"));
+
+        LOG_TST("getClipboard: sent request: " << clipPathAndQuery);
 
         try {
             LOG_TST("getClipboard: HTTP get request returned: "
@@ -377,7 +381,7 @@ public:
         if (!fetchClipboardAssert(_clipURI, "text/html", html))
             return;
 
-        // Setup state that will be also asserte in postCloseTest():
+        // Setup state that will be also asserted in postCloseTest():
         LOG_TST("Setup clipboards:");
         if (!setClipboard(_clipURI2, buildClipboardText("kippers"), HTTPResponse::HTTP_OK))
             return;

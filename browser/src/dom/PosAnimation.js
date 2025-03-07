@@ -1,4 +1,5 @@
 /* -*- js-indent-level: 8 -*- */
+/* global app */
 /*
  * L.PosAnimation is used by Leaflet internally for pan animations.
  */
@@ -16,6 +17,17 @@ L.PosAnimation = L.Class.extend({
 
 		this.fire('start');
 
+		// Skip some work if the duration is zero
+		if (duration <= 0) {
+			el.style[L.DomUtil.TRANSITION] = '';
+			L.DomUtil.setPosition(el, newPos);
+			this._el._leaflet_pos = newPos;
+			this._inProgress = false;
+			this.fire('step').fire('end');
+			this._el.dataset.transitioning = false;
+			return;
+		}
+
 		el.style[L.DomUtil.TRANSITION] = 'all ' + (isNaN(duration) ? 0.25 : 0) +
 		        's cubic-bezier(0,0,' + (easeLinearity || 0.5) + ',1)';
 
@@ -23,7 +35,7 @@ L.PosAnimation = L.Class.extend({
 		L.DomUtil.setPosition(el, newPos);
 
 		// toggle reflow, Chrome flickers for some reason if you don't do this
-		L.Util.falseFn(el.offsetWidth);
+		app.util.falseFn(el.offsetWidth);
 
 		// there's no native way to track value updates of transitioned properties, so we imitate this
 		this._stepTimer = setInterval(L.bind(this._onStep, this), 50);
@@ -37,7 +49,7 @@ L.PosAnimation = L.Class.extend({
 
 		L.DomUtil.setPosition(this._el, this._getPos());
 		this._onTransitionEnd();
-		L.Util.falseFn(this._el.offsetWidth); // force reflow in case we are about to start a new animation
+		app.util.falseFn(this._el.offsetWidth); // force reflow in case we are about to start a new animation
 	},
 
 	_onStep: function () {

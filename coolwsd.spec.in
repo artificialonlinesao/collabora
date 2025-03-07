@@ -70,11 +70,11 @@ echo "account    required     pam_unix.so" >>  %{buildroot}/etc/pam.d/coolwsd
 /usr/share/coolwsd/discovery.xml
 /usr/share/coolwsd/favicon.ico
 /usr/share/coolwsd/browser
-/usr/share/doc/coolwsd/README.md
 /usr/share/doc/coolwsd/README.vars
 /usr/share/doc/coolwsd/metrics.txt
 /usr/share/doc/coolwsd/protocol.txt
 /usr/share/doc/coolwsd/THIRDPARTYLICENSES
+/usr/share/doc/coolwsd/collabora-online-sbom.spdx.json
 /usr/share/man/man1/coolwsd.1.gz
 /usr/share/man/man1/coolforkit-ns.1.gz
 /usr/share/man/man1/coolconvert.1.gz
@@ -130,10 +130,11 @@ if [ $COOLWSD_IS_ACTIVE == "1" ]; then systemctl stop coolwsd; fi
 lokitroot=/opt/collaboraoffice
 coolparent=`cd ${lokitroot} && cd .. && /bin/pwd`
 
-rm -rf ${coolparent}/cool
-mkdir -p ${coolparent}/cool/child-roots
+rm -rf ${coolparent}/cool || true
+mkdir -p ${coolparent}/cool/child-roots ${coolparent}/cool/cache
 chown cool:cool ${coolparent}/cool
 chown cool:cool ${coolparent}/cool/child-roots
+chown cool:cool ${coolparent}/cool/cache
 
 fc-cache ${lokitroot}/share/fonts/truetype
 coolwsd-systemplate-setup ${coolparent}/cool/systemplate ${lokitroot} >/dev/null 2>&1

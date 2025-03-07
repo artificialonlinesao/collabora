@@ -1,7 +1,7 @@
 /* global describe it require cy beforeEach */
 
 var helper = require('../../common/helper');
-var { insertImage, insertVideo, deleteImage, assertImageSize } = require('../../common/desktop_helper');
+var { insertImage, insertVideo, deleteImage } = require('../../common/desktop_helper');
 var desktopHelper = require('../../common/desktop_helper');
 var { triggerNewSVGForShapeInTheCenter } = require('../../common/impress_helper');
 
@@ -27,11 +27,38 @@ describe(['tagdesktop'], 'Image Operation Tests', function() {
 		insertVideo();
 	});
 
+	it('Crop Image', function () {
+		// close sidebar
+		cy.cGet('.unospan-options-modify-page.unoModifyPage').click();
+		insertImage();
+		helper.assertImageSize(438, 111);
+
+		cy.cGet('#Crop').should('be.visible');
+		cy.cGet('#Crop').click();
+
+		cy.cGet('#test-div-shape-handle-3').then(($handle) => {
+			const rect = $handle[0].getBoundingClientRect();
+			const startX = rect.left + rect.width / 2;
+			const startY = rect.top + rect.height / 2;
+			const moveX = 20;
+
+			cy.cGet('body').realMouseDown({ x: startX, y: startY });
+			cy.cGet('body').realMouseMove(startX + moveX, startY);
+			cy.cGet('body').realMouseUp();
+		});
+
+		cy.cGet('#test-div-shape-handle-3').should('exist');
+		cy.wait(1000);
+		cy.cGet('#canvas-container > svg').should('exist');
+		helper.assertImageSize(418, 111);
+	});
+
+
 	it('Resize image when keep ratio option enabled and disabled', function() {
 		desktopHelper.switchUIToNotebookbar();
 		insertImage();
 		//when Keep ratio is unchecked
-		assertImageSize(438, 111);
+		helper.assertImageSize(438, 111);
 
 		//sidebar needs more time
 		cy.cGet('#sidebar-panel').should('be.visible').wait(2000).scrollTo('bottom');
@@ -46,7 +73,7 @@ describe(['tagdesktop'], 'Image Operation Tests', function() {
 
 		triggerNewSVGForShapeInTheCenter();
 
-		assertImageSize(463, 185);
+		helper.assertImageSize(463, 185);
 
 		//Keep ratio checked
 		//sidebar needs more time
@@ -65,6 +92,6 @@ describe(['tagdesktop'], 'Image Operation Tests', function() {
 
 		triggerNewSVGForShapeInTheCenter();
 
-		assertImageSize(579, 232);
+		helper.assertImageSize(579, 232);
 	});
 });

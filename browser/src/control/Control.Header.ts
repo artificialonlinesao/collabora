@@ -548,6 +548,7 @@ export class Header extends app.definitions.canvasSectionObject {
 			this._prevMouseOverEntry = this._mouseOverEntry;
 			this._mouseOverEntry = result.entry;
 		}
+		else return;
 
 		if (!this.containerObject.isDraggingSomething()) { // If we are not dragging anything.
 			this._dragDistance = null;
@@ -634,6 +635,8 @@ export class Header extends app.definitions.canvasSectionObject {
 	onMouseUp(): void {
 		L.DomUtil.enableImageDrag();
 		L.DomUtil.enableTextSelection();
+
+		this._map.fire('closepopups'); // close all popups if a row/column header is selected
 
 		if (this.containerObject.isDraggingSomething() && this._dragEntry) {
 			this.onDragEnd(this.containerObject.getDragDistance());

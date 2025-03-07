@@ -20,7 +20,7 @@ class ShapeHandleScalingSubSection extends CanvasSectionObject {
 	zIndex: number = L.CSections.DefaultForDocumentObjects.zIndex;
 	documentObject: boolean = true;
 
-	constructor (parentHandlerSection: ShapeHandlesSection, sectionName: string, size: number[], documentPosition: cool.SimplePoint, ownInfo: any) {
+	constructor(parentHandlerSection: ShapeHandlesSection, sectionName: string, size: number[], documentPosition: cool.SimplePoint, ownInfo: any, cropModeEnabled: boolean) {
 		super();
 
 		this.size = size;
@@ -35,22 +35,122 @@ class ShapeHandleScalingSubSection extends CanvasSectionObject {
 		this.sectionProperties.initialAngle = null; // Initial angle of the point (handle) to the center in radians.
 		this.sectionProperties.distanceToCenter = null; // Distance to center.
 		this.sectionProperties.mapPane = (<HTMLElement>(document.querySelectorAll('.leaflet-map-pane')[0]));
+		this.sectionProperties.cropModeEnabled = cropModeEnabled;
+		this.sectionProperties.cropCursor = 'url("https://collab-images.kyzon.com/cursors/crop.png") 8 8, auto';
 
 		this.setMousePointerType();
+
+		app.events.on('TextCursorVisibility', this.onTextCursorVisibility.bind(this));
 	}
 
 	onInitialize(): void {
 		this.setPosition(this.sectionProperties.position.pX, this.sectionProperties.position.pY);
 	}
 
+	onTextCursorVisibility(event: any): void {
+		if (event.detail.visible) {
+			this.setShowSection(false);
+			this.interactable = false;
+		}
+		else {
+			this.setShowSection(true);
+			this.interactable = true;
+		}
+	}
+
 	onDraw(frameCount?: number, elapsedTime?: number, subsetBounds?: cool.Bounds): void {
 		this.context.fillStyle = 'wheat';
 		this.context.strokeStyle = 'black';
 		this.context.beginPath();
-		this.context.arc(this.size[0] * 0.5, this.size[1] * 0.5, this.size[0] * 0.5, 0, Math.PI * 2);
+		if (this.sectionProperties.cropModeEnabled)
+			this.drawCropHandles();
+		else
+			this.context.arc(this.size[0] * 0.5, this.size[1] * 0.5, this.size[0] * 0.5, 0, Math.PI * 2);
 		this.context.closePath();
 		this.context.fill();
 		this.context.stroke();
+	}
+
+	drawCropCornerHandle() {
+		const markerWidth = this.size[0];
+		const halfMarkerWidth = markerWidth * 0.5;
+		const shapeAngle = this.sectionProperties.parentHandlerSection.sectionProperties.shapeRectangleProperties.angleRadian;
+		let x = halfMarkerWidth, y = halfMarkerWidth;
+		this.context.translate(x, y);
+		this.context.rotate(shapeAngle * -1);
+		this.context.translate(-x, -y);
+		this.context.moveTo(x, y);
+		x += markerWidth;
+		this.context.lineTo(x, y);
+		y += halfMarkerWidth;
+		this.context.lineTo(x, y);
+		x -= halfMarkerWidth;
+		this.context.lineTo(x, y);
+		y += halfMarkerWidth;
+		this.context.lineTo(x, y);
+		x -= halfMarkerWidth;
+		this.context.lineTo(x, y);
+	}
+
+	drawCropSideHandle() {
+		const markerWidth = this.size[0];
+		const halfMarkerWidth = markerWidth * 0.5;
+		const shapeAngle = this.sectionProperties.parentHandlerSection.sectionProperties.shapeRectangleProperties.angleRadian;
+		let x = halfMarkerWidth, y = halfMarkerWidth;
+		this.context.translate(x, y);
+		this.context.rotate(shapeAngle * -1);
+		this.context.translate(-x, -y);
+		this.context.moveTo(x, y);
+		x += markerWidth;
+		this.context.lineTo(x, y);
+		y += halfMarkerWidth;
+		this.context.lineTo(x, y);
+		x -= markerWidth;
+		this.context.lineTo(x, y);
+	}
+
+	drawCropHandles() {
+		const markerWidth = this.size[0];
+		this.context.save();
+		switch (this.sectionProperties.ownInfo.kind) {
+			case '1':
+				this.drawCropCornerHandle();
+				break;
+			case '2':
+				this.drawCropSideHandle();
+				break;
+			case '3':
+				this.context.rotate(Math.PI / 2);
+				this.context.translate(0, -markerWidth);
+				this.drawCropCornerHandle();
+				break;
+			case '4':
+				this.context.rotate(-Math.PI / 2);
+				this.context.translate(-markerWidth, 0);
+				this.drawCropSideHandle();
+				break;
+			case '5':
+				this.context.rotate(Math.PI / 2);
+				this.context.translate(0, -markerWidth);
+				this.drawCropSideHandle();
+				break;
+			case '6':
+				this.context.rotate(-Math.PI / 2);
+				this.context.translate(-markerWidth, 0);
+				this.drawCropCornerHandle();
+				break;
+			case '7':
+				this.context.rotate(Math.PI);
+				this.context.translate(-markerWidth, -markerWidth);
+				this.drawCropSideHandle();
+				break;
+			case '8':
+				this.context.rotate(Math.PI);
+				this.context.translate(-markerWidth, -markerWidth);
+				this.drawCropCornerHandle();
+				break;
+		}
+		this.context.restore();
 	}
 
 	setMousePointerType() {
@@ -77,7 +177,10 @@ class ShapeHandleScalingSubSection extends CanvasSectionObject {
 		e.stopPropagation();
 		this.stopPropagating();
 		this.sectionProperties.previousCursorStyle = this.sectionProperties.mapPane.style.cursor;
-		this.sectionProperties.mapPane.style.cursor = this.sectionProperties.mousePointerType;
+		if (this.sectionProperties.cropModeEnabled)
+			this.sectionProperties.mapPane.style.cursor = this.sectionProperties.cropCursor;
+		else
+			this.sectionProperties.mapPane.style.cursor = this.sectionProperties.mousePointerType;
 		this.containerObject.requestReDraw();
 	}
 
@@ -271,7 +374,9 @@ class ShapeHandleScalingSubSection extends CanvasSectionObject {
 			y = shapeRecProps.center[1] - subSection.sectionProperties.distanceToCenter * Math.sin(pointAngle);
 			subSection.setPosition(x - halfWidth, y - halfHeight);
 		}
-		this.adjustSVGProperties(shapeRecProps);
+
+		if (!this.sectionProperties.cropModeEnabled)
+			this.adjustSVGProperties(shapeRecProps);
 	}
 
 	onMouseMove(point: Array<number>, dragDistance: Array<number>, e: MouseEvent) {

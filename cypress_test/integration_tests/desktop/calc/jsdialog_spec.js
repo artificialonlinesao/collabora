@@ -36,6 +36,60 @@ describe(['tagdesktop'], 'JSDialog unit test', function() {
 			});
 	});
 
+	it('JSDialog child focus', function() {
+		cy.getFrameWindow().then(function(win) {
+			var smile = win.document.querySelector('meta[name="previewSmile"]').content;
+			var jsonDialog = {
+				id: 'testfocus',
+				type: 'dialog',
+				text: 'Focus test',
+				children: [{
+					id: 'tabcontrol',
+					type: 'tabcontrol',
+					selected: 1,
+					tabs: [{
+						text: 'Test Focus',
+						id: 1,
+						name: 'testfocus'}],
+					children: [{
+						id: 'tabpage',
+						type: 'tabpage',
+						enabled: true,
+						text: 'Focus',
+						children: [{
+							id: 'container',
+							type: 'container',
+							children: [{
+								id: 'colorsetwin',
+								type: 'scrollwindow',
+								children: [{
+									id: 'colorset',
+									type: 'drawingarea',
+									imagewidth: 216,
+									imageheight: 180,
+									image: smile }]}, {
+								id: 'testcheck',
+								type: 'checkbox',
+								text: 'checkbox' }]
+						}]
+					}]
+				}]};
+
+			var dialog = win.L.control.jsDialog();
+			dialog.onJSDialog({data: jsonDialog, callback: function() {}});
+			expect(Object.keys(dialog.dialogs)).to.have.length(1);
+
+			var current = win.document.activeElement;
+			expect(current.id).to.equal('tabcontrol-1');
+
+			cy.realPress('Tab').then(function() {
+				var next = win.document.activeElement;
+				expect(next.id).to.equal('colorset-img');
+				dialog.closeAll(false);
+			});
+		});
+	});
+
 	it('JSDialog dropdown', function() {
 		// Open conditional format menu
 		cy.cGet('#toolbar-up .ui-scroll-right').click();
@@ -57,10 +111,21 @@ describe(['tagdesktop'], 'JSDialog unit test', function() {
 		// open "PDF options JsDialog"
 		cy.cGet('.exportpdf-submenu-icon').click();
 
-		// check water marker checkbox to enable water mark entry input
+		// check watermark checkbox to enable watermark entry input
 		cy.cGet('#watermark-input').check();
-		// after enable eatermark checkbox the input filed beside should also be in enabled state
+		// after enable watermark checkbox the input field beside should also be in enabled state
 		cy.cGet('#watermarkentry-input').should('not.be.disabled');
 
+	});
+
+	it('JSDialog check data validity options', function() {
+		cy.cGet('#Data-tab-label').click();
+		cy.cGet('#data-validation').click();
+
+		// On changing options other fields should toggle enable and disable
+		cy.cGet('#data-input').should('be.disabled');
+		cy.cGet('#allow-input').select("1");
+
+		cy.cGet('#data-input').should('not.be.disabled');
 	});
 });

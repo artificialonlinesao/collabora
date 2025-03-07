@@ -27,7 +27,7 @@ class OtherViewCellCursorSection extends CanvasSectionObject {
 
         this.size = [rectangle.pWidth, rectangle.pHeight];
         this.position = [rectangle.pX1, rectangle.pY1];
-        this.sectionProperties.color = L.LOUtil.rgbToHex(L.LOUtil.getViewIdColor(viewId));
+        this.sectionProperties.color = app.LOUtil.rgbToHex(app.LOUtil.getViewIdColor(viewId));
         this.name = OtherViewCellCursorSection.sectionNamePrefix + viewId;
 
         this.sectionProperties.viewId = viewId;
@@ -107,6 +107,11 @@ class OtherViewCellCursorSection extends CanvasSectionObject {
     }
 
     showUsernamePopUp() {
+        const textCursorSectionName = CursorHeaderSection.namePrefix + this.sectionProperties.viewId;
+
+        if (app.sectionContainer.doesSectionExist(textCursorSectionName))
+            return; // Don't show the popup if the cursor header is shown.
+
         if (this.sectionProperties.popUpContainer) {
             this.adjustPopUpPosition();
 

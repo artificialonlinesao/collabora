@@ -139,7 +139,7 @@ public:
     static std::atomic<bool> InhibitThreadChecks;
 
     enum class Type : uint8_t { IPv4, IPv6, All, Unix };
-    static std::string toString(Type t);
+    static constexpr std::string_view toString(Type t);
 
     // NB. see other Socket::Socket by init below.
     Socket(Type type,
@@ -147,7 +147,7 @@ public:
         : _type(type)
         , _clientPort(0)
         , _fd(createSocket(type))
-        , _closed(_fd < 0)
+        , _isShutdown(_fd < 0)
         , _creationTime(creationTime)
         , _lastSeenTime(_creationTime)
         , _bytesSent(0)
@@ -159,6 +159,10 @@ public:
     virtual ~Socket()
     {
         LOG_TRC("Socket dtor");
+
+        // explicit closeFD called, or initial createSocket failure
+        if (_fd < 0)
+            return;
 
         // Doesn't block on sockets; no error handling needed.
         if constexpr (!Util::isMobileApp())
@@ -172,12 +176,17 @@ public:
         }
     }
 
-    /// Returns true if this socket has been closed, i.e. rejected from polling and potentially shutdown
-    bool isClosed() const { return _closed; }
+    /// Returns true if this socket FD has been shutdown, but not necessarily closed.
+    bool isShutdown() const { return _isShutdown; }
 
     constexpr Type type() const { return _type; }
     constexpr bool isIPType() const { return Type::IPv4 == _type || Type::IPv6 == _type; }
-    void setClientAddress(const std::string& address, unsigned int port=0) { _clientAddress = address; _clientPort=port; }
+    void setClientAddress(std::string address, unsigned int port = 0)
+    {
+        _clientAddress = std::move(address);
+        _clientPort = port;
+    }
+
     const std::string& clientAddress() const { return _clientAddress; }
     unsigned int clientPort() const { return _clientPort; }
 
@@ -216,7 +225,7 @@ public:
         if (!_noShutdown)
         {
             LOG_TRC("Socket shutdown RDWR. " << *this);
-            setClosed();
+            setShutdown();
             if constexpr (!Util::isMobileApp())
                 ::shutdown(_fd, SHUT_RDWR);
             else
@@ -405,6 +414,18 @@ public:
         _ignoreInput = true;
     }
 
+    // arg to emphasize what is allowed do this
+    // close in advance of the ctor
+    void closeFD(const SocketPoll& /*rPoll*/)
+    {
+        ::close(_fd);
+        // Invalidate the FD by negating to preserve the original value.
+        if (_fd > 0)
+            _fd = -_fd;
+        else if (_fd == 0) // Unlikely, but technically possible.
+            _fd = -1;
+    }
+
 protected:
     /// Construct based on an existing socket fd.
     /// Used by accept() only.
@@ -413,7 +434,7 @@ protected:
         : _type(type)
         , _clientPort(0)
         , _fd(fd)
-        , _closed(_fd < 0)
+        , _isShutdown(_fd < 0)
         , _creationTime(creationTime)
         , _lastSeenTime(_creationTime)
         , _bytesSent(0)
@@ -432,11 +453,8 @@ protected:
     /// avoid doing a shutdown before close
     void setNoShutdown() { _noShutdown = true; }
 
-    /// Explicitly marks this socket closed, i.e. rejected from polling and potentially shutdown
-    void setClosed() { _closed = true; }
-
-    /// Explicitly marks this socket and the given SocketDisposition closed
-    void setClosed(SocketDisposition &disposition) { setClosed(); disposition.setClosed(); }
+    /// Explicitly marks this socket FD as shut down, but not necessarily closed.
+    void setShutdown() { _isShutdown = true; }
 
 private:
     /// Create socket of the given type.
@@ -454,12 +472,13 @@ private:
         _noShutdown = false;
         _sendBufferSize = DefaultSendBufferSize;
         _owner = std::this_thread::get_id();
-        LOG_TRC("Created socket. Thread affinity set to " << Log::to_string(_owner) << ", " << toStringImpl());
+        LOG_DBG("Created socket. Thread affinity set to " << Log::to_string(_owner) << ", "
+                                                          << toStringImpl());
 
         if constexpr (!Util::isMobileApp())
         {
 #if ENABLE_DEBUG
-            if (std::getenv("COOL_ZERO_BUFFER_SIZE"))
+            if (std::getenv("COOL_ZERO_BUFFER_SIZE") && _fd >= 0)
             {
                 const int oldSize = getSocketBufferSize();
                 setSocketBufferSize(0);
@@ -472,9 +491,9 @@ private:
     std::string _clientAddress;
     const Type _type;
     unsigned int _clientPort;
-    const int _fd;
-    /// True if this socket is closed.
-    bool _closed;
+    int _fd;
+    /// True if this socket is shut down.
+    bool _isShutdown;
 
     const std::chrono::steady_clock::time_point _creationTime;
     std::chrono::steady_clock::time_point _lastSeenTime;
@@ -771,7 +790,7 @@ public:
     /// Poll the sockets for available data to read or buffer to write.
     /// Returns the return-value of poll(2): 0 on timeout,
     /// -1 for error, and otherwise the number of events signalled.
-    int poll(std::chrono::microseconds timeoutMax) { return poll(timeoutMax.count()); }
+    int poll(std::chrono::microseconds timeoutMax, bool justPoll = false) { return poll(timeoutMax.count(), justPoll); }
 
     /// Poll the sockets for available data to read or buffer to write.
     /// Returns the return-value of poll(2): 0 on timeout,
@@ -940,7 +959,7 @@ private:
     }
 
     /// Actual poll implementation
-    int poll(int64_t timeoutMaxMicroS);
+    int poll(int64_t timeoutMaxMicroS, bool justPoll = false);
 
     /// Initialize the poll fds array with the right events
     void setupPollFds(std::chrono::steady_clock::time_point now,
@@ -1064,7 +1083,7 @@ public:
         LOG_TRC("StreamSocket dtor called with pending write: " << _outBuffer.size()
                                                                 << ", read: " << _inBuffer.size());
 
-        if (!isClosed())
+        if (!isShutdown())
         {
             ASSERT_CORRECT_SOCKET_THREAD(this);
             if (_socketHandler)
@@ -1075,7 +1094,7 @@ public:
         if (!_shutdownSignalled)
         {
             _shutdownSignalled = true;
-            StreamSocket::closeConnection();
+            StreamSocket::shutdownConnection();
         }
         if (isExternalCountedConnection())
             --ExternalConnectionCount;
@@ -1108,10 +1127,7 @@ public:
     }
 
     /// Perform the real shutdown.
-    virtual void closeConnection()
-    {
-        Socket::shutdown();
-    }
+    virtual void shutdownConnection() { Socket::shutdown(); }
 
     int getPollEvents(std::chrono::steady_clock::time_point now,
                       int64_t &timeoutMaxMicroS) override
@@ -1290,13 +1306,12 @@ public:
 
                 if (len > 0)
                 {
-                    LOG_ASSERT_MSG(len <= ssize_t(sizeof(buf)),
-                                   "Read more data than the buffer size");
+                    assert(len <= ssize_t(sizeof(buf)) && "Read more data than the buffer size");
                     notifyBytesRcvd(len);
                     _inBuffer.append(&buf[0], len);
                 }
                 // else poll will handle errors.
-            } while (len == (sizeof(buf)));
+            } while (len == static_cast<ssize_t>(sizeof(buf)));
 
             // Restore errno from the read call.
             errno = last_errno;
@@ -1444,17 +1459,18 @@ public:
                     const int events) override
     {
         ASSERT_CORRECT_SOCKET_THREAD(this);
+        assert((getFD() >= 0 || isShutdown()) && "Socket is closed but not marked correctly");
 
         if (_socketHandler->checkTimeout(now))
         {
-            assert(isClosed()); // should have issued shutdown
-            setClosed();
+            assert(isShutdown() && "checkTimeout should have issued shutdown");
+            setShutdown();
             LOGA_DBG(Socket, "socket timeout: " << getStatsString(now) << ", " << *this);
             disposition.setClosed();
             return;
         }
 
-        if (isClosed() || checkRemoval(now))
+        if (isShutdown() || checkRemoval(now))
         {
             disposition.setClosed();
             return;
@@ -1497,7 +1513,7 @@ public:
             else if (read == 0 || (read < 0 && (last_errno == EPIPE || last_errno == ECONNRESET)))
             {
                 // There is nothing more to read; either we got EOF, or we drained after ECONNRESET.
-                LOG_DBG("Closed after reading");
+                LOG_DBG("Closed after reading. Read result: " << read << " errno: " << Util::symbolicErrno(last_errno));
                 closed = true;
             }
         }
@@ -1545,7 +1561,7 @@ public:
             if (_shutdownSignalled && _outBuffer.empty())
             {
                 LOG_TRC("Shutdown Signaled. Close Connection.");
-                closeConnection();
+                shutdownConnection();
                 closed = true;
                 break;
             }
@@ -1574,9 +1590,10 @@ public:
         {
             LOG_TRC("Closed. Firing onDisconnect.");
             _socketHandler->onDisconnect();
-            setClosed(disposition);
+            setShutdown();
+            disposition.setClosed();
         }
-        else if (isClosed())
+        else if (isShutdown())
             disposition.setClosed();
     }
 
@@ -1700,6 +1717,7 @@ protected:
     virtual int readData(char* buf, int len)
     {
         ASSERT_CORRECT_SOCKET_THREAD(this);
+        assert((getFD() >= 0 || isShutdown()) && "Socket is closed but not marked correctly");
 
         // avoided in readIncomingData
         if (ignoringInput())
@@ -1724,6 +1742,8 @@ protected:
     virtual int writeData(const char* buf, const int len)
     {
         ASSERT_CORRECT_SOCKET_THREAD(this);
+        assert((getFD() >= 0 || isShutdown()) && "Socket is closed but not marked correctly");
+
 #if !MOBILEAPP
 #if ENABLE_DEBUG
         if (simulateSocketError(false))

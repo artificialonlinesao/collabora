@@ -33,30 +33,30 @@ class Session;
 template<class T>
 class SessionMap : public std::map<std::string, std::shared_ptr<T> >
 {
-    std::map<std::string, int> _canonicalIds;
+    std::map<std::string, CanonicalViewId> _canonicalIds;
 public:
     SessionMap() {
         static_assert(std::is_base_of<Session, T>::value, "sessions must have base of Session");
     }
 
     /// Generate a unique key for this set of view properties, only used by WSD
-    int createCanonicalId(const std::string &viewProps)
+    CanonicalViewId createCanonicalId(const std::string &viewProps)
     {
         if (viewProps.empty())
-            return 0;
+            return CanonicalViewId::None;
         for (const auto& it : _canonicalIds)
         {
             if (it.first == viewProps)
                 return it.second;
         }
 
-        const std::size_t id = _canonicalIds.size() + 1000;
+        const CanonicalViewId id = static_cast<CanonicalViewId>(_canonicalIds.size() + 1000);
         _canonicalIds[viewProps] = id;
         return id;
     }
 
     /// Lookup one session in the map that matches this canonical view id, only used by Kit
-    std::shared_ptr<T> findByCanonicalId(int id) const
+    std::shared_ptr<T> findByCanonicalId(CanonicalViewId id) const
     {
         for (const auto &it : *this) {
             if (it.second->getCanonicalViewId() == id)
@@ -280,9 +280,15 @@ public:
 
     const std::string& getSpellOnline() const { return _spellOnline; }
 
+    void setSpellOnline(const std::string& val) { _spellOnline = val; }
+
     const std::string& getDarkTheme() const { return _darkTheme; }
 
+    void setDarkTheme(const std::string& val) { _darkTheme = val; }
+
     const std::string& getDarkBackground() const { return _darkBackground; }
+
+    void setDarkBackground(const std::string& val) { _darkBackground = val; }
 
     const std::string& getBatchMode() const { return _batch; }
 
@@ -290,9 +296,15 @@ public:
 
     const std::string& getMacroSecurityLevel() const { return _macroSecurityLevel; }
 
+    const std::string& getInitialClientVisibleArea() const { return _initialClientVisibleArea; }
+
     bool getAccessibilityState() const { return _accessibilityState; }
 
+    void setAccessibilityState(bool val) { _accessibilityState = val; }
+
     void disableSpellCheckIfReadOnly();
+
+    const std::string& getDocTemplate() const { return _docTemplate; }
 
 protected:
     Session(const std::shared_ptr<ProtocolHandlerInterface> &handler,
@@ -301,7 +313,7 @@ protected:
 
     /// Parses the options of the "load" command,
     /// shared between MasterProcessSession::loadDocument() and ChildProcessSession::loadDocument().
-    void parseDocOptions(const StringVector& tokens, int& part, std::string& timestamp, std::string& doctemplate);
+    void parseDocOptions(const StringVector& tokens, int& part, std::string& timestamp);
 
     void updateLastActivityTime()
     {
@@ -428,12 +440,17 @@ private:
     /// Level of Macro security.
     std::string _macroSecurityLevel;
 
+    std::string _initialClientVisibleArea;
+
     /// Specifies whether accessibility support is enabled for this session.
     bool _accessibilityState;
 
     /// Specifies whether certification verification for the wopi server
     /// should be disabled in core
     bool _disableVerifyHost;
+
+    // The url of the template file used to create the document
+    std::string _docTemplate;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

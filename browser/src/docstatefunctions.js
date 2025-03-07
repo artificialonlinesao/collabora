@@ -43,7 +43,7 @@ app.getViewRectangles = function () {
 };
 
 // ToDo: _splitPanesContext should be an app variable.
-app.isPointVisibleInTheDisplayedArea = function (twipsArray) {
+app.isPointVisibleInTheDisplayedArea = function (twipsArray /* x, y */) {
 	if (app.map._docLayer._splitPanesContext) {
 		let rectangles = app.map._docLayer._splitPanesContext.getViewRectangles();
 		for (let i = 0; i < rectangles.length; i++) {
@@ -52,6 +52,20 @@ app.isPointVisibleInTheDisplayedArea = function (twipsArray) {
 		return false;
 	} else {
 		return app.file.viewedRectangle.containsPoint(twipsArray);
+	}
+};
+
+app.isRectangleVisibleInTheDisplayedArea = function (
+	twipsArray /* x, y, width, height */,
+) {
+	if (app.map._docLayer._splitPanesContext) {
+		let rectangles = app.map._docLayer._splitPanesContext.getViewRectangles();
+		for (let i = 0; i < rectangles.length; i++) {
+			if (rectangles[i].intersectsRectangle(twipsArray)) return true;
+		}
+		return false;
+	} else {
+		return app.file.viewedRectangle.intersectsRectangle(twipsArray);
 	}
 };
 
@@ -141,18 +155,23 @@ app.updateFollowingUsers = function () {
 	console.debug('user following: update');
 	var isCellCursorVisible = app.calc.cellCursorVisible;
 	var isTextCursorVisible = app.file.textCursor.visible;
+
 	if (isCellCursorVisible || isTextCursorVisible) {
+		let twipsArray = [];
 		if (isCellCursorVisible)
-			var cursorPos = app.map._docLayer._twipsToLatLng({
-				x: app.calc.cellCursorRectangle.x2,
-				y: app.calc.cellCursorRectangle.y2,
-			});
+			twipsArray = [
+				app.calc.cellCursorRectangle.x2,
+				app.calc.cellCursorRectangle.y2,
+			];
 		else
-			cursorPos = app.map._docLayer._twipsToLatLng({
-				x: app.file.textCursor.rectangle.x2,
-				y: app.file.textCursor.rectangle.y2,
-			});
-		var cursorPositionInView = app.map._docLayer._isLatLngInView(cursorPos);
+			twipsArray = [
+				app.file.textCursor.rectangle.x2,
+				app.file.textCursor.rectangle.y2,
+			];
+
+		const cursorPositionInView =
+			app.isPointVisibleInTheDisplayedArea(twipsArray);
+
 		if (
 			parseInt(app.getFollowedViewId()) ===
 				parseInt(app.map._docLayer._viewId) &&
@@ -168,15 +187,15 @@ app.updateFollowingUsers = function () {
 	}
 };
 
-app.showAsyncDownloadError = function (response, initalMsg) {
+app.showAsyncDownloadError = function (response, initialMsg) {
 	const reader = new FileReader();
 	const timeout = 10000;
 	reader.onload = function () {
 		if (reader.result === 'wrong server') {
-			initalMsg += _(', cluster configuration error: mis-matching serverid');
-			app.map.uiManager.showSnackbar(initalMsg, '', null, timeout);
+			initialMsg += _(', cluster configuration error: mis-matching serverid');
+			app.map.uiManager.showSnackbar(initialMsg, '', null, timeout);
 		} else {
-			app.map.uiManager.showSnackbar(initalMsg, '', null, timeout);
+			app.map.uiManager.showSnackbar(initialMsg, '', null, timeout);
 		}
 	};
 	reader.readAsText(response);

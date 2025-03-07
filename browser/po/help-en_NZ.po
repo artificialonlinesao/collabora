@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-14 13:17+0200\n"
-"PO-Revision-Date: 2024-09-30 12:42+0000\n"
+"POT-Creation-Date: 2025-03-05 09:51+0200\n"
+"PO-Revision-Date: 2025-02-06 04:56+0000\n"
 "Last-Translator: Rob Pearson <rob.dunedin@gmail.com>\n"
 "Language-Team: English (New Zealand) <https://hosted.weblate.org/projects/"
 "collabora-online/help/en_NZ/>\n"
@@ -3199,10 +3199,10 @@ msgstr "Format the source cell with the font, colour background and more."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li.p:799-11
 msgid ""
-"Click on the clone formatting icon <img class=\"icon-size\" src=\"images"
+"Click on the clone formatting icon <img class=\"icon-size\" src=\"https://collab-images.kyzon.com"
 "/lc_formatpaintbrush.svg\" />. The mouse pointer turns to a paint bucket."
 msgstr ""
-"Click on the clone formatting icon <img class=\"icon-size\" src=\"images"
+"Click on the clone formatting icon <img class=\"icon-size\" src=\"https://collab-images.kyzon.com"
 "/lc_formatpaintbrush.svg\" />. The mouse pointer turns to a paint bucket."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li.p:800-11

@@ -21,11 +21,12 @@ const recordStats = process.argv[8];
 // verbose console output
 const debug = false;
 
-/* dont use the default port (9980)*/
+/* don't use the default port (9980) */
 const port = '9999';
 let args = [
 	`--o:sys_template_path=${top_builddir}/systemplate`,
 	`--o:child_root_path=${top_builddir}/jails`,
+	`--o:cache_files.path=${top_builddir}/cache`,
 	'--o:storage.filesystem[@allow]=true',
 	'--o:admin_console.username=admin',
 	'--o:admin_console.password=admin',

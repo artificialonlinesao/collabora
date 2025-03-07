@@ -17,7 +17,7 @@ endif
 AM_CXXFLAGS = $(CPPUNIT_CFLAGS) -DTDOC=\"$(abs_top_srcdir)/test/data\" -DTDIST=\"$(DIST_FOLDER)\" \
 	-I${top_srcdir}/common -I${top_srcdir}/net -I${top_srcdir}/wsd -I${top_srcdir}/kit \
 	-I${top_srcdir} -I${top_srcdir}/test \
-	-pthread -DCOOLWSD_DATADIR='"@COOLWSD_DATADIR@"' \
+	-DCOOLWSD_DATADIR='"@COOLWSD_DATADIR@"' \
 	-DCOOLWSD_CONFIGDIR='"@COOLWSD_CONFIGDIR@"' \
 	-DCOOLWSD_LOGLEVEL='"@COOLWSD_LOGLEVEL@"' \
 	-DDEBUG_ABSSRCDIR='"@abs_srcdir@"' \
@@ -44,6 +44,7 @@ all_la_unit_tests = \
 	unit-integration.la \
 	unit-httpws.la \
 	unit-quarantine.la \
+	unit-multi-tenant.la \
 	unit-load-torture.la \
 	unit-save-torture.la \
 	unit-copy-paste.la \
@@ -80,6 +81,7 @@ all_la_unit_tests = \
 	unit-render-search-result.la \
 	unit-tiff-load.la \
 	unit-save.la \
+	unit-any-input.la \
 	unit-wopi-saveas-with-encoded-file-name.la \
 	unit-storage.la \
 	unit-wopi-async-upload-modifyclose.la \
@@ -105,13 +107,14 @@ if ENABLE_LIBFUZZER
 all_la_unit_tests += unit-fuzz.la
 endif
 
-noinst_LTLIBRARIES = ${all_la_unit_tests}
+check_LTLIBRARIES = ${all_la_unit_tests}
 
 MAGIC_TO_FORCE_SHLIB_CREATION = -rpath /dummy
 AM_LDFLAGS = -module $(MAGIC_TO_FORCE_SHLIB_CREATION) $(ZLIB_LIBS) $(ZSTD_LIBS) ${PNG_LIBS}
 
 # Clang's linker doesn't like -pthread.
 if !HAVE_CLANG
+AM_CXXFLAGS += -pthread
 AM_LDFLAGS += -pthread
 endif
 
@@ -134,11 +137,12 @@ wsd_sources = \
 	../wsd/RequestDetails.cpp \
 	../wsd/TileCache.cpp
 
-#	KitQueueTests.cpp \
 test_base_sources = \
+	KitQueueTests.cpp \
 	RequestDetailsTests.cpp \
 	StringVectorTests.cpp \
 	FileServeWhiteBoxTests.cpp \
+	NetUtilWhiteBoxTests.cpp \
 	WhiteBoxTests.cpp \
 	HttpWhiteBoxTests.cpp \
 	DeltaTests.cpp \
@@ -294,6 +298,8 @@ unit_tiff_load_la_SOURCES = UnitTiffLoad.cpp
 unit_tiff_load_la_LIBADD = $(CPPUNIT_LIBS)
 unit_save_la_SOURCES = UnitSave.cpp
 unit_save_la_LIBADD = $(CPPUNIT_LIBS)
+unit_any_input_la_SOURCES = UnitAnyInput.cpp
+unit_any_input_la_LIBADD = $(CPPUNIT_LIBS)
 unit_large_paste_la_SOURCES = UnitLargePaste.cpp
 unit_large_paste_la_LIBADD = $(CPPUNIT_LIBS)
 unit_paste_la_SOURCES = UnitPaste.cpp
@@ -334,6 +340,8 @@ unit_hosting_la_SOURCES = UnitHosting.cpp
 unit_hosting_la_LIBADD = $(CPPUNIT_LIBS)
 unit_quarantine_la_SOURCES = UnitQuarantine.cpp
 unit_quarantine_la_LIBADD = $(CPPUNIT_LIBS)
+unit_multi_tenant_la_SOURCES = UnitMultiTenant.cpp
+unit_multi_tenant_la_LIBADD = $(CPPUNIT_LIBS)
 unit_perf_la_SOURCES = UnitPerf.cpp
 unit_perf_la_LIBADD = $(CPPUNIT_LIBS) $(LIBPFM_LIBS)
 unit_proxy_la_SOURCES = UnitProxy.cpp
@@ -377,7 +385,7 @@ all-local: unittest
 	@echo "Test output is in `pwd`/test.log and is displayed on failure."
 	@echo
 	@fc-cache "@LO_PATH@"/share/fonts/truetype
-	@UNITTEST=1 ${top_builddir}/test/unittest 2> test.log || (cat test.log && /bin/false)
+	@UNITTEST=1 ${top_builddir}/test/unittest --cert-path ${abs_top_srcdir}/etc 2> test.log || (cat test.log && /bin/false)
 	@echo "Done test all-local"
 	@$(CLEANUP_COMMAND)
 

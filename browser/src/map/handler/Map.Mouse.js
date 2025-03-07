@@ -3,7 +3,7 @@
  * L.Map.Mouse is handling mouse interaction with the document
  */
 
-/* global UNOModifier app */
+/* global UNOModifier app TileManager */
 
 L.Map.mergeOptions({
 	mouse: true
@@ -76,7 +76,7 @@ L.Map.Mouse = L.Handler.extend({
 			L.DomEvent.off(document, 'mouseup', this._onMouseUpOutside, this);
 		}
 		else if (e.type === 'mousedown') {
-			docLayer._resetPreFetching();
+			TileManager.resetPreFetching();
 			this._mouseDown = true;
 			this._buttonDown = buttons;
 			if (this._holdMouseEvent) {
@@ -96,6 +96,10 @@ L.Map.Mouse = L.Handler.extend({
 					return;
 				}
 			}
+
+			var scrollSection = app.sectionContainer.getSectionWithName(L.CSections.Scroll.name);
+			if (scrollSection.sectionProperties.mouseIsOnVerticalScrollBar || scrollSection.sectionProperties.mouseIsOnHorizontalScrollBar)
+				return;
 
 			// Core side is handling the mouseup by itself when the right button is down.
 			// If we fire mouseup for right button, there will be duplicate.
