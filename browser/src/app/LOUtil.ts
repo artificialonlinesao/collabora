@@ -448,7 +448,9 @@ class LOUtil {
 
 			if (
 				imageElement.src &&
-				imageElement.src.includes('https://collab-images.kyzon.com/branding/dark/')
+				imageElement.src.includes(
+					'https://collab-images.kyzon.com/branding/dark/',
+				)
 			) {
 				imageElement.src = imageElement.src.replace(
 					'https://collab-images.kyzon.com/branding/dark/',
@@ -460,7 +462,9 @@ class LOUtil {
 			if (
 				imageElement.src &&
 				(imageElement.src.includes('https://collab-images.kyzon.com/dark/') ||
-					imageElement.src.includes('https://collab-images.kyzon.com/branding/'))
+					imageElement.src.includes(
+						'https://collab-images.kyzon.com/branding/',
+					))
 			) {
 				imageElement.src = imageElement.src.replace(
 					'https://collab-images.kyzon.com/dark/',

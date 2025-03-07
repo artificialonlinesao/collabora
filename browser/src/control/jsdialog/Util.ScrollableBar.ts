@@ -98,7 +98,7 @@ function setupResizeHandler(container: Element, scrollable: Element) {
 	};
 
 	window.addEventListener('resize', handler);
-  scrollable.addEventListener('wheel', shiftHandler);
+	scrollable.addEventListener('wheel', shiftHandler);
 
 	// No longer need to listen for scroll events, as we've made the toolbar
 	// unscrollable. You'd need to use the arrow buttons instead.
