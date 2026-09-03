@@ -22,6 +22,7 @@
 #include <Poco/URI.h>
 
 #include <memory>
+#include <set>
 #include <string>
 #include <chrono>
 
@@ -122,6 +123,7 @@ public:
             _isAutosave = false;
             _isExitSave = false;
             _extendedData.clear();
+            _editorUserIds.clear();
         }
 
         void merge(const Attributes& lhs)
@@ -135,6 +137,8 @@ public:
             // Clobber with the lhs, assuming it's newer.
             if (!lhs._extendedData.empty())
                 _extendedData = lhs._extendedData;
+
+            _editorUserIds.insert(lhs._editorUserIds.begin(), lhs._editorUserIds.end());
         }
 
         /// Asks the storage object to force overwrite
@@ -159,6 +163,15 @@ public:
         void setExtendedData(const std::string& extendedData) { _extendedData = extendedData; }
         const std::string& getExtendedData() const { return _extendedData; }
 
+        /// Record a WOPI UserId that may have contributed to this version.
+        void addEditorUserId(const std::string& userId)
+        {
+            if (!userId.empty())
+                _editorUserIds.insert(userId);
+        }
+        void clearEditorUserIds() { _editorUserIds.clear(); }
+        const std::set<std::string>& getEditorUserIds() const { return _editorUserIds; }
+
         /// Dump the internals of this instance.
         void dumpState(std::ostream& os, const std::string& indent = "\n  ") const
         {
@@ -167,6 +180,7 @@ public:
             os << indent << "auto-save: " << std::boolalpha << isAutosave();
             os << indent << "exit-save: " << std::boolalpha << isExitSave();
             os << indent << "extended-data: " << getExtendedData();
+            os << indent << "editor-count: " << getEditorUserIds().size();
         }
 
     private:
@@ -180,6 +194,8 @@ public:
         bool _isExitSave;
         /// The client-provided saving extended data to send to the WOPI host.
         std::string _extendedData;
+        /// WOPI UserIds that may have contributed changes to this version.
+        std::set<std::string> _editorUserIds;
     };
 
     /// Represents the upload request result, with a Result code

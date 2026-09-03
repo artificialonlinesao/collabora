@@ -461,10 +461,12 @@ public:
         // posted to admin console in the main polling loop.
     }
 
-    /// Sets the last activity timestamp that is most likely to modify the document.
-    void updateLastModifyingActivityTime()
+    /// Records activity that is likely to modify the document and who performed it.
+    void recordPotentialDocumentModification(const std::string& editorUserId)
     {
         _lastModifyActivityTime = std::chrono::steady_clock::now();
+        if (!editorUserId.empty())
+            _potentialEditorUserIds.insert(editorUserId);
     }
 
     /// This updates the editing sessionId which is used for auto-saving.
@@ -1607,6 +1609,9 @@ private:
 
     /// All session of this DocBroker by ID.
     SessionMap<ClientSession> _sessions;
+
+    /// WOPI UserIds that may have contributed since the last Core save request.
+    std::set<std::string> _potentialEditorUserIds;
 
     /// If we set the user-requested initial (on load) settings to be forced.
     std::set<std::string> _isInitialStateSet;

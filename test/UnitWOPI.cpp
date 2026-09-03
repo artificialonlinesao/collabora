@@ -21,6 +21,7 @@
 
 #include <Poco/Net/HTTPRequest.h>
 
+#include <algorithm>
 #include <thread>
 #include <sys/types.h>
 #include <unistd.h>
@@ -65,6 +66,7 @@ public:
 
             // the document is not modified
             LOK_ASSERT_EQUAL(std::string("false"), request.get("X-COOL-WOPI-IsModifiedByUser"));
+            LOK_ASSERT_EQUAL(false, request.has("X-WOPI-Editors"));
 
             // but the save action is an explicit user's request
             LOK_ASSERT_EQUAL(std::string("false"), request.get("X-COOL-WOPI-IsAutosave"));
@@ -82,6 +84,7 @@ public:
 
             // the document is modified
             LOK_ASSERT_EQUAL(std::string("true"), request.get("X-COOL-WOPI-IsModifiedByUser"));
+            LOK_ASSERT_EQUAL(std::string("tuser"), request.get("X-WOPI-Editors"));
 
             // and this test fakes that it's an autosave
             LOK_ASSERT_EQUAL(std::string("true"), request.get("X-COOL-WOPI-IsAutosave"));
@@ -148,6 +151,104 @@ public:
                 // just wait for the results
                 break;
             }
+        }
+    }
+};
+
+class UnitWOPIEditors : public WopiTestServer
+{
+    STATE_ENUM(Phase, Load, WaitViews, WaitModifiedStatus, WaitPutFile, Done) _phase;
+
+    std::size_t _loadedViewCount;
+    std::string _secondWopiSrc;
+    std::string _thirdWopiSrc;
+
+public:
+    UnitWOPIEditors()
+        : WopiTestServer("UnitWOPIEditors")
+        , _phase(Phase::Load)
+        , _loadedViewCount(0)
+    {
+    }
+
+    void configCheckFileInfo(const Poco::Net::HTTPRequest& request,
+                             Poco::JSON::Object::Ptr& fileInfo) override
+    {
+        const auto queryParameters = Poco::URI(request.getURI()).getQueryParameters();
+        const auto accessToken = std::find_if(
+            queryParameters.begin(), queryParameters.end(),
+            [](const auto& parameter) { return parameter.first == "access_token"; });
+
+        LOK_ASSERT_MESSAGE("CheckFileInfo must include an access token",
+                           accessToken != queryParameters.end());
+        fileInfo->set("UserId", accessToken->second);
+    }
+
+    bool onViewLoaded(const std::string& message) override
+    {
+        LOG_TST("View loaded #" << ++_loadedViewCount << ": [" << message << ']');
+        LOK_ASSERT_STATE(_phase, Phase::WaitViews);
+
+        if (_loadedViewCount == 1)
+        {
+            WSD_CMD_BY_CONNECTION_INDEX(1, "load url=" + _secondWopiSrc);
+        }
+        else if (_loadedViewCount == 2)
+        {
+            WSD_CMD_BY_CONNECTION_INDEX(2, "load url=" + _thirdWopiSrc);
+        }
+        else if (_loadedViewCount == 3)
+        {
+            TRANSITION_STATE(_phase, Phase::WaitModifiedStatus);
+            WSD_CMD_BY_CONNECTION_INDEX(0, "key type=input char=97 key=0");
+            WSD_CMD_BY_CONNECTION_INDEX(0, "key type=up char=0 key=512");
+        }
+
+        return true;
+    }
+
+    bool onDocumentModified(const std::string& message) override
+    {
+        LOG_TST("Document modified: [" << message << ']');
+        LOK_ASSERT_STATE(_phase, Phase::WaitModifiedStatus);
+
+        TRANSITION_STATE(_phase, Phase::WaitPutFile);
+        WSD_CMD_BY_CONNECTION_INDEX(1, "key type=input char=98 key=0");
+        WSD_CMD_BY_CONNECTION_INDEX(1, "key type=up char=0 key=512");
+        WSD_CMD_BY_CONNECTION_INDEX(1, "save dontTerminateEdit=0 dontSaveIfUnmodified=0");
+        return true;
+    }
+
+    std::unique_ptr<http::Response>
+    assertPutFileRequest(const Poco::Net::HTTPRequest& request) override
+    {
+        LOK_ASSERT_STATE(_phase, Phase::WaitPutFile);
+        LOK_ASSERT_EQUAL(std::string("editor-a,editor-b"), request.get("X-WOPI-Editors"));
+
+        TRANSITION_STATE(_phase, Phase::Done);
+        passTest("PutFile excludes a viewer who did not contribute to the uploaded version.");
+        return nullptr;
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitViews);
+                const std::string firstWopiSrc =
+                    initWebsocket("/wopi/files/0?access_token=editor-a");
+                _secondWopiSrc = addWebSocket("/wopi/files/0?access_token=editor-b");
+                _thirdWopiSrc = addWebSocket("/wopi/files/0?access_token=viewer-c");
+                WSD_CMD_BY_CONNECTION_INDEX(0, "load url=" + firstWopiSrc);
+                break;
+            }
+            case Phase::WaitViews:
+            case Phase::WaitModifiedStatus:
+            case Phase::WaitPutFile:
+            case Phase::Done:
+                break;
         }
     }
 };
@@ -268,8 +369,8 @@ public:
 
 UnitBase** unit_create_wsd_multi(void)
 {
-    // return new UnitBase* [3] { new UnitWOPI(), new UnitOverload(), nullptr };
-    return new UnitBase* [2] { new UnitWOPI(), nullptr };
+    // return new UnitBase* [4] { new UnitWOPI(), new UnitWOPIEditors(), new UnitOverload(), nullptr };
+    return new UnitBase* [3] { new UnitWOPI(), new UnitWOPIEditors(), nullptr };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

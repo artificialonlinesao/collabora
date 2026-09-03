@@ -682,6 +682,7 @@ public:
     {
         LOK_ASSERT_EQUAL(std::string("true"), request.get("X-COOL-WOPI-IsModifiedByUser"));
         LOK_ASSERT_EQUAL(false, request.has("X-LOOL-WOPI-IsModifiedByUser"));
+        LOK_ASSERT_EQUAL(std::string("tuser"), request.get("X-WOPI-Editors"));
 
         LOK_ASSERT_EQUAL(std::string("false"), request.get("X-COOL-WOPI-IsAutosave"));
         LOK_ASSERT_EQUAL(false, request.has("X-LOOL-WOPI-IsAutosave"));

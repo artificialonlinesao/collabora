@@ -1875,6 +1875,14 @@ void DocumentBroker::handleSaveResponse(const std::shared_ptr<ClientSession>& se
         LOG_DBG("Core reported that the file was " << (wasModified ? "" : "not ")
                                                    << "modified before saving");
         _nextStorageAttrs.setUserModified(wasModified);
+        if (!wasModified)
+            _nextStorageAttrs.clearEditorUserIds();
+    }
+    else if (result == "unmodified")
+    {
+        // Core produced no new version, so discard the contributors captured
+        // for this save while retaining any failed-upload attributes.
+        _nextStorageAttrs.clearEditorUserIds();
     }
 
     // Update the storage attributes to capture what's
@@ -3108,6 +3116,8 @@ bool DocumentBroker::sendUnoSave(const std::shared_ptr<ClientSession>& session,
 
     _nextStorageAttrs.setIsAutosave(autosave);
     _nextStorageAttrs.setExtendedData(extendedData);
+    for (const auto& editorUserId : _potentialEditorUserIds)
+        _nextStorageAttrs.addEditorUserId(editorUserId);
 
     const std::string saveArgs = oss.str();
 
@@ -3115,6 +3125,7 @@ bool DocumentBroker::sendUnoSave(const std::shared_ptr<ClientSession>& session,
     const auto command = std::string("save background=") + (background ? "true " : " ") + saveArgs;
     if (forwardToChild(session, command))
     {
+        _potentialEditorUserIds.clear();
         LOG_DBG("Saving [" << _docKey << "] using [" << sessionId << "]: " << command);
 
         _saveManager.markLastSaveRequestTime();

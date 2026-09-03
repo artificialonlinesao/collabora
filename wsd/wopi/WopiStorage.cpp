@@ -805,6 +805,19 @@ std::size_t WopiStorage::uploadLocalFileToStorageAsync(
                            attribs.isUserModified() ? "true" : "false");
             httpHeader.set("X-COOL-WOPI-IsAutosave", attribs.isAutosave() ? "true" : "false");
             httpHeader.set("X-COOL-WOPI-IsExitSave", attribs.isExitSave() ? "true" : "false");
+            if (attribs.isUserModified() && !attribs.getEditorUserIds().empty())
+            {
+                std::ostringstream editors;
+                bool firstEditor = true;
+                for (const auto& editorUserId : attribs.getEditorUserIds())
+                {
+                    if (!firstEditor)
+                        editors << ',';
+                    editors << editorUserId;
+                    firstEditor = false;
+                }
+                httpHeader.set("X-WOPI-Editors", editors.str());
+            }
             if (isLegacyServer())
             {
                 httpHeader.set("X-LOOL-WOPI-IsModifiedByUser",

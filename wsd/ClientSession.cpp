@@ -1022,7 +1022,7 @@ bool ClientSession::_handleInput(const char *buffer, int length)
             else
             {
                 if (isEditable())
-                    docBroker->updateLastModifyingActivityTime();
+                    docBroker->recordPotentialDocumentModification(getUserId());
                 return forwardToChild(std::string(buffer, length), docBroker);
             }
         }
@@ -1314,7 +1314,7 @@ bool ClientSession::_handleInput(const char *buffer, int length)
 
         if (isEditable() && COOLProtocol::tokenIndicatesDocumentModification(tokens))
         {
-            docBroker->updateLastModifyingActivityTime();
+            docBroker->recordPotentialDocumentModification(getUserId());
         }
 
         if (!filterMessage(firstLine))
